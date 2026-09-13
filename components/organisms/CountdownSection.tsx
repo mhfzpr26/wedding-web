@@ -9,6 +9,8 @@ import { useInView } from '@/hooks/useInView';
 import type { TimeLeft } from '@/types/invitation';
 import type { WeddingCountdown } from '@/types/wedding';
 
+import { calculateCountdown, formatWeddingDate, generateGoogleCalendarUrl } from '@/lib/date-utils';
+
 export interface CountdownSectionProps {
   countdown?: WeddingCountdown;
 }
@@ -29,29 +31,26 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   const targetDateStr = countdown?.targetDate || '2026-11-14T09:00:00+07:00';
   const calendarUrl =
     countdown?.calendarUrl ||
-    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
+    generateGoogleCalendarUrl({
+      title: 'Pernikahan Destia & Rakafansa',
+      startDate: targetDateStr,
+      details: 'Pernikahan Destia Dwi Ramadhani & Rakafansa Saputra',
+      location: 'Bekasi',
+    });
+
+  const formattedTargetDate = formatWeddingDate(targetDateStr, 'MMMM dd, yyyy').toUpperCase();
 
   useEffect(() => {
     setIsMounted(true);
-    const targetDate = new Date(targetDateStr).getTime();
 
     const updateTimer = () => {
-      const now = Date.now();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-      );
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setTimeLeft({ days, hours, minutes, seconds });
+      const res = calculateCountdown(targetDateStr);
+      setTimeLeft({
+        days: res.days,
+        hours: res.hours,
+        minutes: res.minutes,
+        seconds: res.seconds,
+      });
     };
 
     updateTimer();
@@ -85,7 +84,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
               WORTH THE WAIT • GLOBAL PREMIERE
             </div>
             <h2 className="countdown__title" id="countdown-title">
-              PREMIERES NOVEMBER 14, 2026
+              PREMIERES {formattedTargetDate}
             </h2>
             <p style={{ color: 'var(--color-light-gray)', marginTop: '0.35rem', fontSize: 'var(--font-size-small)' }}>
               Hitung mundur menuju momen penayangan perdana ikrar suci pernikahan

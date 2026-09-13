@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Textarea } from '@/components/atoms/Textarea';
+import { GuestQrPass } from '@/components/molecules/GuestQrPass';
 import { useInView } from '@/hooks/useInView';
 import type { AttendanceStatus, RsvpPayload } from '@/types/rsvp';
 
@@ -143,6 +144,15 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 VIP PASS CONFIRMED!
               </p>
               <p style={{ fontSize: 'var(--font-size-small)', color: '#d2d2d2' }}>{responseMsg}</p>
+
+              {formData.attendance === 'Hadir' && (
+                <GuestQrPass
+                  guestName={formData.name}
+                  invitationSlug={invitationSlug}
+                  attendance={formData.attendance}
+                  guestCount={Number.parseInt(String(formData.guestCount || 1), 10) || 1}
+                />
+              )}
             </div>
           ) : (
             <form className="rsvp__form" onSubmit={handleSubmit}>

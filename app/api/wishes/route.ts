@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import type { WishPayload } from '@/types/wishes';
 import {
   getInvitationBySlug,
   getTenantWishes,
   saveTenantWish,
 } from '@/lib/saas-data';
+import { wishSchema } from '@/lib/validations/wedding';
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,19 +30,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as WishPayload & {
-      slug?: string;
-      invitationSlug?: string;
-      invitationId?: string;
-    };
-    const { name, status, message, slug, invitationSlug, invitationId: rawInvId } = body;
+    const rawBody = await request.json();
+    const parsed = wishSchema.safeParse(rawBody);
 
-    if (!name || !message) {
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Input data ucapan tidak valid';
       return NextResponse.json(
-        { error: 'Nama dan pesan wajib diisi' },
+        {
+          error: firstError,
+          details: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 },
       );
     }
+
+    const { name, status, message, slug, invitationSlug, invitationId: rawInvId } = parsed.data;
 
     let targetInvitationId = rawInvId || 'inv-destia-rakafansa';
     const targetSlug = slug || invitationSlug;

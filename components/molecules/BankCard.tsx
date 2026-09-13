@@ -1,8 +1,11 @@
 'use client';
 
 import type React from 'react';
+import { useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import { QRCodeSVG } from 'qrcode.react';
 import type { BankAccountData } from '@/types/invitation';
 
 export interface BankCardProps {
@@ -16,6 +19,11 @@ export const BankCard: React.FC<BankCardProps> = ({
   isCopied,
   onCopy,
 }) => {
+  const [showQr, setShowQr] = useState(false);
+
+  // Transfer payload or format
+  const qrTransferPayload = `${account.bank}:${account.number}:${account.owner}`;
+
   return (
     <div className="gift__card netflix-patron-card">
       <div className="netflix-patron-card__header">
@@ -34,24 +42,65 @@ export const BankCard: React.FC<BankCardProps> = ({
         <div className="gift__owner">A.N. {account.owner}</div>
       </div>
 
-      <button
-        type="button"
-        className={`gift__copy-btn ${isCopied ? 'gift__copy-btn--copied' : ''}`}
-        onClick={() => onCopy(account.number, account.bank)}
-        aria-label={`Salin nomor rekening ${account.bank}`}
-      >
-        {isCopied ? (
-          <>
-            <CheckIcon sx={{ fontSize: 16 }} aria-hidden="true" />
-            <span>ACCOUNT NUMBER COPIED!</span>
-          </>
-        ) : (
-          <>
-            <ContentCopyIcon sx={{ fontSize: 16 }} aria-hidden="true" />
-            <span>COPY ACCOUNT NUMBER</span>
-          </>
-        )}
-      </button>
+      {showQr && (
+        <div
+          style={{
+            backgroundColor: '#ffffff',
+            padding: '12px',
+            borderRadius: '8px',
+            margin: '12px auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '6px',
+            width: 'fit-content',
+          }}
+        >
+          <QRCodeSVG value={qrTransferPayload} size={130} level="M" />
+          <span style={{ color: '#111827', fontSize: '0.72rem', fontWeight: 600 }}>
+            Scan via Mobile Banking
+          </span>
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+        <button
+          type="button"
+          style={{ flex: 1 }}
+          className={`gift__copy-btn ${isCopied ? 'gift__copy-btn--copied' : ''}`}
+          onClick={() => onCopy(account.number, account.bank)}
+          aria-label={`Salin nomor rekening ${account.bank}`}
+        >
+          {isCopied ? (
+            <>
+              <CheckIcon sx={{ fontSize: 16 }} aria-hidden="true" />
+              <span>COPIED!</span>
+            </>
+          ) : (
+            <>
+              <ContentCopyIcon sx={{ fontSize: 16 }} aria-hidden="true" />
+              <span>COPY NUMBER</span>
+            </>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setShowQr((prev) => !prev)}
+          className="gift__copy-btn"
+          style={{
+            flex: '0 0 auto',
+            padding: '0 12px',
+            backgroundColor: showQr ? 'var(--color-netflix-red, #e50914)' : 'rgba(255,255,255,0.1)',
+            borderColor: showQr ? 'var(--color-netflix-red, #e50914)' : 'rgba(255,255,255,0.2)',
+          }}
+          aria-label="Tampilkan QR Code Rekening"
+          title="Tampilkan QR Code"
+        >
+          <QrCode2Icon sx={{ fontSize: 18 }} />
+        </button>
+      </div>
     </div>
   );
 };
+

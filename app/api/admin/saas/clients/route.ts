@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createClient, getClients, getInvitations } from '@/lib/saas-data';
+import { clientSchema } from '@/lib/validations/saas';
 
 export async function GET() {
   try {
@@ -36,23 +37,29 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, phone, email, package: clientPackage, notes, status } = body;
+    const rawBody = await request.json();
+    const parsed = clientSchema.safeParse(rawBody);
 
-    if (!name || !phone) {
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Input data client tidak valid';
       return NextResponse.json(
-        { error: 'Nama client dan nomor WhatsApp wajib diisi' },
+        {
+          error: firstError,
+          details: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 },
       );
     }
 
+    const { name, phone, email, package: clientPackage, notes, status } = parsed.data;
+
     const newClient = await createClient({
       name,
       phone,
-      email,
-      package: clientPackage || 'Standard',
-      notes,
-      status: status || 'active',
+      email: email || undefined,
+      package: clientPackage,
+      notes: notes || undefined,
+      status,
     });
 
     return NextResponse.json(newClient, { status: 201 });

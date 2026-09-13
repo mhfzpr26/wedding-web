@@ -5,6 +5,7 @@ import {
   getInvitations,
   getTenantRsvps,
 } from '@/lib/saas-data';
+import { invitationSchema } from '@/lib/validations/saas';
 
 export async function GET() {
   try {
@@ -48,15 +49,21 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { clientId, title, slug, templateId, status, eventDate } = body;
+    const rawBody = await request.json();
+    const parsed = invitationSchema.safeParse(rawBody);
 
-    if (!clientId || !title || !slug) {
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Input data undangan tidak valid';
       return NextResponse.json(
-        { error: 'Client, judul undangan, dan slug URL wajib diisi' },
+        {
+          error: firstError,
+          details: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 },
       );
     }
+
+    const { clientId, title, slug, templateId, status, eventDate } = parsed.data;
 
     const newInvitation = await createInvitation({
       clientId,
@@ -64,7 +71,7 @@ export async function POST(request: NextRequest) {
       slug,
       templateId: templateId || 'netflix',
       status: status || 'draft',
-      eventDate,
+      eventDate: eventDate || undefined,
     });
 
     return NextResponse.json(newInvitation, { status: 201 });

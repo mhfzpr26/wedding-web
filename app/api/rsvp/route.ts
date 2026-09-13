@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import type { RsvpPayload } from '@/types/rsvp';
 import {
   getInvitationBySlug,
   getTenantRsvps,
   saveTenantRsvp,
 } from '@/lib/saas-data';
+import { rsvpSchema } from '@/lib/validations/wedding';
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,19 +34,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as RsvpPayload & {
-      slug?: string;
-      invitationSlug?: string;
-      invitationId?: string;
-    };
-    const { name, attendance, guestCount, notes, slug, invitationSlug, invitationId: rawInvId } = body;
+    const rawBody = await request.json();
+    const parsed = rsvpSchema.safeParse(rawBody);
 
-    if (!name || !attendance) {
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Input data RSVP tidak valid';
       return NextResponse.json(
-        { error: 'Nama dan konfirmasi kehadiran wajib diisi' },
+        {
+          error: firstError,
+          details: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 },
       );
     }
+
+    const { name, attendance, guestCount, notes, slug, invitationSlug, invitationId: rawInvId } = parsed.data;
 
     let targetInvitationId = rawInvId || 'inv-destia-rakafansa';
     const targetSlug = slug || invitationSlug;
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
       name,
       attendance,
       guestCount,
-      notes,
+      notes: notes || undefined,
     });
 
     return NextResponse.json(

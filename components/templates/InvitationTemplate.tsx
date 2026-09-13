@@ -2,6 +2,7 @@
 
 import type React from 'react';
 import { useCallback, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { ClosingSection } from '@/components/organisms/ClosingSection';
 import { CountdownSection } from '@/components/organisms/CountdownSection';
 import { CoupleSection } from '@/components/organisms/CoupleSection';
@@ -111,36 +112,36 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
 
       <FloatingAudio music={config?.music} />
 
-      <main
-        id="main-content"
-        style={{
-          opacity: coverOpened ? 1 : 0,
-          visibility: coverOpened ? 'visible' : 'hidden',
-          height: coverOpened ? 'auto' : 0,
-          overflow: coverOpened ? 'visible' : 'hidden',
-          width: '100%',
-          maxWidth: '100%',
-          transition: 'opacity 0.6s ease, visibility 0.6s ease',
-        }}
-      >
-        <OpeningSection opening={config?.opening} />
-        <TrailerSection trailer={config?.trailer} />
-        <CoupleSection couple={config?.couple} />
-        <GallerySection photos={config?.gallery} />
-        <LoveStorySection timeline={config?.loveStory} />
-        <CountdownSection countdown={config?.countdown} />
-        <EventSection events={config?.events} />
-        <RsvpSection
-          defaultName={guestName}
-          invitationSlug={invitationSlug}
-        />
-        <WishesSection
-          defaultName={guestName}
-          invitationSlug={invitationSlug}
-        />
-        <GiftSection gifts={config?.gifts} />
-        <ClosingSection closing={config?.closing} couple={config?.couple} />
-      </main>
+      {coverOpened && (
+        <motion.main
+          id="main-content"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            width: '100%',
+            maxWidth: '100%',
+          }}
+        >
+          <OpeningSection opening={config?.opening} />
+          <TrailerSection trailer={config?.trailer} />
+          <CoupleSection couple={config?.couple} />
+          <GallerySection photos={config?.gallery} />
+          <LoveStorySection timeline={config?.loveStory} />
+          <CountdownSection countdown={config?.countdown} />
+          <EventSection events={config?.events} />
+          <RsvpSection
+            defaultName={guestName}
+            invitationSlug={invitationSlug}
+          />
+          <WishesSection
+            defaultName={guestName}
+            invitationSlug={invitationSlug}
+          />
+          <GiftSection gifts={config?.gifts} />
+          <ClosingSection closing={config?.closing} couple={config?.couple} />
+        </motion.main>
+      )}
     </>
   );
 };
