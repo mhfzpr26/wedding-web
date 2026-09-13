@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1788959881395",
+    "name": "Ahmad Faiz",
+    "status": "Hadir",
+    "message": "Semoga samawa dunia akhirat!",
+    "createdAt": "2026-09-09T13:18:01.395Z"
+  },
+  {
+    "id": "1",
+    "name": "Keluarga Besar Budi Santoso",
+    "status": "Hadir",
+    "message": "Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khoir. Selamat menempuh hidup baru Destia & Rakafansa, semoga menjadi keluarga sakinah mawaddah warahmah.",
+    "createdAt": "2026-09-01T10:15:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "Sarah & Dimas",
+    "status": "Hadir",
+    "message": "Selamat Destia & Raka! Semoga pernikahannya selalu dipenuhi berkah, cinta, dan kebahagiaan seumur hidup.",
+    "createdAt": "2026-09-03T14:20:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Rizky Pratama",
+    "status": "Hadir",
+    "message": "Happy wedding brother Rakafansa & Destia! Lancar sampai hari H yaa!",
+    "createdAt": "2026-09-05T09:40:00.000Z"
+  }
+]

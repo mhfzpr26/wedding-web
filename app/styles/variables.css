@@ -1,0 +1,98 @@
+:root {
+  /* ============================================================
+     Netflix Color Palette
+     ============================================================ */
+  --color-black: #141414;
+  --color-dark: #181818;
+  --color-card: #222222;
+  --color-card-hover: #2d2d2d;
+  --color-red: #e50914;
+  --color-red-dark: #b20710;
+  --color-red-hover: #f40612;
+  --color-white: #ffffff;
+  --color-light-gray: #b3b3b3;
+  --color-gray: #6b6b6b;
+
+  /* Legacy aliases — keeps existing class styles working via cascade */
+  --color-navy: var(--color-black);
+  --color-deep-blue: var(--color-dark);
+  --color-muted-blue: var(--color-light-gray);
+  --color-ivory: var(--color-white);
+  --color-soft-white: var(--color-black);
+  --color-gold: var(--color-red);
+  --color-gold-light: var(--color-red-hover);
+  --color-gold-dark: var(--color-red-dark);
+
+  /* ============================================================
+     Typography Tokens (Minor Third Scale - 1.200 Ratio, Base 16px)
+     ============================================================ */
+  --font-heading: "Bebas Neue", "Arial Black", Impact, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-script: var(--font-heading);
+
+  /* Exact Minor Third scale tokens (typescale.com) */
+  --font-size-display-lg: 68.80px;
+  --font-size-display-md: 57.34px;
+  --font-size-h1: 47.78px;
+  --font-size-h2: 39.81px;
+  --font-size-h3: 33.18px;
+  --font-size-h4: 27.65px;
+  --font-size-h5: 23.04px;
+  --font-size-h6: 19.20px;
+  --font-size-p: 16.00px;
+  --font-size-base: 16.00px;
+  --font-size-small: 13.33px;
+  --font-size-sm: 13.33px;
+  --font-size-tiny: 11.11px;
+  --font-size-xs: 11.11px;
+
+  /* Line Heights */
+  --line-height-tight: 1.05;
+  --line-height-heading: 1.15;
+  --line-height-snug: 1.35;
+  --line-height-base: 1.65;
+  --line-height-relaxed: 1.8;
+
+  /* Letter Spacing (Tracking) */
+  --tracking-tighter: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.12em;
+  --tracking-widest: 0.25em;
+  --tracking-badge: 0.35em;
+
+  /* ============================================================
+     Spacing (Compact & Content-Dense for Streaming UI)
+     ============================================================ */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1.25rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 2.75rem;
+
+  --container-max: 1100px;
+  --container-padding: 1.25rem;
+
+  /* ============================================================
+     Transitions
+     ============================================================ */
+  --transition-fast: 0.3s ease;
+  --transition-normal: 0.5s ease;
+  --transition-slow: 0.8s ease;
+
+  /* ============================================================
+     Borders & Shadows
+     ============================================================ */
+  --border-thin: 1px solid rgba(229, 9, 20, 0.2);
+  --border-gold: 1px solid var(--color-red);
+
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.7);
+  --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.9);
+
+  /* ============================================================
+     Z-Index
+     ============================================================ */
+  --z-cover: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+}

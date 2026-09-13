@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="150" height="40">
+  <defs>
+    <linearGradient id="netflixRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E50914" />
+      <stop offset="100%" stop-color="#B20710" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+  <text x="50%" y="31" font-family="'Bebas Neue', Impact, 'Arial Black', sans-serif" font-size="38" font-weight="900" letter-spacing="4" fill="url(#netflixRed)" text-anchor="middle" filter="url(#shadow)">NETFLIX</text>
+</svg>
