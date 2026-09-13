@@ -11,7 +11,7 @@ import type { RsvpPayload, RsvpRecord } from '@/types/rsvp';
 import type { WishPayload, WishRecord } from '@/types/wishes';
 import { DEFAULT_WEDDING_CONFIG } from './wedding-data';
 import { AVAILABLE_TEMPLATES } from '@/components/templates/registry';
-import { initDatabaseSchema, query } from './db';
+import { prisma } from './prisma';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CLIENTS_FILE = path.join(DATA_DIR, 'clients.json');
@@ -26,33 +26,22 @@ function ensureDirectoryExistence(dirPath: string) {
 
 let saasInitialized = false;
 
-// Auto-seed initial tenant data (Destia & Rakafansa) to DB and filesystem
+// Auto-seed initial tenant data (Destia & Rakafansa) via Prisma ORM
 export async function initializeSaasStorage(): Promise<void> {
   if (saasInitialized) return;
 
   ensureDirectoryExistence(DATA_DIR);
   ensureDirectoryExistence(TENANTS_DIR);
 
-  // 1. Ensure PostgreSQL tables exist
   try {
-    await initDatabaseSchema();
-  } catch (err) {
-    console.error('Database schema check warning:', err);
-  }
-
-  // 2. Check if DB is connected and seeded
-  try {
-    const clientsCountRes = await query<{ count: string }>(
-      'SELECT count(*) as count FROM saas_clients;',
-    );
-    const count = Number(clientsCountRes.rows[0]?.count || 0);
+    const clientsCount = await prisma.client.count();
 
     const initialClientId = 'client-destia';
     const initialInvitationId = 'inv-destia-rakafansa';
     const initialSlug = 'destia-rakafansa';
 
-    // If PostgreSQL has 0 clients, seed from existing JSON or default
-    if (count === 0) {
+    // If database has 0 clients, seed from existing JSON or default
+    if (clientsCount === 0) {
       let seedConfig = DEFAULT_WEDDING_CONFIG;
       const tenantConfigFile = path.join(
         TENANTS_DIR,
@@ -75,48 +64,43 @@ export async function initializeSaasStorage(): Promise<void> {
         }
       }
 
-      // Seed Client
-      await query(
-        `INSERT INTO saas_clients (id, name, phone, email, package, notes, status, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-         ON CONFLICT (id) DO NOTHING;`,
-        [
-          initialClientId,
-          'Destia & Rakafansa',
-          '081234567890',
-          'destia.rakafansa@example.com',
-          'Cinematic VIP',
-          'Client perdana paket Netflix Cinematic Theme',
-          'active',
-        ],
-      );
+      // Seed Client via Prisma
+      await prisma.client.upsert({
+        where: { id: initialClientId },
+        update: {},
+        create: {
+          id: initialClientId,
+          name: 'Destia & Rakafansa',
+          phone: '081234567890',
+          email: 'destia.rakafansa@example.com',
+          package: 'Cinematic VIP',
+          notes: 'Client perdana paket Netflix Cinematic Theme',
+          status: 'active',
+        },
+      });
 
-      // Seed Invitation
-      await query(
-        `INSERT INTO saas_invitations (id, client_id, title, slug, template_id, status, event_date, views_count, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
-         ON CONFLICT (id) DO NOTHING;`,
-        [
-          initialInvitationId,
-          initialClientId,
-          'Destia & Rakafansa | The Wedding',
-          initialSlug,
-          'netflix',
-          'published',
-          '2026-11-14',
-          142,
-        ],
-      );
+      // Seed Invitation via Prisma
+      await prisma.invitation.upsert({
+        where: { id: initialInvitationId },
+        update: {},
+        create: {
+          id: initialInvitationId,
+          clientId: initialClientId,
+          title: 'Destia & Rakafansa | The Wedding',
+          slug: initialSlug,
+          templateId: 'netflix',
+          status: 'published',
+          eventDate: '2026-11-14',
+          viewsCount: 142,
+          config: {
+            create: {
+              config: seedConfig as object,
+            },
+          },
+        },
+      });
 
-      // Seed Config (JSONB)
-      await query(
-        `INSERT INTO saas_wedding_configs (invitation_id, config, updated_at)
-         VALUES ($1, $2, NOW())
-         ON CONFLICT (invitation_id) DO UPDATE SET config = EXCLUDED.config;`,
-        [initialInvitationId, JSON.stringify(seedConfig)],
-      );
-
-      // Seed RSVP if any
+      // Seed RSVPs if any from file
       const destiaTenantDir = path.join(TENANTS_DIR, initialInvitationId);
       ensureDirectoryExistence(destiaTenantDir);
       const destiaRsvpFile = path.join(destiaTenantDir, 'rsvps.json');
@@ -126,61 +110,56 @@ export async function initializeSaasStorage(): Promise<void> {
             fs.readFileSync(destiaRsvpFile, 'utf-8'),
           );
           for (const r of rsvps) {
-            await query(
-              `INSERT INTO saas_rsvps (id, invitation_id, name, attendance, guest_count, notes, submitted_at)
-               VALUES ($1, $2, $3, $4, $5, $6, $7)
-               ON CONFLICT (id) DO NOTHING;`,
-              [
-                r.id,
-                initialInvitationId,
-                r.name,
-                r.attendance,
-                r.guestCount || 1,
-                r.notes || '',
-                r.submittedAt || new Date().toISOString(),
-              ],
-            );
+            await prisma.rsvp.upsert({
+              where: { id: r.id },
+              update: {},
+              create: {
+                id: r.id,
+                invitationId: initialInvitationId,
+                name: r.name,
+                attendance: r.attendance,
+                guestCount: r.guestCount || 1,
+                notes: r.notes || '',
+                submittedAt: r.submittedAt ? new Date(r.submittedAt) : new Date(),
+              },
+            });
           }
         } catch {
           // Ignore
         }
       }
 
-      console.log('✅ Seeded initial Destia & Rakafansa into PostgreSQL!');
+      console.log('✅ Seeded initial Destia & Rakafansa via Prisma ORM!');
     }
   } catch (err) {
-    console.warn(
-      'PostgreSQL seed skipped or fallback to file-storage:',
-      err,
-    );
+    console.warn('Prisma seed warning (fallback available):', err);
   }
 
   saasInitialized = true;
 }
 
 // -------------------------------------------------------------
-// CLIENTS CRUD (POSTGRESQL + FILE BACKUP)
+// CLIENTS CRUD (PRISMA ORM)
 // -------------------------------------------------------------
 export async function getClients(): Promise<ClientRecord[]> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      name: string;
-      phone: string;
-      email: string;
-      package: string;
-      notes: string;
-      status: string;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `SELECT id, name, phone, email, package, notes, status, created_at, updated_at 
-       FROM saas_clients 
-       ORDER BY created_at DESC;`,
-    );
+    const rows = await prisma.client.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        invitations: {
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            status: true,
+            templateId: true,
+          },
+        },
+      },
+    });
 
-    return res.rows.map((row) => ({
+    return rows.map((row) => ({
       id: row.id,
       name: row.name,
       phone: row.phone,
@@ -188,11 +167,19 @@ export async function getClients(): Promise<ClientRecord[]> {
       package: row.package,
       notes: row.notes || '',
       status: row.status as 'active' | 'inactive',
-      createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
-      updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
+      invitationsCount: row.invitations.length,
+      invitations: row.invitations.map((inv) => ({
+        id: inv.id,
+        title: inv.title,
+        slug: inv.slug,
+        status: inv.status as InvitationStatus,
+        templateId: inv.templateId,
+      })),
     }));
   } catch (error) {
-    console.error('PostgreSQL getClients fallback to file:', error);
+    console.error('Prisma getClients fallback to file:', error);
     if (!fs.existsSync(CLIENTS_FILE)) return [];
     try {
       return JSON.parse(fs.readFileSync(CLIENTS_FILE, 'utf-8'));
@@ -205,20 +192,14 @@ export async function getClients(): Promise<ClientRecord[]> {
 export async function getClientById(id: string): Promise<ClientRecord | null> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      name: string;
-      phone: string;
-      email: string;
-      package: string;
-      notes: string;
-      status: string;
-      created_at: Date;
-      updated_at: Date;
-    }>('SELECT * FROM saas_clients WHERE id = $1 LIMIT 1;', [id]);
+    const row = await prisma.client.findUnique({
+      where: { id },
+      include: {
+        invitations: true,
+      },
+    });
 
-    if (res.rows.length === 0) return null;
-    const row = res.rows[0];
+    if (!row) return null;
     return {
       id: row.id,
       name: row.name,
@@ -227,11 +208,11 @@ export async function getClientById(id: string): Promise<ClientRecord | null> {
       package: row.package,
       notes: row.notes || '',
       status: row.status as 'active' | 'inactive',
-      createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
-      updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
   } catch (error) {
-    console.error('PostgreSQL getClientById fallback:', error);
+    console.error('Prisma getClientById fallback:', error);
     const clients = await getClients();
     return clients.find((c) => c.id === id) || null;
   }
@@ -242,32 +223,20 @@ export async function createClient(
 ): Promise<ClientRecord> {
   await initializeSaasStorage();
   const id = `client_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-  const name = data.name.trim();
-  const phone = data.phone.trim();
-  const email = data.email?.trim() || '';
-  const pkg = data.package?.trim() || 'Standard';
-  const notes = data.notes?.trim() || '';
-  const status = data.status || 'active';
 
   try {
-    const res = await query<{
-      id: string;
-      name: string;
-      phone: string;
-      email: string;
-      package: string;
-      notes: string;
-      status: string;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `INSERT INTO saas_clients (id, name, phone, email, package, notes, status, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-       RETURNING *;`,
-      [id, name, phone, email, pkg, notes, status],
-    );
+    const row = await prisma.client.create({
+      data: {
+        id,
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        email: data.email?.trim() || '',
+        package: data.package?.trim() || 'Standard',
+        notes: data.notes?.trim() || '',
+        status: data.status || 'active',
+      },
+    });
 
-    const row = res.rows[0];
     const newClient: ClientRecord = {
       id: row.id,
       name: row.name,
@@ -276,8 +245,8 @@ export async function createClient(
       package: row.package,
       notes: row.notes || '',
       status: row.status as 'active' | 'inactive',
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
 
     // Backup to JSON
@@ -290,7 +259,7 @@ export async function createClient(
 
     return newClient;
   } catch (error) {
-    console.error('Error creating client in PostgreSQL:', error);
+    console.error('Error creating client via Prisma:', error);
     throw error;
   }
 }
@@ -301,36 +270,18 @@ export async function updateClient(
 ): Promise<ClientRecord | null> {
   await initializeSaasStorage();
   try {
-    const existing = await getClientById(id);
-    if (!existing) return null;
+    const row = await prisma.client.update({
+      where: { id },
+      data: {
+        name: data.name !== undefined ? data.name.trim() : undefined,
+        phone: data.phone !== undefined ? data.phone.trim() : undefined,
+        email: data.email !== undefined ? data.email.trim() : undefined,
+        package: data.package !== undefined ? data.package.trim() : undefined,
+        notes: data.notes !== undefined ? data.notes.trim() : undefined,
+        status: data.status !== undefined ? data.status : undefined,
+      },
+    });
 
-    const name = data.name !== undefined ? data.name.trim() : existing.name;
-    const phone = data.phone !== undefined ? data.phone.trim() : existing.phone;
-    const email = data.email !== undefined ? data.email.trim() : (existing.email || '');
-    const pkg = data.package !== undefined ? data.package.trim() : existing.package;
-    const notes = data.notes !== undefined ? data.notes.trim() : (existing.notes || '');
-    const status = data.status !== undefined ? data.status : existing.status;
-
-    const res = await query<{
-      id: string;
-      name: string;
-      phone: string;
-      email: string;
-      package: string;
-      notes: string;
-      status: string;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `UPDATE saas_clients
-       SET name = $1, phone = $2, email = $3, package = $4, notes = $5, status = $6, updated_at = NOW()
-       WHERE id = $7
-       RETURNING *;`,
-      [name, phone, email, pkg, notes, status, id],
-    );
-
-    if (res.rows.length === 0) return null;
-    const row = res.rows[0];
     return {
       id: row.id,
       name: row.name,
@@ -339,11 +290,11 @@ export async function updateClient(
       package: row.package,
       notes: row.notes || '',
       status: row.status as 'active' | 'inactive',
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
   } catch (error) {
-    console.error('Error updating client in PostgreSQL:', error);
+    console.error('Error updating client via Prisma:', error);
     return null;
   }
 }
@@ -351,51 +302,47 @@ export async function updateClient(
 export async function deleteClient(id: string): Promise<boolean> {
   await initializeSaasStorage();
   try {
-    const res = await query('DELETE FROM saas_clients WHERE id = $1;', [id]);
-    return (res.rowCount || 0) > 0;
+    await prisma.client.delete({ where: { id } });
+    return true;
   } catch (error) {
-    console.error('Error deleting client in PostgreSQL:', error);
+    console.error('Error deleting client via Prisma:', error);
     return false;
   }
 }
 
 // -------------------------------------------------------------
-// INVITATIONS CRUD (POSTGRESQL + FILE BACKUP)
+// INVITATIONS CRUD (PRISMA ORM)
 // -------------------------------------------------------------
 export async function getInvitations(): Promise<InvitationRecord[]> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      client_id: string;
-      title: string;
-      slug: string;
-      template_id: string;
-      status: string;
-      event_date: string;
-      views_count: number;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `SELECT id, client_id, title, slug, template_id, status, event_date, views_count, created_at, updated_at 
-       FROM saas_invitations 
-       ORDER BY created_at DESC;`,
-    );
+    const rows = await prisma.invitation.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        client: {
+          select: { id: true, name: true, phone: true, package: true },
+        },
+        rsvps: true,
+      },
+    });
 
-    return res.rows.map((row) => ({
+    return rows.map((row) => ({
       id: row.id,
-      clientId: row.client_id,
+      clientId: row.clientId || '',
       title: row.title,
       slug: row.slug,
-      templateId: row.template_id,
+      templateId: row.templateId,
       status: row.status as InvitationStatus,
-      eventDate: row.event_date || '',
-      viewsCount: row.views_count || 0,
-      createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
-      updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+      eventDate: row.eventDate || '',
+      viewsCount: row.viewsCount,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
+      client: row.client,
+      rsvpsCount: row.rsvps.length,
+      attendingCount: row.rsvps.filter((r) => r.attendance === 'Hadir').length,
     }));
   } catch (error) {
-    console.error('PostgreSQL getInvitations fallback to file:', error);
+    console.error('Prisma getInvitations fallback to file:', error);
     if (!fs.existsSync(INVITATIONS_FILE)) return [];
     try {
       return JSON.parse(fs.readFileSync(INVITATIONS_FILE, 'utf-8'));
@@ -410,35 +357,32 @@ export async function getInvitationById(
 ): Promise<InvitationRecord | null> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      client_id: string;
-      title: string;
-      slug: string;
-      template_id: string;
-      status: string;
-      event_date: string;
-      views_count: number;
-      created_at: Date;
-      updated_at: Date;
-    }>('SELECT * FROM saas_invitations WHERE id = $1 LIMIT 1;', [id]);
+    const row = await prisma.invitation.findUnique({
+      where: { id },
+      include: {
+        client: true,
+        rsvps: true,
+      },
+    });
 
-    if (res.rows.length === 0) return null;
-    const row = res.rows[0];
+    if (!row) return null;
     return {
       id: row.id,
-      clientId: row.client_id,
+      clientId: row.clientId || '',
       title: row.title,
       slug: row.slug,
-      templateId: row.template_id,
+      templateId: row.templateId,
       status: row.status as InvitationStatus,
-      eventDate: row.event_date || '',
-      viewsCount: row.views_count || 0,
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      eventDate: row.eventDate || '',
+      viewsCount: row.viewsCount,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
+      client: row.client,
+      rsvpsCount: row.rsvps.length,
+      attendingCount: row.rsvps.filter((r) => r.attendance === 'Hadir').length,
     };
   } catch (error) {
-    console.error('PostgreSQL getInvitationById fallback:', error);
+    console.error('Prisma getInvitationById fallback:', error);
     const invs = await getInvitations();
     return invs.find((i) => i.id === id) || null;
   }
@@ -450,37 +394,33 @@ export async function getInvitationBySlug(
   await initializeSaasStorage();
   const normalized = slug.trim().toLowerCase();
   try {
-    const res = await query<{
-      id: string;
-      client_id: string;
-      title: string;
-      slug: string;
-      template_id: string;
-      status: string;
-      event_date: string;
-      views_count: number;
-      created_at: Date;
-      updated_at: Date;
-    }>('SELECT * FROM saas_invitations WHERE LOWER(slug) = $1 LIMIT 1;', [
-      normalized,
-    ]);
+    const row = await prisma.invitation.findFirst({
+      where: {
+        slug: {
+          equals: normalized,
+          mode: 'insensitive',
+        },
+      },
+      include: {
+        client: true,
+      },
+    });
 
-    if (res.rows.length === 0) return null;
-    const row = res.rows[0];
+    if (!row) return null;
     return {
       id: row.id,
-      clientId: row.client_id,
+      clientId: row.clientId || '',
       title: row.title,
       slug: row.slug,
-      templateId: row.template_id,
+      templateId: row.templateId,
       status: row.status as InvitationStatus,
-      eventDate: row.event_date || '',
-      viewsCount: row.views_count || 0,
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      eventDate: row.eventDate || '',
+      viewsCount: row.viewsCount,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
   } catch (error) {
-    console.error('PostgreSQL getInvitationBySlug fallback:', error);
+    console.error('Prisma getInvitationBySlug fallback:', error);
     const invs = await getInvitations();
     return (
       invs.find((inv) => inv.slug.trim().toLowerCase() === normalized) || null
@@ -539,44 +479,35 @@ export async function createInvitation(params: {
   };
 
   try {
-    const res = await query<{
-      id: string;
-      client_id: string;
-      title: string;
-      slug: string;
-      template_id: string;
-      status: string;
-      event_date: string;
-      views_count: number;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `INSERT INTO saas_invitations (id, client_id, title, slug, template_id, status, event_date, views_count, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
-       RETURNING *;`,
-      [id, params.clientId, params.title.trim(), finalSlug, templateId, status, eventDate, 0],
-    );
+    const row = await prisma.invitation.create({
+      data: {
+        id,
+        clientId: params.clientId,
+        title: params.title.trim(),
+        slug: finalSlug,
+        templateId,
+        status,
+        eventDate,
+        viewsCount: 0,
+        config: {
+          create: {
+            config: initialConfig as object,
+          },
+        },
+      },
+    });
 
-    // Save initial config to PostgreSQL JSONB table
-    await query(
-      `INSERT INTO saas_wedding_configs (invitation_id, config, updated_at)
-       VALUES ($1, $2, NOW())
-       ON CONFLICT (invitation_id) DO UPDATE SET config = EXCLUDED.config;`,
-      [id, JSON.stringify(initialConfig)],
-    );
-
-    const row = res.rows[0];
     const newInvitation: InvitationRecord = {
       id: row.id,
-      clientId: row.client_id,
+      clientId: row.clientId || '',
       title: row.title,
       slug: row.slug,
-      templateId: row.template_id,
+      templateId: row.templateId,
       status: row.status as InvitationStatus,
-      eventDate: row.event_date || '',
-      viewsCount: row.views_count || 0,
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      eventDate: row.eventDate || '',
+      viewsCount: row.viewsCount,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
 
     // Backup to filesystem
@@ -604,7 +535,7 @@ export async function createInvitation(params: {
 
     return newInvitation;
   } catch (error) {
-    console.error('Error creating invitation in PostgreSQL:', error);
+    console.error('Error creating invitation via Prisma:', error);
     throw error;
   }
 }
@@ -634,32 +565,16 @@ export async function updateInvitation(
       finalSlug = cleanSlug;
     }
 
-    const title = data.title !== undefined ? data.title.trim() : existing.title;
-    const templateId = data.templateId || existing.templateId;
-    const status = data.status || existing.status;
-    const eventDate = data.eventDate || existing.eventDate;
-
-    const res = await query<{
-      id: string;
-      client_id: string;
-      title: string;
-      slug: string;
-      template_id: string;
-      status: string;
-      event_date: string;
-      views_count: number;
-      created_at: Date;
-      updated_at: Date;
-    }>(
-      `UPDATE saas_invitations
-       SET title = $1, slug = $2, template_id = $3, status = $4, event_date = $5, updated_at = NOW()
-       WHERE id = $6
-       RETURNING *;`,
-      [title, finalSlug, templateId, status, eventDate, id],
-    );
-
-    if (res.rows.length === 0) return null;
-    const row = res.rows[0];
+    const row = await prisma.invitation.update({
+      where: { id },
+      data: {
+        title: data.title !== undefined ? data.title.trim() : undefined,
+        slug: finalSlug,
+        templateId: data.templateId || undefined,
+        status: data.status || undefined,
+        eventDate: data.eventDate || undefined,
+      },
+    });
 
     // If templateId changed, sync config
     if (data.templateId) {
@@ -674,39 +589,41 @@ export async function updateInvitation(
 
     return {
       id: row.id,
-      clientId: row.client_id,
+      clientId: row.clientId || '',
       title: row.title,
       slug: row.slug,
-      templateId: row.template_id,
+      templateId: row.templateId,
       status: row.status as InvitationStatus,
-      eventDate: row.event_date || '',
-      viewsCount: row.views_count || 0,
-      createdAt: new Date(row.created_at).toISOString(),
-      updatedAt: new Date(row.updated_at).toISOString(),
+      eventDate: row.eventDate || '',
+      viewsCount: row.viewsCount,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     };
   } catch (error) {
-    console.error('Error updating invitation in PostgreSQL:', error);
+    console.error('Error updating invitation via Prisma:', error);
     throw error;
   }
 }
 
 export async function incrementInvitationViews(id: string): Promise<void> {
   try {
-    await query(
-      'UPDATE saas_invitations SET views_count = views_count + 1 WHERE id = $1;',
-      [id],
-    );
+    await prisma.invitation.update({
+      where: { id },
+      data: {
+        viewsCount: { increment: 1 },
+      },
+    });
   } catch (err) {
-    console.error('Error incrementing views in PostgreSQL:', err);
+    console.error('Error incrementing views via Prisma:', err);
   }
 }
 
 export async function deleteInvitation(id: string): Promise<boolean> {
   await initializeSaasStorage();
   try {
-    const res = await query('DELETE FROM saas_invitations WHERE id = $1;', [id]);
+    await prisma.invitation.delete({ where: { id } });
 
-    // Also remove local files
+    // Also clean local directory
     try {
       const tenantDir = path.join(TENANTS_DIR, id);
       if (fs.existsSync(tenantDir)) {
@@ -716,28 +633,27 @@ export async function deleteInvitation(id: string): Promise<boolean> {
       // Ignore
     }
 
-    return (res.rowCount || 0) > 0;
+    return true;
   } catch (error) {
-    console.error('Error deleting invitation in PostgreSQL:', error);
+    console.error('Error deleting invitation via Prisma:', error);
     return false;
   }
 }
 
 // -------------------------------------------------------------
-// TENANT CONFIG (POSTGRESQL JSONB + FILE BACKUP)
+// TENANT CONFIG (PRISMA JSONB + FILE BACKUP)
 // -------------------------------------------------------------
 export async function getInvitationConfig(
   invitationId: string,
 ): Promise<WeddingConfig> {
   await initializeSaasStorage();
   try {
-    const res = await query<{ config: WeddingConfig }>(
-      'SELECT config FROM saas_wedding_configs WHERE invitation_id = $1 LIMIT 1;',
-      [invitationId],
-    );
+    const row = await prisma.weddingConfig.findUnique({
+      where: { invitationId },
+    });
 
-    if (res.rows.length > 0 && res.rows[0].config) {
-      const parsed = res.rows[0].config as Partial<WeddingConfig>;
+    if (row?.config) {
+      const parsed = row.config as unknown as Partial<WeddingConfig>;
       return {
         ...DEFAULT_WEDDING_CONFIG,
         ...parsed,
@@ -767,7 +683,7 @@ export async function getInvitationConfig(
       };
     }
   } catch (error) {
-    console.error('PostgreSQL getInvitationConfig fallback:', error);
+    console.error('Prisma getInvitationConfig fallback:', error);
   }
 
   // Fallback to file
@@ -790,22 +706,27 @@ export async function saveInvitationConfig(
 ): Promise<boolean> {
   await initializeSaasStorage();
   try {
-    // 1. Save to PostgreSQL JSONB
-    await query(
-      `INSERT INTO saas_wedding_configs (invitation_id, config, updated_at)
-       VALUES ($1, $2, NOW())
-       ON CONFLICT (invitation_id) DO UPDATE SET config = EXCLUDED.config, updated_at = NOW();`,
-      [invitationId, JSON.stringify(config)],
-    );
+    // 1. Upsert to Prisma WeddingConfig (JSONB)
+    await prisma.weddingConfig.upsert({
+      where: { invitationId },
+      update: {
+        config: config as object,
+      },
+      create: {
+        invitationId,
+        config: config as object,
+      },
+    });
 
-    // 2. Sync title & templateId in saas_invitations
+    // 2. Sync title & templateId in Invitation model
     if (config.title) {
-      await query(
-        `UPDATE saas_invitations 
-         SET title = $1, template_id = $2, updated_at = NOW() 
-         WHERE id = $3;`,
-        [config.title, config.templateId || 'netflix', invitationId],
-      );
+      await prisma.invitation.update({
+        where: { id: invitationId },
+        data: {
+          title: config.title,
+          templateId: config.templateId || undefined,
+        },
+      });
     }
 
     // 3. Backup to filesystem
@@ -823,44 +744,34 @@ export async function saveInvitationConfig(
 
     return true;
   } catch (error) {
-    console.error('Error saving config to PostgreSQL:', error);
+    console.error('Error saving config via Prisma:', error);
     return false;
   }
 }
 
 // -------------------------------------------------------------
-// TENANT RSVP & WISHES (POSTGRESQL)
+// TENANT RSVP & WISHES (PRISMA ORM)
 // -------------------------------------------------------------
 export async function getTenantRsvps(
   invitationId: string,
 ): Promise<RsvpRecord[]> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      name: string;
-      attendance: string;
-      guest_count: number;
-      notes: string;
-      submitted_at: Date;
-    }>(
-      `SELECT id, name, attendance, guest_count, notes, submitted_at 
-       FROM saas_rsvps 
-       WHERE invitation_id = $1 
-       ORDER BY submitted_at DESC;`,
-      [invitationId],
-    );
+    const rows = await prisma.rsvp.findMany({
+      where: { invitationId },
+      orderBy: { submittedAt: 'desc' },
+    });
 
-    return res.rows.map((r) => ({
+    return rows.map((r) => ({
       id: r.id,
       name: r.name,
       attendance: r.attendance as 'Hadir' | 'Tidak Hadir',
-      guestCount: r.guest_count,
+      guestCount: r.guestCount,
       notes: r.notes || '',
-      submittedAt: new Date(r.submitted_at).toISOString(),
+      submittedAt: r.submittedAt.toISOString(),
     }));
   } catch (error) {
-    console.error('PostgreSQL getTenantRsvps fallback to file:', error);
+    console.error('Prisma getTenantRsvps fallback to file:', error);
     const file = path.join(TENANTS_DIR, invitationId, 'rsvps.json');
     if (!fs.existsSync(file)) return [];
     try {
@@ -881,22 +792,26 @@ export async function saveTenantRsvp(
   const attendance = payload.attendance;
   const guestCount = attendance === 'Hadir' ? Number(payload.guestCount || 1) : 0;
   const notes = payload.notes ? payload.notes.trim() : '';
-  const submittedAt = new Date().toISOString();
 
   try {
-    await query(
-      `INSERT INTO saas_rsvps (id, invitation_id, name, attendance, guest_count, notes, submitted_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-      [id, invitationId, name, attendance, guestCount, notes, submittedAt],
-    );
+    const row = await prisma.rsvp.create({
+      data: {
+        id,
+        invitationId,
+        name,
+        attendance,
+        guestCount,
+        notes,
+      },
+    });
 
     const newRsvp: RsvpRecord = {
-      id,
-      name,
-      attendance,
-      guestCount,
-      notes,
-      submittedAt,
+      id: row.id,
+      name: row.name,
+      attendance: row.attendance as 'Hadir' | 'Tidak Hadir',
+      guestCount: row.guestCount,
+      notes: row.notes || '',
+      submittedAt: row.submittedAt.toISOString(),
     };
 
     // Backup to file
@@ -915,7 +830,7 @@ export async function saveTenantRsvp(
 
     return newRsvp;
   } catch (error) {
-    console.error('Error saving RSVP to PostgreSQL:', error);
+    console.error('Error saving RSVP via Prisma:', error);
     throw error;
   }
 }
@@ -925,29 +840,20 @@ export async function getTenantWishes(
 ): Promise<WishRecord[]> {
   await initializeSaasStorage();
   try {
-    const res = await query<{
-      id: string;
-      name: string;
-      status: string;
-      message: string;
-      created_at: Date;
-    }>(
-      `SELECT id, name, status, message, created_at 
-       FROM saas_wishes 
-       WHERE invitation_id = $1 
-       ORDER BY created_at DESC;`,
-      [invitationId],
-    );
+    const rows = await prisma.wish.findMany({
+      where: { invitationId },
+      orderBy: { createdAt: 'desc' },
+    });
 
-    return res.rows.map((w) => ({
+    return rows.map((w) => ({
       id: w.id,
       name: w.name,
       status: w.status as 'Hadir' | 'Tidak Hadir',
       message: w.message,
-      createdAt: new Date(w.created_at).toISOString(),
+      createdAt: w.createdAt.toISOString(),
     }));
   } catch (error) {
-    console.error('PostgreSQL getTenantWishes fallback to file:', error);
+    console.error('Prisma getTenantWishes fallback to file:', error);
     const file = path.join(TENANTS_DIR, invitationId, 'wishes.json');
     if (!fs.existsSync(file)) return [];
     try {
@@ -967,21 +873,24 @@ export async function saveTenantWish(
   const name = payload.name.trim();
   const status = payload.status || 'Hadir';
   const message = payload.message.trim();
-  const createdAt = new Date().toISOString();
 
   try {
-    await query(
-      `INSERT INTO saas_wishes (id, invitation_id, name, status, message, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6);`,
-      [id, invitationId, name, status, message, createdAt],
-    );
+    const row = await prisma.wish.create({
+      data: {
+        id,
+        invitationId,
+        name,
+        status,
+        message,
+      },
+    });
 
     const newWish: WishRecord = {
-      id,
-      name,
-      status,
-      message,
-      createdAt,
+      id: row.id,
+      name: row.name,
+      status: row.status as 'Hadir' | 'Tidak Hadir',
+      message: row.message,
+      createdAt: row.createdAt.toISOString(),
     };
 
     // Backup to file
@@ -1000,48 +909,38 @@ export async function saveTenantWish(
 
     return newWish;
   } catch (error) {
-    console.error('Error saving Wish to PostgreSQL:', error);
+    console.error('Error saving Wish via Prisma:', error);
     throw error;
   }
 }
 
 // -------------------------------------------------------------
-// SAAS OVERALL STATS (POSTGRESQL AGGREGATION)
+// SAAS OVERALL STATS (PRISMA AGGREGATION)
 // -------------------------------------------------------------
 export async function getSaasStats(): Promise<SaasStats> {
   await initializeSaasStorage();
   try {
-    const clientsRes = await query<{ count: string }>(
-      'SELECT count(*) as count FROM saas_clients;',
-    );
-    const invsRes = await query<{
-      total: string;
-      published: string;
-      draft: string;
-      inactive: string;
-    }>(
-      `SELECT 
-        count(*) as total,
-        count(*) FILTER (WHERE status = 'published') as published,
-        count(*) FILTER (WHERE status = 'draft') as draft,
-        count(*) FILTER (WHERE status = 'inactive') as inactive
-       FROM saas_invitations;`,
-    );
-    const rsvpsRes = await query<{ count: string }>(
-      'SELECT count(*) as count FROM saas_rsvps;',
-    );
+    const [totalClients, totalInvitations, publishedCount, draftCount, inactiveCount, totalRsvps] =
+      await Promise.all([
+        prisma.client.count(),
+        prisma.invitation.count(),
+        prisma.invitation.count({ where: { status: 'published' } }),
+        prisma.invitation.count({ where: { status: 'draft' } }),
+        prisma.invitation.count({ where: { status: 'inactive' } }),
+        prisma.rsvp.count(),
+      ]);
 
     return {
-      totalClients: Number(clientsRes.rows[0]?.count || 0),
-      totalInvitations: Number(invsRes.rows[0]?.total || 0),
-      publishedCount: Number(invsRes.rows[0]?.published || 0),
-      draftCount: Number(invsRes.rows[0]?.draft || 0),
-      inactiveCount: Number(invsRes.rows[0]?.inactive || 0),
+      totalClients,
+      totalInvitations,
+      publishedCount,
+      draftCount,
+      inactiveCount,
       totalTemplates: AVAILABLE_TEMPLATES.length,
-      totalRsvps: Number(rsvpsRes.rows[0]?.count || 0),
+      totalRsvps,
     };
   } catch (error) {
-    console.error('PostgreSQL getSaasStats fallback:', error);
+    console.error('Prisma getSaasStats fallback:', error);
     const clients = await getClients();
     const invitations = await getInvitations();
 

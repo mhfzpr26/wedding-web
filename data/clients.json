@@ -1,14 +1,16 @@
 [
   {
-    "id": "client_1789292328047_288gi",
+    "id": "client_1789293336186_ao106",
     "name": "Budi Santoso & Siti Nurhaliza",
     "phone": "081987654321",
     "email": "budi.siti@example.com",
     "package": "Cinematic VIP",
     "notes": "Paket Netflix Wedding Special",
     "status": "active",
-    "createdAt": "2026-09-13T09:38:48.048Z",
-    "updatedAt": "2026-09-13T09:38:48.048Z"
+    "createdAt": "2026-09-13T09:55:36.192Z",
+    "updatedAt": "2026-09-13T09:55:36.192Z",
+    "invitationsCount": 0,
+    "invitations": []
   },
   {
     "id": "client-destia",
@@ -19,6 +21,16 @@
     "notes": "Client perdana paket Netflix Cinematic Theme",
     "status": "active",
     "createdAt": "2026-09-13T09:38:47.865Z",
-    "updatedAt": "2026-09-13T09:38:47.865Z"
+    "updatedAt": "2026-09-13T09:38:47.865Z",
+    "invitationsCount": 1,
+    "invitations": [
+      {
+        "id": "inv-destia-rakafansa",
+        "title": "Destia & Rakafansa | The Wedding",
+        "slug": "destia-rakafansa",
+        "status": "published",
+        "templateId": "netflix"
+      }
+    ]
   }
 ]

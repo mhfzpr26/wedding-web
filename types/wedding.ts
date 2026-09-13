@@ -170,6 +170,14 @@ export interface InvitationRecord {
   viewsCount: number;
   createdAt: string;
   updatedAt: string;
+  client?: {
+    id: string;
+    name: string;
+    phone?: string;
+    package?: string;
+  } | null;
+  rsvpsCount?: number;
+  attendingCount?: number;
 }
 
 export interface SaasStats {
