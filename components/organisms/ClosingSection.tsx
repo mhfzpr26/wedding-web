@@ -53,7 +53,7 @@ export const ClosingSection: React.FC = () => {
           </div>
 
           <div className="netflix-more-like-this__grid">
-            {moreLikeThis.map((item, index) => (
+            {moreLikeThis.map((item) => (
               <div key={item.title} className="netflix-poster-card">
                 <div className="netflix-poster-card__thumb-box">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

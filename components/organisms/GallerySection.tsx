@@ -106,9 +106,9 @@ export const GallerySection: React.FC = () => {
     setSelectedPhotoIndex(index);
   };
 
-  const handleCloseLightbox = () => {
+  const handleCloseLightbox = useCallback(() => {
     setSelectedPhotoIndex(null);
-  };
+  }, []);
 
   const handlePrev = useCallback(() => {
     if (selectedPhotoIndex === null) return;
@@ -129,7 +129,7 @@ export const GallerySection: React.FC = () => {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selectedPhotoIndex, handlePrev, handleNext]);
+  }, [selectedPhotoIndex, handlePrev, handleNext, handleCloseLightbox]);
 
   return (
     <section

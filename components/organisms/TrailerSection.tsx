@@ -93,7 +93,7 @@ export const TrailerSection: React.FC = () => {
               playsInline
               muted={isMuted}
               onTimeUpdate={() => {
-                if (videoRef.current && videoRef.current.duration) {
+                if (videoRef.current?.duration) {
                   setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
                 }
               }}
@@ -144,7 +144,7 @@ export const TrailerSection: React.FC = () => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const clickPos = (e.clientX - rect.left) / rect.width;
                   setProgress(clickPos * 100);
-                  if (videoRef.current && videoRef.current.duration) {
+                  if (videoRef.current?.duration) {
                     videoRef.current.currentTime = clickPos * videoRef.current.duration;
                   }
                 }}

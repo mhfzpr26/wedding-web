@@ -4,8 +4,6 @@ import type React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
-import { SectionHeader } from '@/components/atoms/SectionHeader';
-import { Select } from '@/components/atoms/Select';
 import { Textarea } from '@/components/atoms/Textarea';
 import { useInView } from '@/hooks/useInView';
 import type { AttendanceStatus, RsvpPayload } from '@/types/rsvp';
@@ -32,15 +30,11 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
 
   const handleInputChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAttendanceChange = (status: AttendanceStatus) => {
-    setFormData((prev) => ({ ...prev, attendance: status }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,14 +147,14 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   PILIH PROFIL KEHADIRAN (SELECT PROFILE):
                 </span>
                 <div className="netflix-profile-picker__grid">
-                  {profileOptions.map((opt, i) => {
+                  {profileOptions.map((opt) => {
                     const isSelected =
                       formData.attendance === opt.id &&
                       (opt.id === 'Tidak Hadir' || formData.guestCount === opt.count);
 
                     return (
                       <button
-                        key={`${opt.id}-${opt.count}-${i}`}
+                        key={`${opt.id}-${opt.count}`}
                         type="button"
                         className={`netflix-profile-avatar-card ${isSelected ? 'netflix-profile-avatar-card--active' : ''}`}
                         onClick={() => {

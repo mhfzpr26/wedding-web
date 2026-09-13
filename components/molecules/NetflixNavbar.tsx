@@ -70,7 +70,6 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
       className={`netflix-nav ${scrolled ? 'netflix-nav--scrolled' : ''} ${
         visible ? 'netflix-nav--visible' : ''
       }`}
-      aria-label="Navigasi Utama"
     >
       <div className="netflix-nav__container">
         {/* Logo */}
@@ -84,7 +83,7 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
         </a>
 
         {/* Links */}
-        <nav className="netflix-nav__menu">
+        <nav className="netflix-nav__menu" aria-label="Navigasi Utama">
           <a
             href="#opening"
             onClick={scrollTo('opening')}

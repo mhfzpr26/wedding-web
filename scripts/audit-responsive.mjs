@@ -1,6 +1,6 @@
 import { chromium } from 'playwright-core';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const report = {
   desktop: { overflows: [], issues: [] },

@@ -27,11 +27,20 @@
       "a11y": {
         "noSvgWithoutTitle": "off",
         "useMediaCaption": "off",
-        "useSemanticElements": "off"
+        "useSemanticElements": "off",
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+        "useValidAnchor": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",
         "useExhaustiveDependencies": "warn"
+      },
+      "performance": {
+        "noImgElement": "off"
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     }
   },

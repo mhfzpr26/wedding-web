@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -17,7 +17,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   isOpen,
   guestName,
 }) => {
-  const [animationsReady, setAnimationsReady] = useState(true);
+  const animationsReady = true;
   const [savedToList, setSavedToList] = useState(false);
 
   const handleEnterClick = (e: React.MouseEvent) => {
