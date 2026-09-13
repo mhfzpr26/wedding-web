@@ -1,6 +1,6 @@
+import InstagramIcon from '@mui/icons-material/Instagram';
 import type React from 'react';
 import type { WeddingBrideGroom } from '@/types/wedding';
-import InstagramIcon from '@mui/icons-material/Instagram';
 
 export interface CoupleProfileCardProps {
   person: WeddingBrideGroom;
@@ -18,7 +18,9 @@ export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
   const photoSrc = person.photo || defaultPhoto;
 
   return (
-    <article className={`couple__person couple__person--${type} netflix-cast-card`}>
+    <article
+      className={`couple__person couple__person--${type} netflix-cast-card`}
+    >
       {/* Big Netflix Top 10 Rank Watermark */}
       <div className="netflix-cast-card__rank-watermark" aria-hidden="true">
         #{rank}
@@ -41,27 +43,27 @@ export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
         <span className="netflix-cast-card__tag">
           {type === 'bride' ? 'LEAD ACTRESS' : 'LEAD ACTOR'}
         </span>
-        <span className="netflix-spec-tag">100% MATCH</span>
       </div>
 
       <span
         className="couple__role"
         id={type === 'bride' ? 'couple-title' : undefined}
       >
-        {person.characterRole || (type === 'bride' ? 'DESTIA as THE BRIDE' : 'RAKAFANSA as THE GROOM')}
+        {person.characterRole ||
+          (type === 'bride' ? 'DESTIA as THE BRIDE' : 'RAKAFANSA as THE GROOM')}
       </span>
 
       <h3 className="couple__name">{person.name}</h3>
 
       {person.bio && (
-        <p className="netflix-cast-card__bio">
-          &ldquo;{person.bio}&rdquo;
-        </p>
+        <p className="netflix-cast-card__bio">&ldquo;{person.bio}&rdquo;</p>
       )}
 
       <div className="netflix-cast-card__credits-box">
         <p className="couple__parent-label">
-          {type === 'bride' ? 'EXECUTIVE SPONSORS (ORANG TUA WANITA):' : 'EXECUTIVE SPONSORS (ORANG TUA PRIA):'}
+          {type === 'bride'
+            ? 'EXECUTIVE SPONSORS (ORANG TUA WANITA):'
+            : 'EXECUTIVE SPONSORS (ORANG TUA PRIA):'}
         </p>
         <p className="couple__parents">
           {person.parents.mother}

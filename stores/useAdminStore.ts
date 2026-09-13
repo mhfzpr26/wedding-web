@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { RsvpRecord } from '@/types/rsvp';
 import type {
   ClientRecord,
   InvitationRecord,
@@ -6,7 +7,6 @@ import type {
   SaasStats,
   WeddingConfig,
 } from '@/types/wedding';
-import type { RsvpRecord } from '@/types/rsvp';
 
 export type PrimaryTab = 'dashboard' | 'clients' | 'editor' | 'templates';
 export type EditorTab =
@@ -130,9 +130,7 @@ export interface AdminState {
       | ((prev: WeddingConfig | null) => WeddingConfig | null),
   ) => void;
   setClients: (
-    updater:
-      | ClientWithInvs[]
-      | ((prev: ClientWithInvs[]) => ClientWithInvs[]),
+    updater: ClientWithInvs[] | ((prev: ClientWithInvs[]) => ClientWithInvs[]),
   ) => void;
   setInvitations: (
     updater:
@@ -240,28 +238,23 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   setEditorStatus: (editorStatus) => set({ editorStatus }),
   setConfig: (updater) =>
     set((state) => ({
-      config:
-        typeof updater === 'function' ? updater(state.config) : updater,
+      config: typeof updater === 'function' ? updater(state.config) : updater,
     })),
   setClients: (updater) =>
     set((state) => ({
-      clients:
-        typeof updater === 'function' ? updater(state.clients) : updater,
+      clients: typeof updater === 'function' ? updater(state.clients) : updater,
     })),
   setInvitations: (updater) =>
     set((state) => ({
       invitations:
-        typeof updater === 'function'
-          ? updater(state.invitations)
-          : updater,
+        typeof updater === 'function' ? updater(state.invitations) : updater,
     })),
   setStats: (stats) => set({ stats }),
   setRsvps: (rsvps) => set({ rsvps }),
   setRsvpStats: (rsvpStats) => set({ rsvpStats }),
 
   // Modal actions
-  setShowCreateInvModal: (showCreateInvModal) =>
-    set({ showCreateInvModal }),
+  setShowCreateInvModal: (showCreateInvModal) => set({ showCreateInvModal }),
   setCreateInvForm: (updater) =>
     set((state) => ({
       createInvForm:

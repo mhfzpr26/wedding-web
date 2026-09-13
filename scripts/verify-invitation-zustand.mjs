@@ -1,5 +1,5 @@
-import { chromium } from 'playwright-core';
 import path from 'node:path';
+import { chromium } from 'playwright-core';
 
 const ARTIFACT_DIR =
   'C:/Users/mhafi/.gemini/antigravity-ide/brain/b3201bb1-3947-4149-bc22-de6c30131c02/.tempmediaStorage';
@@ -12,10 +12,14 @@ async function run() {
   const page = await context.newPage();
 
   console.log('Navigating to /undangan/destia-rakafansa...');
-  await page.goto('http://localhost:3000/undangan/destia-rakafansa', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:3000/undangan/destia-rakafansa', {
+    waitUntil: 'networkidle',
+  });
 
   // Verify Cover is present
-  const enterBtn = page.locator('#btn-open-invitation, button:has-text("Buka Undangan")');
+  const enterBtn = page.locator(
+    '#btn-open-invitation, button:has-text("Buka Undangan")',
+  );
   await enterBtn.first().waitFor({ state: 'visible', timeout: 5000 });
   console.log('✅ Found Buka Undangan button');
 

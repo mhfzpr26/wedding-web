@@ -28,7 +28,9 @@ const DEFAULT_TIMELINE: StoryTimelineItemData[] = [
   },
 ];
 
-export const LoveStorySection: React.FC<LoveStorySectionProps> = ({ timeline }) => {
+export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
+  timeline,
+}) => {
   const { ref, inView } = useInView<HTMLElement>();
 
   const timelineData =
@@ -50,12 +52,24 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({ timeline }) 
           }}
         >
           <div className="netflix-section-header">
-            <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
+            <div
+              className="netflix-badge-pill"
+              style={{ margin: '0 auto var(--spacing-xs)' }}
+            >
               TRAILERS &amp; MORE • THE STORY SO FAR
             </div>
-            <h2 className="love-story__title" id="story-title">OUR JOURNEY THROUGH SEASONS</h2>
-            <p style={{ color: 'var(--color-light-gray)', marginTop: '0.35rem', fontSize: 'var(--font-size-small)' }}>
-              Kilas balik perjalanan cerita dari pertemuan tak terduga hingga pelaminan
+            <h2 className="love-story__title" id="story-title">
+              OUR JOURNEY THROUGH SEASONS
+            </h2>
+            <p
+              style={{
+                color: 'var(--color-light-gray)',
+                marginTop: '0.35rem',
+                fontSize: 'var(--font-size-small)',
+              }}
+            >
+              Kilas balik perjalanan cerita dari pertemuan tak terduga hingga
+              pelaminan
             </p>
           </div>
         </div>

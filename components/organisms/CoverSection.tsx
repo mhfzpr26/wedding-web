@@ -1,10 +1,10 @@
 'use client';
 
-import type React from 'react';
-import { useState } from 'react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import type React from 'react';
+import { useState } from 'react';
 
 import type { WeddingCover } from '@/types/wedding';
 
@@ -28,7 +28,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   const seriesBadge = cover?.seriesBadge || 'A NETFLIX WEDDING SPECIAL';
   const trendingRank = cover?.trendingRank || '#1 in Weddings Today';
   const title = cover?.title || 'DESTIA & RAKAFANSA';
-  const matchPercentage = cover?.matchPercentage || '99% Match';
   const year = cover?.year || '2026';
   const ratingBadge = cover?.ratingBadge || 'SU / ALL AGES';
   const qualityBadge = cover?.qualityBadge || 'UHD 4K';
@@ -100,7 +99,9 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(-20px)',
+              animationsReady && !isOpen
+                ? 'translateY(0)'
+                : 'translateY(-20px)',
             transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s',
           }}
         >
@@ -152,7 +153,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
             transition: 'opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s',
           }}
         >
-          <span className="netflix-cover__match">{matchPercentage}</span>
           <span className="netflix-cover__year">{year}</span>
           <span className="netflix-cover__badge-pill netflix-cover__badge-pill--rating">
             {ratingBadge}
@@ -193,7 +193,8 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__guest-pass"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s',
           }}
         >
@@ -207,9 +208,15 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
               />
             </div>
             <div className="netflix-cover__profile-text">
-              <span className="netflix-cover__guest-badge">EXCLUSIVE INVITATION PASS • VIP</span>
-              <span className="netflix-cover__guest-label">Who&apos;s Watching:</span>
-              <span className="netflix-cover__guest-name">{guestName || 'Tamu Undangan Terhormat'}</span>
+              <span className="netflix-cover__guest-badge">
+                EXCLUSIVE INVITATION PASS • VIP
+              </span>
+              <span className="netflix-cover__guest-label">
+                Who&apos;s Watching:
+              </span>
+              <span className="netflix-cover__guest-name">
+                {guestName || 'Tamu Undangan Terhormat'}
+              </span>
             </div>
           </div>
         </div>
@@ -219,7 +226,8 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__actions"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
             transition: 'opacity 0.8s ease 0.9s, transform 0.8s ease 0.9s',
           }}
         >

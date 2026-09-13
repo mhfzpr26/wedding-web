@@ -52,11 +52,22 @@ export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
     >
       <div className="container">
         <div className="netflix-section-header">
-          <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
+          <div
+            className="netflix-badge-pill"
+            style={{ margin: '0 auto var(--spacing-xs)' }}
+          >
             TOP 10 STARRING CAST • PEMERAN UTAMA
           </div>
-          <h2 className="couple__header-title" id="couple-title">MEET THE LEAD CAST</h2>
-          <p style={{ color: 'var(--color-light-gray)', marginTop: '0.35rem', fontSize: 'var(--font-size-small)' }}>
+          <h2 className="couple__header-title" id="couple-title">
+            MEET THE LEAD CAST
+          </h2>
+          <p
+            style={{
+              color: 'var(--color-light-gray)',
+              marginTop: '0.35rem',
+              fontSize: 'var(--font-size-small)',
+            }}
+          >
             Dua insan yang menjadi pemeran utama dalam film kehidupan nyata ini
           </p>
         </div>

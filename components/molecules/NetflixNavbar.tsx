@@ -1,14 +1,14 @@
 'use client';
 
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import PeopleIcon from '@mui/icons-material/People';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import TimerIcon from '@mui/icons-material/Timer';
 import type React from 'react';
 import { useEffect, useState } from 'react';
-import PeopleIcon from '@mui/icons-material/People';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import TimerIcon from '@mui/icons-material/Timer';
 
 export interface NetflixNavbarProps {
   guestName?: string;
@@ -63,7 +63,9 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
     }
   };
 
-  const guestInitial = guestName ? guestName.trim().charAt(0).toUpperCase() : 'U';
+  const guestInitial = guestName
+    ? guestName.trim().charAt(0).toUpperCase()
+    : 'U';
 
   return (
     <header
@@ -73,7 +75,11 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
     >
       <div className="netflix-nav__container">
         {/* Logo */}
-        <a href="#opening" onClick={scrollTo('opening')} className="netflix-nav__logo-link">
+        <a
+          href="#opening"
+          onClick={scrollTo('opening')}
+          className="netflix-nav__logo-link"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/netflix-logo.svg"
@@ -96,7 +102,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('trailer')}
             className={`netflix-nav__link ${activeSection === 'trailer' ? 'active' : ''}`}
           >
-            <OndemandVideoIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <OndemandVideoIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Trailer
           </a>
           <a
@@ -104,7 +113,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('couple')}
             className={`netflix-nav__link ${activeSection === 'couple' ? 'active' : ''}`}
           >
-            <PeopleIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <PeopleIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Cast
           </a>
           <a
@@ -119,7 +131,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('story')}
             className={`netflix-nav__link ${activeSection === 'story' ? 'active' : ''}`}
           >
-            <TimelineIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <TimelineIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Story
           </a>
           <a
@@ -127,7 +142,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('countdown')}
             className={`netflix-nav__link ${activeSection === 'countdown' ? 'active' : ''}`}
           >
-            <TimerIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <TimerIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Premiere
           </a>
           <a
@@ -135,7 +153,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('event')}
             className={`netflix-nav__link ${activeSection === 'event' ? 'active' : ''}`}
           >
-            <OndemandVideoIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <OndemandVideoIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Episodes
           </a>
           <a
@@ -143,7 +164,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('rsvp')}
             className={`netflix-nav__link ${activeSection === 'rsvp' ? 'active' : ''}`}
           >
-            <ConfirmationNumberIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <ConfirmationNumberIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             RSVP
           </a>
           <a
@@ -151,7 +175,10 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('wishes')}
             className={`netflix-nav__link ${activeSection === 'wishes' ? 'active' : ''}`}
           >
-            <RateReviewIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <RateReviewIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Reviews
           </a>
           <a
@@ -159,16 +186,24 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             onClick={scrollTo('gift')}
             className={`netflix-nav__link ${activeSection === 'gift' ? 'active' : ''}`}
           >
-            <CardGiftcardIcon sx={{ fontSize: 16 }} className="netflix-nav__link-icon" />
+            <CardGiftcardIcon
+              sx={{ fontSize: 16 }}
+              className="netflix-nav__link-icon"
+            />
             Gift
           </a>
         </nav>
 
         {/* User Profile Badge */}
         <div className="netflix-nav__user">
-          <div className="netflix-nav__profile" title={`Login sebagai: ${guestName || 'Tamu Undangan'}`}>
+          <div
+            className="netflix-nav__profile"
+            title={`Login sebagai: ${guestName || 'Tamu Undangan'}`}
+          >
             <span className="netflix-nav__avatar">{guestInitial}</span>
-            <span className="netflix-nav__username">{guestName ? guestName.split(' ')[0] : 'Guest'}</span>
+            <span className="netflix-nav__username">
+              {guestName ? guestName.split(' ')[0] : 'Guest'}
+            </span>
           </div>
         </div>
       </div>

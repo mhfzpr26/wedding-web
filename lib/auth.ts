@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
-import { type JWTPayload, SignJWT, jwtVerify } from 'jose';
+import { type JWTPayload, jwtVerify, SignJWT } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.ADMIN_JWT_SECRET || 'wedflow-secure-enterprise-jwt-key-2026-wedding-platform',
+  process.env.ADMIN_JWT_SECRET ||
+    'wedflow-secure-enterprise-jwt-key-2026-wedding-platform',
 );
 
 const TOKEN_EXPIRY = '7d';
@@ -36,9 +37,12 @@ export async function verifyPassword(
 /**
  * Sign an admin JWT token using jose.
  */
-export async function signAdminToken(
-  payload: { id: string; role: string; email?: string; name?: string },
-): Promise<string> {
+export async function signAdminToken(payload: {
+  id: string;
+  role: string;
+  email?: string;
+  name?: string;
+}): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()

@@ -31,9 +31,7 @@ export const wishSchema = z.object({
     .trim()
     .min(2, 'Nama minimal 2 karakter')
     .max(100, 'Nama maksimal 100 karakter'),
-  status: z
-    .string()
-    .default('Hadir'),
+  status: z.string().default('Hadir'),
   message: z
     .string()
     .trim()

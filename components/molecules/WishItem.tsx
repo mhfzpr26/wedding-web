@@ -29,9 +29,18 @@ export const WishItem: React.FC<WishItemProps> = ({ wish }) => {
           {wish.name.charAt(0).toUpperCase()}
         </div>
         <div className="netflix-review-item__user-meta">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              flexWrap: 'wrap',
+            }}
+          >
             <span className="wishes__sender">{wish.name}</span>
-            <span className="netflix-spec-tag netflix-spec-tag--red">VERIFIED VIEWER</span>
+            <span className="netflix-spec-tag netflix-spec-tag--red">
+              VERIFIED VIEWER
+            </span>
             <Badge>{wish.status}</Badge>
           </div>
           <span className="wishes__date">{formatDate(wish.createdAt)}</span>

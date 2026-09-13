@@ -69,12 +69,7 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
       role="region"
       aria-label="Pemutar Musik Latar"
     >
-      <audio
-        ref={audioRef}
-        src={audioUrl}
-        loop
-        preload="auto"
-      />
+      <audio ref={audioRef} src={audioUrl} loop preload="auto" />
       <AudioToggle
         isPlaying={audioPlaying && !trailerPlaying}
         onToggle={toggleAudio}

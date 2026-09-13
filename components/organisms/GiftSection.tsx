@@ -57,14 +57,22 @@ export const GiftSection: React.FC<GiftSectionProps> = ({ gifts }) => {
           }}
         >
           <div className="netflix-section-header">
-            <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
+            <div
+              className="netflix-badge-pill"
+              style={{ margin: '0 auto var(--spacing-xs)' }}
+            >
               EXECUTIVE PRODUCERS • BACK THE PRODUCTION
             </div>
-            <h2 className="gift__title" id="gift-title">WEDDING GIFT &amp; SUPPORT</h2>
+            <h2 className="gift__title" id="gift-title">
+              WEDDING GIFT &amp; SUPPORT
+            </h2>
           </div>
 
           <p className="gift__desc">
-            Kehadiran dan doa restu Anda adalah karunia yang paling berharga bagi kami. Namun bagi Bapak/Ibu/Saudara/i yang berkenan memberikan tanda kasih secara digital untuk mendukung babak baru (Season 2) perjalanan kami, dapat disalurkan melalui rekening resmi berikut:
+            Kehadiran dan doa restu Anda adalah karunia yang paling berharga
+            bagi kami. Namun bagi Bapak/Ibu/Saudara/i yang berkenan memberikan
+            tanda kasih secara digital untuk mendukung babak baru (Season 2)
+            perjalanan kami, dapat disalurkan melalui rekening resmi berikut:
           </p>
 
           <div className="gift__cards">

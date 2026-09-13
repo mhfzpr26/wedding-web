@@ -1,5 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getWeddingConfig, saveWeddingConfig, DEFAULT_WEDDING_CONFIG } from '@/lib/wedding-data';
+import {
+  DEFAULT_WEDDING_CONFIG,
+  getWeddingConfig,
+  saveWeddingConfig,
+} from '@/lib/wedding-data';
 import type { WeddingConfig } from '@/types/wedding';
 
 export async function GET() {

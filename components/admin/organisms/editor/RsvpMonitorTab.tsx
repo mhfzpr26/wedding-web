@@ -1,7 +1,24 @@
 'use client';
 
-import type React from 'react';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import PeopleIcon from '@mui/icons-material/People';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import type React from 'react';
+import { KpiCard } from '@/components/admin/molecules/KpiCard';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export const RsvpMonitorTab: React.FC = () => {
@@ -10,122 +27,139 @@ export const RsvpMonitorTab: React.FC = () => {
   const rsvps = useAdminStore((s) => s.rsvps);
   const rsvpStats = useAdminStore((s) => s.rsvpStats);
 
-  const currentInvitation = invitations.find((i) => i.id === selectedInvitationId);
+  const currentInvitation = invitations.find(
+    (i) => i.id === selectedInvitationId,
+  );
 
   return (
-    <div className="admin-card">
-      <div className="admin-card__header">
-        <div className="admin-card__title-group">
-          <h3 className="admin-card__title">
-            💌 Konfirmasi Kehadiran Tamu (Undangan Ini)
-          </h3>
-          <span className="admin-card__desc">
-            Data RSVP tamu yang terisolasi 100% khusus untuk undangan &quot;{currentInvitation?.title}&quot;.
-          </span>
-        </div>
-      </div>
+    <Box>
+      <Box sx={{ mb: 2.5 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          💌 Monitor Kehadiran Tamu
+        </Typography>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          Data RSVP khusus undangan &quot;{currentInvitation?.title ?? '—'}
+          &quot;
+        </Typography>
+      </Box>
 
-      {/* Stats for this invitation */}
-      <div className="admin-kpi-grid" style={{ marginBottom: '1.5rem' }}>
-        <div className="admin-kpi-card">
-          <div className="admin-kpi-card__info">
-            <span className="admin-kpi-card__label">Total Respons</span>
-            <span className="admin-kpi-card__value">
-              {rsvpStats.totalResponses}
-            </span>
-          </div>
-        </div>
-        <div className="admin-kpi-card">
-          <div className="admin-kpi-card__info">
-            <span className="admin-kpi-card__label">Konfirmasi Hadir</span>
-            <span
-              className="admin-kpi-card__value"
-              style={{ color: 'var(--admin-green)' }}
-            >
-              {rsvpStats.attendingCount}
-            </span>
-          </div>
-        </div>
-        <div className="admin-kpi-card">
-          <div className="admin-kpi-card__info">
-            <span className="admin-kpi-card__label">Tidak Hadir</span>
-            <span
-              className="admin-kpi-card__value"
-              style={{ color: '#ef4444' }}
-            >
-              {rsvpStats.notAttendingCount}
-            </span>
-          </div>
-        </div>
-        <div className="admin-kpi-card">
-          <div className="admin-kpi-card__info">
-            <span className="admin-kpi-card__label">Estimasi Porsi Tamu</span>
-            <span className="admin-kpi-card__value">
-              {rsvpStats.totalGuests}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {rsvps.length === 0 ? (
-        <div
-          style={{
-            textAlign: 'center',
-            padding: '3rem 1rem',
-            color: 'var(--admin-text-secondary)',
-          }}
-        >
-          <AssignmentTurnedInIcon
-            style={{ fontSize: '3rem', opacity: 0.3 }}
+      {/* Stats */}
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid size={{ xs: 6, md: 3 }}>
+          <KpiCard
+            label="Total Respons"
+            value={rsvpStats.totalResponses}
+            Icon={AssignmentTurnedInIcon}
+            color="primary"
           />
-          <p style={{ marginTop: '0.75rem' }}>
-            Belum ada konfirmasi kehadiran tamu pada undangan ini.
-          </p>
-        </div>
-      ) : (
-        <div className="admin-table-wrapper">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Nama Tamu</th>
-                <th>Kehadiran</th>
-                <th>Jumlah Orang</th>
-                <th>Pesan / Doa</th>
-                <th>Waktu Submit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rsvps.map((r) => (
-                <tr key={r.id}>
-                  <td style={{ fontWeight: 700 }}>{r.name}</td>
-                  <td>
-                    <span
-                      className={`admin-status-badge admin-status-badge--${
-                        r.attendance === 'Hadir'
-                          ? 'published'
-                          : 'inactive'
-                      }`}
-                    >
-                      <span className="admin-status-badge__dot" />
-                      {r.attendance}
-                    </span>
-                  </td>
-                  <td>{r.guestCount || 1} Orang</td>
-                  <td>{r.notes || '-'}</td>
-                  <td
-                    style={{
-                      fontSize: '0.75rem',
-                      color: 'var(--admin-text-muted)',
-                    }}
-                  >
-                    {new Date(r.submittedAt).toLocaleString('id-ID')}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+        </Grid>
+        <Grid size={{ xs: 6, md: 3 }}>
+          <KpiCard
+            label="Konfirmasi Hadir"
+            value={rsvpStats.attendingCount}
+            Icon={CheckCircleIcon}
+            color="success"
+          />
+        </Grid>
+        <Grid size={{ xs: 6, md: 3 }}>
+          <KpiCard
+            label="Tidak Hadir"
+            value={rsvpStats.notAttendingCount}
+            Icon={CancelIcon}
+            color="error"
+          />
+        </Grid>
+        <Grid size={{ xs: 6, md: 3 }}>
+          <KpiCard
+            label="Estimasi Tamu"
+            value={rsvpStats.totalGuests}
+            sub="total orang"
+            Icon={PeopleIcon}
+            color="info"
+          />
+        </Grid>
+      </Grid>
+
+      {/* Table */}
+      <Card>
+        {rsvps.length === 0 ? (
+          <Box
+            sx={{
+              textAlign: 'center',
+              py: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <HowToRegIcon
+              sx={{ fontSize: 44, color: 'primary.main', opacity: 0.3 }}
+            />
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Belum ada konfirmasi kehadiran tamu untuk undangan ini.
+            </Typography>
+          </Box>
+        ) : (
+          <TableContainer
+            component={Paper}
+            elevation={0}
+            sx={{ bgcolor: 'transparent' }}
+          >
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nama Tamu</TableCell>
+                  <TableCell>Kehadiran</TableCell>
+                  <TableCell align="center">Jumlah</TableCell>
+                  <TableCell>Pesan / Doa</TableCell>
+                  <TableCell>Waktu Submit</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rsvps.map((r) => (
+                  <TableRow key={r.id}>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                        {r.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={r.attendance}
+                        size="small"
+                        color={r.attendance === 'Hadir' ? 'success' : 'error'}
+                        sx={{ fontWeight: 700, fontSize: '0.7rem', height: 20 }}
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2">
+                        {r.guestCount || 1}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        {r.notes || '—'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.disabled' }}
+                      >
+                        {new Date(r.submittedAt).toLocaleString('id-ID')}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Card>
+    </Box>
   );
 };

@@ -39,7 +39,9 @@ function makeRequest(method, urlPath, data = null) {
 }
 
 async function runSaaSTests() {
-  console.log('🚀 Starting Multi-Tenant Wedding SaaS Platform Verification...\n');
+  console.log(
+    '🚀 Starting Multi-Tenant Wedding SaaS Platform Verification...\n',
+  );
 
   // 1. Check SaaS Stats
   console.log('1. Testing GET /api/admin/saas/stats...');
@@ -56,10 +58,14 @@ async function runSaaSTests() {
   if (!destiaInv) {
     throw new Error('Destia & Rakafansa seed invitation missing!');
   }
-  console.log(`   ✅ Seed found: ID=${destiaInv.id}, Slug=${destiaInv.slug}, Status=${destiaInv.status}`);
+  console.log(
+    `   ✅ Seed found: ID=${destiaInv.id}, Slug=${destiaInv.slug}, Status=${destiaInv.status}`,
+  );
 
   // 3. Create a New Client
-  console.log('\n3. Testing POST /api/admin/saas/clients (Create New Client)...');
+  console.log(
+    '\n3. Testing POST /api/admin/saas/clients (Create New Client)...',
+  );
   const newClientRes = await makeRequest('POST', '/api/admin/saas/clients', {
     name: 'Budi Santoso & Siti Nurhaliza',
     phone: '081987654321',
@@ -68,13 +74,19 @@ async function runSaaSTests() {
     notes: 'Paket Netflix Wedding Special',
   });
   if (newClientRes.status !== 201) {
-    throw new Error(`Failed create client: ${JSON.stringify(newClientRes.data)}`);
+    throw new Error(
+      `Failed create client: ${JSON.stringify(newClientRes.data)}`,
+    );
   }
   const createdClient = newClientRes.data;
-  console.log(`   ✅ Client created: ID=${createdClient.id}, Name=${createdClient.name}`);
+  console.log(
+    `   ✅ Client created: ID=${createdClient.id}, Name=${createdClient.name}`,
+  );
 
   // 4. Create an Invitation for this Client
-  console.log('\n4. Testing POST /api/admin/saas/invitations (Create Invitation with unique slug)...');
+  console.log(
+    '\n4. Testing POST /api/admin/saas/invitations (Create Invitation with unique slug)...',
+  );
   const testSlug = `budi-siti-${Date.now().toString().slice(-4)}`;
   const newInvRes = await makeRequest('POST', '/api/admin/saas/invitations', {
     clientId: createdClient.id,
@@ -85,13 +97,19 @@ async function runSaaSTests() {
     eventDate: '2026-12-25',
   });
   if (newInvRes.status !== 201) {
-    throw new Error(`Failed create invitation: ${JSON.stringify(newInvRes.data)}`);
+    throw new Error(
+      `Failed create invitation: ${JSON.stringify(newInvRes.data)}`,
+    );
   }
   const createdInv = newInvRes.data;
-  console.log(`   ✅ Invitation created: ID=${createdInv.id}, Slug=${createdInv.slug}`);
+  console.log(
+    `   ✅ Invitation created: ID=${createdInv.id}, Slug=${createdInv.slug}`,
+  );
 
   // 5. Customize Isolated Tenant Config for Budi & Siti
-  console.log('\n5. Testing POST /api/admin/saas/invitations/[id]/config (Isolated Tenant Customization)...');
+  console.log(
+    '\n5. Testing POST /api/admin/saas/invitations/[id]/config (Isolated Tenant Customization)...',
+  );
   const getCfgRes = await makeRequest(
     'GET',
     `/api/admin/saas/invitations/${createdInv.id}/config`,
@@ -109,7 +127,9 @@ async function runSaaSTests() {
     budiConfig,
   );
   if (saveCfgRes.status !== 200) {
-    throw new Error(`Failed to save config: ${JSON.stringify(saveCfgRes.data)}`);
+    throw new Error(
+      `Failed to save config: ${JSON.stringify(saveCfgRes.data)}`,
+    );
   }
   console.log('   ✅ Budi & Siti isolated config saved successfully.');
 
@@ -122,8 +142,12 @@ async function runSaaSTests() {
   if (destiaCfgRes.data.cover.title !== 'DESTIA & RAKAFANSA') {
     throw new Error('Data leakage! Destia config was altered by Budi edit!');
   }
-  console.log('   ✅ Destia & Rakafansa config is 100% intact (Title: DESTIA & RAKAFANSA).');
-  console.log(`   ✅ Budi & Siti config is strictly isolated (Title: ${budiConfig.cover.title}).`);
+  console.log(
+    '   ✅ Destia & Rakafansa config is 100% intact (Title: DESTIA & RAKAFANSA).',
+  );
+  console.log(
+    `   ✅ Budi & Siti config is strictly isolated (Title: ${budiConfig.cover.title}).`,
+  );
 
   // 7. Test Tenant-Isolated RSVP
   console.log('\n7. Testing Tenant-Isolated RSVP Submission...');
@@ -145,9 +169,13 @@ async function runSaaSTests() {
     `/api/admin/saas/invitations/${createdInv.id}/rsvps`,
   );
   if (budiRsvpsRes.data.totalResponses !== 1) {
-    throw new Error(`Expected 1 RSVP for Budi, got ${budiRsvpsRes.data.totalResponses}`);
+    throw new Error(
+      `Expected 1 RSVP for Budi, got ${budiRsvpsRes.data.totalResponses}`,
+    );
   }
-  console.log(`   ✅ Budi tenant has ${budiRsvpsRes.data.totalResponses} RSVP (Ahmad Dahlan).`);
+  console.log(
+    `   ✅ Budi tenant has ${budiRsvpsRes.data.totalResponses} RSVP (Ahmad Dahlan).`,
+  );
 
   // 8. Test Public URL /undangan/[slug]
   console.log(`\n8. Testing Public URL /undangan/${testSlug}...`);
@@ -155,7 +183,10 @@ async function runSaaSTests() {
   if (pageRes.status !== 200) {
     throw new Error(`Failed to load page: ${pageRes.status}`);
   }
-  if (!pageRes.raw.includes('BUDI &amp; SITI') && !pageRes.raw.includes('BUDI & SITI')) {
+  if (
+    !pageRes.raw.includes('BUDI &amp; SITI') &&
+    !pageRes.raw.includes('BUDI & SITI')
+  ) {
     console.log('   Note: React streaming output received.');
   }
   console.log(`   ✅ Page /undangan/${testSlug} responded with HTTP 200 OK.`);
@@ -169,7 +200,9 @@ async function runSaaSTests() {
   if (!inactivePageRes.raw.includes('Undangan Sedang Dinonaktifkan')) {
     throw new Error('Inactive guard failed!');
   }
-  console.log('   ✅ Inactive guard correctly displayed: "Undangan Sedang Dinonaktifkan".');
+  console.log(
+    '   ✅ Inactive guard correctly displayed: "Undangan Sedang Dinonaktifkan".',
+  );
 
   // 10. Clean up test invitation and client
   console.log('\n10. Cleaning up test tenant data...');
@@ -177,7 +210,9 @@ async function runSaaSTests() {
   await makeRequest('DELETE', `/api/admin/saas/clients/${createdClient.id}`);
   console.log('   ✅ Test tenant data cleanly removed.');
 
-  console.log('\n🎉 ALL MULTI-TENANT SAAS PLATFORM TESTS PASSED WITH 100% SUCCESS!\n');
+  console.log(
+    '\n🎉 ALL MULTI-TENANT SAAS PLATFORM TESTS PASSED WITH 100% SUCCESS!\n',
+  );
 }
 
 runSaaSTests().catch((err) => {

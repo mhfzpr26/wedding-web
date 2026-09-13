@@ -1,5 +1,5 @@
-import { chromium } from 'playwright-core';
 import path from 'node:path';
+import { chromium } from 'playwright-core';
 
 const ARTIFACT_DIR =
   'C:/Users/mhafi/.gemini/antigravity-ide/brain/b3201bb1-3947-4149-bc22-de6c30131c02/.tempmediaStorage';

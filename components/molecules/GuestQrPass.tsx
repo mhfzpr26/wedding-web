@@ -1,8 +1,8 @@
 'use client';
 
+import { QRCodeSVG } from 'qrcode.react';
 import type React from 'react';
 import { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
 import { FaCheckCircle, FaTicketAlt } from 'react-icons/fa';
 
 export interface GuestQrPassProps {
@@ -120,7 +120,8 @@ export const GuestQrPass: React.FC<GuestQrPassProps> = ({
           lineHeight: 1.5,
         }}
       >
-        Tunjukkan QR Code ini kepada resepsionis / penerima tamu saat tiba di lokasi acara untuk check-in buku tamu digital.
+        Tunjukkan QR Code ini kepada resepsionis / penerima tamu saat tiba di
+        lokasi acara untuk check-in buku tamu digital.
       </p>
 
       <div

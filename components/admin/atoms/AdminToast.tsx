@@ -1,47 +1,37 @@
 'use client';
 
+import { useSnackbar } from 'notistack';
 import type React from 'react';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import InfoIcon from '@mui/icons-material/Info';
-import CloseIcon from '@mui/icons-material/Close';
+import { useEffect } from 'react';
+import { useAdminStore } from '@/stores/useAdminStore';
 
-export interface AdminToastProps {
-  type: 'success' | 'error' | 'info';
-  message: string;
-  onClose?: () => void;
-}
+/**
+ * AdminToast — now powered by notistack.
+ * This component observes the Zustand toast state and fires notistack snackbars.
+ * It renders nothing visually itself.
+ */
+export const AdminToast: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const toast = useAdminStore((s) => s.toast);
+  const setToast = useAdminStore((s) => s.setToast);
 
-export const AdminToast: React.FC<AdminToastProps> = ({
-  type,
-  message,
-  onClose,
-}) => {
-  const getIcon = () => {
-    switch (type) {
-      case 'success':
-        return <CheckCircleIcon sx={{ fontSize: 20, color: '#46d369' }} />;
-      case 'error':
-        return <ErrorIcon sx={{ fontSize: 20, color: '#E50914' }} />;
-      default:
-        return <InfoIcon sx={{ fontSize: 20, color: '#0071eb' }} />;
-    }
-  };
+  useEffect(() => {
+    if (!toast) return;
 
-  return (
-    <div className={`admin-toast admin-toast--${type}`}>
-      {getIcon()}
-      <span className="admin-toast__message">{message}</span>
-      {onClose && (
-        <button
-          type="button"
-          className="admin-toast__close"
-          onClick={onClose}
-          aria-label="Tutup notifikasi"
-        >
-          <CloseIcon sx={{ fontSize: 16 }} />
-        </button>
-      )}
-    </div>
-  );
+    const variantMap = {
+      success: 'success',
+      error: 'error',
+      info: 'info',
+    } as const;
+
+    enqueueSnackbar(toast.message, {
+      variant: variantMap[toast.type] ?? 'default',
+      preventDuplicate: false,
+    });
+
+    // Clear toast state after showing
+    setToast(null);
+  }, [toast, enqueueSnackbar, setToast]);
+
+  return null;
 };

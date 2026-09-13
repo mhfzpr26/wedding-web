@@ -128,29 +128,54 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
           }}
         >
           <div className="netflix-section-header">
-            <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
+            <div
+              className="netflix-badge-pill"
+              style={{ margin: '0 auto var(--spacing-xs)' }}
+            >
               CONFIRM VIP STREAMING PASS
             </div>
-            <h2 className="rsvp__title" id="rsvp-title">WHO&apos;S WATCHING?</h2>
-            <p style={{ color: 'var(--color-light-gray)', marginTop: '0.35rem', fontSize: 'var(--font-size-small)' }}>
-              Pilih profil kehadiran Anda untuk menghadiri pemutaran perdana pernikahan Destia &amp; Rakafansa
+            <h2 className="rsvp__title" id="rsvp-title">
+              WHO&apos;S WATCHING?
+            </h2>
+            <p
+              style={{
+                color: 'var(--color-light-gray)',
+                marginTop: '0.35rem',
+                fontSize: 'var(--font-size-small)',
+              }}
+            >
+              Pilih profil kehadiran Anda untuk menghadiri pemutaran perdana
+              pernikahan Destia &amp; Rakafansa
             </p>
           </div>
 
           {submitStatus === 'success' ? (
             <div className="rsvp__message-success">
               <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎉</div>
-              <p style={{ fontWeight: '700', fontSize: 'var(--font-size-h6)', marginBottom: '0.25rem', color: '#ffffff' }}>
+              <p
+                style={{
+                  fontWeight: '700',
+                  fontSize: 'var(--font-size-h6)',
+                  marginBottom: '0.25rem',
+                  color: '#ffffff',
+                }}
+              >
                 VIP PASS CONFIRMED!
               </p>
-              <p style={{ fontSize: 'var(--font-size-small)', color: '#d2d2d2' }}>{responseMsg}</p>
+              <p
+                style={{ fontSize: 'var(--font-size-small)', color: '#d2d2d2' }}
+              >
+                {responseMsg}
+              </p>
 
               {formData.attendance === 'Hadir' && (
                 <GuestQrPass
                   guestName={formData.name}
                   invitationSlug={invitationSlug}
                   attendance={formData.attendance}
-                  guestCount={Number.parseInt(String(formData.guestCount || 1), 10) || 1}
+                  guestCount={
+                    Number.parseInt(String(formData.guestCount || 1), 10) || 1
+                  }
                 />
               )}
             </div>
@@ -165,7 +190,8 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   {profileOptions.map((opt) => {
                     const isSelected =
                       formData.attendance === opt.id &&
-                      (opt.id === 'Tidak Hadir' || formData.guestCount === opt.count);
+                      (opt.id === 'Tidak Hadir' ||
+                        formData.guestCount === opt.count);
 
                     return (
                       <button
@@ -184,13 +210,21 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                           className="netflix-profile-avatar-card__icon"
                           style={{ background: opt.avatarBg }}
                         >
-                          <span style={{ fontSize: '1.75rem' }}>{opt.avatarInitial}</span>
+                          <span style={{ fontSize: '1.75rem' }}>
+                            {opt.avatarInitial}
+                          </span>
                           {isSelected && (
-                            <span className="netflix-profile-avatar-card__check">✓</span>
+                            <span className="netflix-profile-avatar-card__check">
+                              ✓
+                            </span>
                           )}
                         </div>
-                        <span className="netflix-profile-avatar-card__title">{opt.title}</span>
-                        <span className="netflix-profile-avatar-card__sub">{opt.subtitle}</span>
+                        <span className="netflix-profile-avatar-card__title">
+                          {opt.title}
+                        </span>
+                        <span className="netflix-profile-avatar-card__sub">
+                          {opt.subtitle}
+                        </span>
                       </button>
                     );
                   })}
@@ -218,7 +252,12 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
               />
 
               {submitStatus === 'error' && (
-                <p style={{ color: '#ef5350', fontSize: 'var(--font-size-small)' }}>
+                <p
+                  style={{
+                    color: '#ef5350',
+                    fontSize: 'var(--font-size-small)',
+                  }}
+                >
                   {responseMsg}
                 </p>
               )}
@@ -229,7 +268,9 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                 disabled={isSubmitting}
                 className="rsvp__submit-btn"
               >
-                {isSubmitting ? 'VERIFYING PASS...' : 'CONFIRM VIP PASS (KIRIM KONFIRMASI)'}
+                {isSubmitting
+                  ? 'VERIFYING PASS...'
+                  : 'CONFIRM VIP PASS (KIRIM KONFIRMASI)'}
               </Button>
             </form>
           )}

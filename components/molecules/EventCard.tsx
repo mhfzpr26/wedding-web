@@ -1,7 +1,7 @@
-import type React from 'react';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import PlaceIcon from '@mui/icons-material/Place';
+import type React from 'react';
 import type { EventDetailData } from '@/types/invitation';
 
 export interface EventCardProps {
@@ -10,7 +10,8 @@ export interface EventCardProps {
 }
 
 export const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
-  const venuePhoto = index === 0 ? '/images/venue-akad.jpg' : '/images/venue-resepsi.jpg';
+  const venuePhoto =
+    index === 0 ? '/images/venue-akad.jpg' : '/images/venue-resepsi.jpg';
 
   return (
     <article className="netflix-episode-row">
@@ -38,17 +39,22 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       <div className="netflix-episode-row__info">
         <div className="netflix-episode-row__header">
           <h3 className="netflix-episode-row__title">
-            {event.episodeNumber ? `Episode ${event.episodeNumber}: ` : `${index + 1}. `}
+            {event.episodeNumber
+              ? `Episode ${event.episodeNumber}: `
+              : `${index + 1}. `}
             {event.title}
           </h3>
           <span className="netflix-episode-row__duration">
-            {event.duration || (index === 0 ? '08.00 - 10.00' : '11.00 - 14.00')}
+            {event.duration ||
+              (index === 0 ? '08.00 - 10.00' : '11.00 - 14.00')}
           </span>
         </div>
 
         <div className="netflix-episode-row__meta-tags">
           <span className="netflix-spec-tag">{event.date}</span>
-          <span className="netflix-spec-tag netflix-spec-tag--red">{event.time}</span>
+          <span className="netflix-spec-tag netflix-spec-tag--red">
+            {event.time}
+          </span>
           <span className="netflix-spec-tag">LOKASI: {event.venue}</span>
         </div>
 
@@ -59,9 +65,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
               : 'Pesta perayaan dan ramah tamah bersama para sahabat, kerabat, dan tamu kehormatan. Penuh kebahagiaan, musik, dan jamuan istimewa.')}
         </p>
 
-        <p className="netflix-episode-row__address">
-          📍 {event.address}
-        </p>
+        <p className="netflix-episode-row__address">📍 {event.address}</p>
 
         {/* Action Buttons styled as Netflix streaming controls */}
         <div className="netflix-episode-row__actions">

@@ -1,7 +1,18 @@
 'use client';
 
-import type React from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import MovieIcon from '@mui/icons-material/Movie';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import type React from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export const MediaEditorTab: React.FC = () => {
@@ -20,271 +31,234 @@ export const MediaEditorTab: React.FC = () => {
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploading(fieldKey);
     try {
       const formData = new FormData();
       formData.append('file', file);
-
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
         body: formData,
       });
-
       if (res.ok) {
         const data = await res.json();
         onSuccess(data.url);
-        showToast('success', `File ${file.name} berhasil diunggah!`);
+        showToast('success', `${file.name} berhasil diunggah!`);
       } else {
         const err = await res.json();
         showToast('error', err.error || 'Gagal mengunggah file');
       }
     } catch {
-      showToast('error', 'Terjadi kesalahan saat upload file');
+      showToast('error', 'Terjadi kesalahan saat upload');
     } finally {
       setUploading(null);
       e.target.value = '';
     }
   };
 
+  const setMusic = (key: string, val: string | boolean) =>
+    setConfig((prev) =>
+      prev ? { ...prev, music: { ...prev.music, [key]: val } } : null,
+    );
+
+  const setTrailer = (key: string, val: string) =>
+    setConfig((prev) =>
+      prev ? { ...prev, trailer: { ...prev.trailer, [key]: val } } : null,
+    );
+
   return (
-    <div className="admin-grid-2">
-      <div className="admin-card">
-        <h3 className="admin-card__title">
-          🎵 Musik Latar (Background Song)
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Judul Lagu</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.music?.title || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      music: {
-                        ...prev.music,
-                        title: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
+    <Grid container spacing={3}>
+      {/* Music Card */}
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Card sx={{ height: '100%' }}>
+          <CardContent sx={{ p: 3 }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}
+            >
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 1.5,
+                  bgcolor: 'rgba(99,102,241,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MusicNoteIcon sx={{ fontSize: 18, color: 'primary.light' }} />
+              </Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                🎵 Musik Latar (Background Song)
+              </Typography>
+            </Box>
 
-        <div className="admin-form-group">
-          <label className="admin-label">File Musik MP3</label>
-          <div
-            style={{
-              display: 'flex',
-              gap: '0.75rem',
-              alignItems: 'center',
-            }}
-          >
-            <label className="admin-btn admin-btn--secondary">
-              <CloudUploadIcon fontSize="small" />{' '}
-              {uploading === 'audioFile' ? 'Mengunggah MP3...' : 'Upload MP3'}
-              <input
-                type="file"
-                accept="audio/*"
-                style={{ display: 'none' }}
-                onChange={(e) =>
-                  handleFileUpload(e, 'audioFile', (url) =>
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            music: {
-                              ...prev.music,
-                              audioUrl: url,
-                            },
-                          }
-                        : null,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.music?.audioUrl || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        music: {
-                          ...prev.music,
-                          audioUrl: e.target.value,
-                        },
+            <Grid container spacing={2}>
+              <Grid size={12}>
+                <TextField
+                  label="Judul Lagu"
+                  value={config.music?.title || ''}
+                  onChange={(e) => setMusic('title', e.target.value)}
+                  fullWidth
+                  placeholder="e.g. Perfect - Ed Sheeran"
+                />
+              </Grid>
+              <Grid size={12}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.secondary',
+                    fontWeight: 600,
+                    display: 'block',
+                    mb: 1,
+                  }}
+                >
+                  File Musik MP3
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    size="small"
+                    startIcon={<CloudUploadIcon fontSize="small" />}
+                    disabled={uploading === 'audioFile'}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    {uploading === 'audioFile' ? 'Uploading…' : 'Upload MP3'}
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) =>
+                        handleFileUpload(e, 'audioFile', (url) =>
+                          setMusic('audioUrl', url),
+                        )
                       }
-                    : null,
-                )
-              }
-              placeholder="URL file MP3 atau upload di atas (cth: /uploads/music.mp3)"
-            />
-          </div>
-        </div>
+                    />
+                  </Button>
+                  <TextField
+                    size="small"
+                    label="URL File MP3"
+                    value={config.music?.audioUrl || ''}
+                    onChange={(e) => setMusic('audioUrl', e.target.value)}
+                    fullWidth
+                    placeholder="/uploads/music.mp3"
+                  />
+                </Box>
+              </Grid>
+              <Grid size={12}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={config.music?.autoplay ?? false}
+                      onChange={(e) => setMusic('autoplay', e.target.checked)}
+                      color="primary"
+                      size="small"
+                    />
+                  }
+                  label={
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      Putar otomatis setelah tamu membuka undangan
+                    </Typography>
+                  }
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
 
-        <div className="admin-form-group">
-          <label
-            className="admin-label"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              cursor: 'pointer',
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={config.music?.autoplay ?? false}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        music: {
-                          ...prev.music,
-                          autoplay: e.target.checked,
-                        },
+      {/* Video Card */}
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Card sx={{ height: '100%' }}>
+          <CardContent sx={{ p: 3 }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}
+            >
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 1.5,
+                  bgcolor: 'rgba(14,165,233,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MovieIcon sx={{ fontSize: 18, color: 'info.light' }} />
+              </Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                🎬 Video Teaser Prewedding
+              </Typography>
+            </Box>
+
+            <Grid container spacing={2}>
+              <Grid size={12}>
+                <TextField
+                  label="Judul Video Teaser"
+                  value={config.trailer?.filmTitle || ''}
+                  onChange={(e) => setTrailer('filmTitle', e.target.value)}
+                  fullWidth
+                />
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  label="URL File Video (MP4/WebM)"
+                  value={config.trailer?.videoUrl || ''}
+                  onChange={(e) => setTrailer('videoUrl', e.target.value)}
+                  fullWidth
+                  placeholder="https://... atau /uploads/video.mp4"
+                />
+              </Grid>
+              <Grid size={12}>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    size="small"
+                    startIcon={<CloudUploadIcon fontSize="small" />}
+                    disabled={uploading === 'trailerPoster'}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    {uploading === 'trailerPoster'
+                      ? 'Uploading…'
+                      : 'Upload Poster'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) =>
+                        handleFileUpload(e, 'trailerPoster', (url) =>
+                          setTrailer('posterUrl', url),
+                        )
                       }
-                    : null,
-                )
-              }
-            />
-            Putar otomatis setelah tamu menekan tombol buka undangan
-          </label>
-        </div>
-      </div>
-
-      <div className="admin-card">
-        <h3 className="admin-card__title">
-          🎬 Video Teaser & Sinematografi Prewedding
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Judul Video Teaser</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.trailer?.filmTitle || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      trailer: {
-                        ...prev.trailer,
-                        filmTitle: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">URL Video File (MP4/WebM)</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.trailer?.videoUrl || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      trailer: {
-                        ...prev.trailer,
-                        videoUrl: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Poster Thumbnail Video</label>
-          <div
-            style={{
-              display: 'flex',
-              gap: '0.75rem',
-              alignItems: 'center',
-            }}
-          >
-            <label className="admin-btn admin-btn--secondary">
-              <CloudUploadIcon fontSize="small" /> Upload Poster
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) =>
-                  handleFileUpload(e, 'trailerPoster', (url) =>
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            trailer: {
-                              ...prev.trailer,
-                              posterUrl: url,
-                            },
-                          }
-                        : null,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.trailer?.posterUrl || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        trailer: {
-                          ...prev.trailer,
-                          posterUrl: e.target.value,
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Badge Durasi Video</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.trailer?.duration || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      trailer: {
-                        ...prev.trailer,
-                        duration: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-      </div>
-    </div>
+                    />
+                  </Button>
+                  <TextField
+                    size="small"
+                    label="URL Poster Thumbnail"
+                    value={config.trailer?.posterUrl || ''}
+                    onChange={(e) => setTrailer('posterUrl', e.target.value)}
+                    fullWidth
+                  />
+                </Box>
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  label="Badge Durasi Video"
+                  value={config.trailer?.duration || ''}
+                  onChange={(e) => setTrailer('duration', e.target.value)}
+                  fullWidth
+                  placeholder="e.g. 3:24"
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };

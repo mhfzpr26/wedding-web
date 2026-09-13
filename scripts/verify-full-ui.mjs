@@ -1,6 +1,6 @@
-import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 import path from 'node:path';
+import { chromium } from 'playwright-core';
 
 const outDir = path.resolve('public/screenshots_final');
 if (!fs.existsSync(outDir)) {
@@ -18,16 +18,21 @@ async function run() {
     deviceScaleFactor: 2,
     isMobile: true,
     hasTouch: true,
-    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'
+    userAgent:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
   });
 
   const page = await context.newPage();
   console.log('Navigating to http://localhost:3000/?to=Bayu ...');
-  await page.goto('http://localhost:3000/?to=Bayu', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:3000/?to=Bayu', {
+    waitUntil: 'networkidle',
+  });
 
   // 1. Cover with avatar & guest Bayu
   await page.waitForTimeout(1000);
-  await page.screenshot({ path: path.join(outDir, '01_mobile_cover_avatar.png') });
+  await page.screenshot({
+    path: path.join(outDir, '01_mobile_cover_avatar.png'),
+  });
   console.log('Captured 01_mobile_cover_avatar.png');
 
   // 2. Open Invitation
@@ -39,7 +44,9 @@ async function run() {
   await page.waitForTimeout(1500);
 
   // 3. Hero Poster Section
-  await page.screenshot({ path: path.join(outDir, '02_mobile_hero_poster.png') });
+  await page.screenshot({
+    path: path.join(outDir, '02_mobile_hero_poster.png'),
+  });
   console.log('Captured 02_mobile_hero_poster.png');
 
   // 4. The 1 Dedicated Video Trailer Section
@@ -47,7 +54,9 @@ async function run() {
   if (await trailer.isVisible()) {
     await trailer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '03_mobile_trailer_player.png') });
+    await page.screenshot({
+      path: path.join(outDir, '03_mobile_trailer_player.png'),
+    });
     console.log('Captured 03_mobile_trailer_player.png');
   }
 
@@ -56,7 +65,9 @@ async function run() {
   if (await couple.isVisible()) {
     await couple.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '04_mobile_lead_cast.png') });
+    await page.screenshot({
+      path: path.join(outDir, '04_mobile_lead_cast.png'),
+    });
     console.log('Captured 04_mobile_lead_cast.png');
   }
 
@@ -65,7 +76,9 @@ async function run() {
   if (await gallery.isVisible()) {
     await gallery.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '05_mobile_photo_gallery.png') });
+    await page.screenshot({
+      path: path.join(outDir, '05_mobile_photo_gallery.png'),
+    });
     console.log('Captured 05_mobile_photo_gallery.png');
 
     // Click first photo to test Lightbox
@@ -73,7 +86,9 @@ async function run() {
     if (await firstCard.isVisible()) {
       await firstCard.click();
       await page.waitForTimeout(600);
-      await page.screenshot({ path: path.join(outDir, '06_mobile_gallery_lightbox.png') });
+      await page.screenshot({
+        path: path.join(outDir, '06_mobile_gallery_lightbox.png'),
+      });
       console.log('Captured 06_mobile_gallery_lightbox.png');
 
       // Close lightbox
@@ -90,7 +105,9 @@ async function run() {
   if (await story.isVisible()) {
     await story.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '07_mobile_love_story.png') });
+    await page.screenshot({
+      path: path.join(outDir, '07_mobile_love_story.png'),
+    });
     console.log('Captured 07_mobile_love_story.png');
   }
 
@@ -99,7 +116,9 @@ async function run() {
   if (await countdown.isVisible()) {
     await countdown.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '08_mobile_countdown.png') });
+    await page.screenshot({
+      path: path.join(outDir, '08_mobile_countdown.png'),
+    });
     console.log('Captured 08_mobile_countdown.png');
   }
 
@@ -108,7 +127,9 @@ async function run() {
   if (await eventSec.isVisible()) {
     await eventSec.scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
-    await page.screenshot({ path: path.join(outDir, '09_mobile_event_venues.png') });
+    await page.screenshot({
+      path: path.join(outDir, '09_mobile_event_venues.png'),
+    });
     console.log('Captured 09_mobile_event_venues.png');
   }
 
@@ -122,7 +143,9 @@ async function run() {
   }
 
   await browser.close();
-  console.log('All verification screenshots captured successfully in public/screenshots_final/');
+  console.log(
+    'All verification screenshots captured successfully in public/screenshots_final/',
+  );
 }
 
 run().catch((err) => {

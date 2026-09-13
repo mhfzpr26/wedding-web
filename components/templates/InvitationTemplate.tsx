@@ -1,8 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useCallback, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { NetflixNavbar } from '@/components/molecules/NetflixNavbar';
 import { ClosingSection } from '@/components/organisms/ClosingSection';
 import { CountdownSection } from '@/components/organisms/CountdownSection';
 import { CoupleSection } from '@/components/organisms/CoupleSection';
@@ -16,7 +17,6 @@ import { OpeningSection } from '@/components/organisms/OpeningSection';
 import { RsvpSection } from '@/components/organisms/RsvpSection';
 import { TrailerSection } from '@/components/organisms/TrailerSection';
 import { WishesSection } from '@/components/organisms/WishesSection';
-import { NetflixNavbar } from '@/components/molecules/NetflixNavbar';
 
 import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingConfig } from '@/types/wedding';

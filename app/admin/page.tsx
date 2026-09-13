@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { AdminLayout } from '@/components/admin/templates/AdminLayout';
+import { AdminClientWrapper } from '@/components/admin/templates/AdminClientWrapper';
 import './admin.css';
 
 export const metadata: Metadata = {
-  title: 'Central Multi-Tenant SaaS Command | Wedding Platform',
+  title: 'WEDFLOW — SaaS Command Center',
   description:
-    'Satu admin panel pusat untuk mengelola seluruh client, undangan, template, dan konten dinamis SaaS Wedding.',
+    'Central multi-tenant admin panel untuk mengelola seluruh client, undangan, template, dan konten SaaS Wedding.',
 };
 
 export default function AdminPage() {
-  return <AdminLayout />;
+  return <AdminClientWrapper />;
 }

@@ -1,13 +1,13 @@
 'use client';
 
-import type React from 'react';
-import { useState, useRef } from 'react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import type React from 'react';
+import { useRef, useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingTrailer } from '@/types/wedding';
@@ -102,9 +102,7 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
             {title}
           </h2>
 
-          <p className="section-subtitle">
-            {subtitle}
-          </p>
+          <p className="section-subtitle">{subtitle}</p>
         </div>
 
         {/* The 1 Dedicated Netflix Video Player */}
@@ -116,7 +114,9 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
             transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
           }}
         >
-          <div className={`netflix-trailer__cinema-frame ${isPlaying ? 'netflix-trailer__cinema-frame--playing' : ''}`}>
+          <div
+            className={`netflix-trailer__cinema-frame ${isPlaying ? 'netflix-trailer__cinema-frame--playing' : ''}`}
+          >
             {/* HTML5 Video element */}
             <video
               ref={videoRef}
@@ -126,7 +126,10 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
               muted={isMuted}
               onTimeUpdate={() => {
                 if (videoRef.current?.duration) {
-                  setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
+                  setProgress(
+                    (videoRef.current.currentTime / videoRef.current.duration) *
+                      100,
+                  );
                 }
               }}
               onPause={() => {
@@ -144,7 +147,10 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
 
             {/* Poster Overlay when not playing */}
             {!isPlaying && (
-              <div className="netflix-trailer__poster-overlay" onClick={handleTogglePlay}>
+              <div
+                className="netflix-trailer__poster-overlay"
+                onClick={handleTogglePlay}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={posterUrl}
@@ -169,13 +175,17 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                 <div className="netflix-trailer__poster-meta">
                   <span className="netflix-badge-red">TEASER FILM</span>
                   <h3 className="netflix-trailer__poster-title">{filmTitle}</h3>
-                  <span className="netflix-trailer__poster-duration">Duration: {duration}</span>
+                  <span className="netflix-trailer__poster-duration">
+                    Duration: {duration}
+                  </span>
                 </div>
               </div>
             )}
 
             {/* Custom Netflix Video Controls Bar */}
-            <div className={`netflix-trailer__controls ${isPlaying ? 'netflix-trailer__controls--active' : ''}`}>
+            <div
+              className={`netflix-trailer__controls ${isPlaying ? 'netflix-trailer__controls--active' : ''}`}
+            >
               {/* Red Glow Progress Scrubber */}
               <div
                 className="netflix-trailer__progress-bar-wrap"
@@ -184,7 +194,8 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                   const clickPos = (e.clientX - rect.left) / rect.width;
                   setProgress(clickPos * 100);
                   if (videoRef.current?.duration) {
-                    videoRef.current.currentTime = clickPos * videoRef.current.duration;
+                    videoRef.current.currentTime =
+                      clickPos * videoRef.current.duration;
                   }
                 }}
               >
@@ -225,8 +236,12 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                 </div>
 
                 <div className="netflix-trailer__controls-right">
-                  <span className="netflix-trailer__quality-badge">4K ULTRA HD</span>
-                  <span className="netflix-trailer__quality-badge">DOLBY ATMOS</span>
+                  <span className="netflix-trailer__quality-badge">
+                    4K ULTRA HD
+                  </span>
+                  <span className="netflix-trailer__quality-badge">
+                    DOLBY ATMOS
+                  </span>
                   <button
                     type="button"
                     className="netflix-trailer__ctrl-btn"
@@ -243,21 +258,34 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
           {/* Film Synopsis & Production Metadata */}
           <div className="netflix-trailer__info-card">
             <div className="netflix-trailer__meta-row">
-              <span className="netflix-spec-tag netflix-spec-tag--red">NETFLIX ORIGINAL WEDDING SPECIAL</span>
-              <span className="netflix-spec-tag">100% MATCH</span>
+              <span className="netflix-spec-tag netflix-spec-tag--red">
+                NETFLIX ORIGINAL WEDDING SPECIAL
+              </span>
               <span className="netflix-spec-tag">4K ULTRA HD</span>
             </div>
 
             <p className="netflix-trailer__desc">
-              Sebuah dokumenter sinematik kisah nyata dua insan, dari perjumpaan tak terduga hingga mengikat janji suci seumur hidup.
-              Saksikan peluncuran eksklusif hari bahagia Destia Dwi Ramadhani &amp; Rakafansa Saputra pada 14 November 2026.
+              Sebuah dokumenter sinematik kisah nyata dua insan, dari perjumpaan
+              tak terduga hingga mengikat janji suci seumur hidup. Saksikan
+              peluncuran eksklusif hari bahagia Destia Dwi Ramadhani &amp;
+              Rakafansa Saputra pada 14 November 2026.
             </p>
 
             <div className="netflix-trailer__credits-grid">
-              <div><strong>Cast:</strong> Destia Dwi Ramadhani, Rakafansa Saputra</div>
-              <div><strong>Genres:</strong> Romantic, Slice of Life, Real-Life Documentary</div>
-              <div><strong>Director of Photography:</strong> Artha Cinematic Studio</div>
-              <div><strong>Executive Producers:</strong> Keluarga Besar Kedua Mempelai</div>
+              <div>
+                <strong>Cast:</strong> Destia Dwi Ramadhani, Rakafansa Saputra
+              </div>
+              <div>
+                <strong>Genres:</strong> Romantic, Slice of Life, Real-Life
+                Documentary
+              </div>
+              <div>
+                <strong>Director of Photography:</strong> Artha Cinematic Studio
+              </div>
+              <div>
+                <strong>Executive Producers:</strong> Keluarga Besar Kedua
+                Mempelai
+              </div>
             </div>
           </div>
         </div>

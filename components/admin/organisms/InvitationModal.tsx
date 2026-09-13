@@ -1,15 +1,46 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import type React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { useAdminStore } from '@/stores/useAdminStore';
 import type { InvitationStatus } from '@/types/wedding';
+
+const invitationSchema = z.object({
+  clientId: z.string().min(1, 'Pilih client terlebih dahulu'),
+  title: z.string().min(3, 'Judul minimal 3 karakter'),
+  slug: z
+    .string()
+    .min(3, 'Slug minimal 3 karakter')
+    .regex(/^[a-z0-9-]+$/, 'Slug hanya boleh huruf kecil, angka, dan tanda -'),
+  templateId: z.string().min(1),
+  status: z.enum(['draft', 'published', 'inactive']),
+  eventDate: z.string().optional(),
+});
+
+type InvFormData = z.infer<typeof invitationSchema>;
 
 export const InvitationModal: React.FC = () => {
   const showCreateInvModal = useAdminStore((s) => s.showCreateInvModal);
   const setShowCreateInvModal = useAdminStore((s) => s.setShowCreateInvModal);
   const createInvForm = useAdminStore((s) => s.createInvForm);
-  const setCreateInvForm = useAdminStore((s) => s.setCreateInvForm);
   const clients = useAdminStore((s) => s.clients);
   const showToast = useAdminStore((s) => s.showToast);
   const refreshSaasData = useAdminStore((s) => s.refreshSaasData);
@@ -20,27 +51,45 @@ export const InvitationModal: React.FC = () => {
   const saving = useAdminStore((s) => s.saving);
   const setSaving = useAdminStore((s) => s.setSaving);
 
-  if (!showCreateInvModal) return null;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<InvFormData>({
+    resolver: zodResolver(invitationSchema),
+    defaultValues: {
+      clientId: '',
+      title: '',
+      slug: '',
+      templateId: 'netflix',
+      status: 'draft',
+      eventDate: '',
+    },
+  });
 
-  const handleCreateInvitation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!createInvForm.clientId) {
-      showToast('error', 'Silakan pilih client terlebih dahulu');
-      return;
+  useEffect(() => {
+    if (createInvForm && showCreateInvModal) {
+      reset({
+        clientId: createInvForm.clientId ?? '',
+        title: createInvForm.title ?? '',
+        slug: createInvForm.slug ?? '',
+        templateId: createInvForm.templateId ?? 'netflix',
+        status: (createInvForm.status as InvitationStatus) ?? 'draft',
+        eventDate: createInvForm.eventDate ?? '',
+      });
     }
-    if (!createInvForm.title.trim()) {
-      showToast('error', 'Judul undangan wajib diisi');
-      return;
-    }
+  }, [createInvForm, showCreateInvModal, reset]);
 
+  const onSubmit = async (data: InvFormData) => {
     setSaving(true);
     try {
       const res = await fetch('/api/admin/saas/invitations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(createInvForm),
+        body: JSON.stringify(data),
       });
-
       if (res.ok) {
         const newInv = await res.json();
         showToast('success', `Undangan "${newInv.title}" berhasil dibuat!`);
@@ -60,160 +109,207 @@ export const InvitationModal: React.FC = () => {
   };
 
   return (
-    <div className="admin-modal-overlay">
-      <div className="admin-modal">
-        <div className="admin-modal__header">
-          <h3 className="admin-modal__title">Buat Undangan Baru</h3>
-          <button
-            type="button"
-            className="admin-modal__close"
-            onClick={() => setShowCreateInvModal(false)}
+    <Dialog
+      open={showCreateInvModal}
+      onClose={() => setShowCreateInvModal(false)}
+      maxWidth="sm"
+      fullWidth
+      slotProps={{
+        paper: {
+          sx: {
+            bgcolor: '#111827 !important',
+            backgroundImage: 'none !important',
+            border: '1px solid #1f2937',
+          },
+        },
+      }}
+    >
+      <DialogTitle>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 36,
+              height: 36,
+              borderRadius: 2,
+              bgcolor: 'rgba(99,102,241,0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <CloseIcon sx={{ fontSize: 20 }} />
-          </button>
-        </div>
+            <CardGiftcardIcon sx={{ color: 'primary.light', fontSize: 20 }} />
+          </Box>
+          Buat Undangan Baru
+        </Box>
+      </DialogTitle>
 
-        <form onSubmit={handleCreateInvitation}>
-          <div className="admin-modal__body">
-            <div className="admin-form-group">
-              <label className="admin-label">Pilih Pemesan / Client *</label>
-              <select
-                className="admin-select"
-                required
-                value={createInvForm.clientId}
-                onChange={(e) =>
-                  setCreateInvForm((prev) => ({
-                    ...prev,
-                    clientId: e.target.value,
-                  }))
-                }
-              >
-                <option value="">-- Pilih Client Terdaftar --</option>
-                {clients.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} ({c.phone}) - Paket: {c.package}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="admin-form-group">
-              <label className="admin-label">Judul Undangan *</label>
-              <input
-                type="text"
-                className="admin-input"
-                required
-                placeholder="e.g. Destia & Rakafansa | The Wedding"
-                value={createInvForm.title}
-                onChange={(e) => {
-                  const title = e.target.value;
-                  const autoSlug = title
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/^-|-$/g, '');
-                  setCreateInvForm((prev) => ({
-                    ...prev,
-                    title,
-                    slug: prev.slug || autoSlug,
-                  }));
-                }}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent>
+          <Grid container spacing={2}>
+            {/* Client Selector */}
+            <Grid size={12}>
+              <Controller
+                name="clientId"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth size="small" error={!!errors.clientId}>
+                    <InputLabel>Pilih Client / Pemesan *</InputLabel>
+                    <Select {...field} label="Pilih Client / Pemesan *">
+                      <MenuItem value="">
+                        <em>-- Pilih Client --</em>
+                      </MenuItem>
+                      {clients.map((c) => (
+                        <MenuItem key={c.id} value={c.id}>
+                          {c.name} · {c.phone} · {c.package}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.clientId && (
+                      <FormHelperText>{errors.clientId.message}</FormHelperText>
+                    )}
+                  </FormControl>
+                )}
               />
-            </div>
+            </Grid>
 
-            <div className="admin-form-group">
-              <label className="admin-label">Link Slug Undangan *</label>
-              <div className="admin-input-prefix-wrap">
-                <span className="admin-input-prefix">/undangan/</span>
-                <input
-                  type="text"
-                  className="admin-input"
-                  required
-                  placeholder="destia-rakafansa"
-                  value={createInvForm.slug}
-                  onChange={(e) =>
-                    setCreateInvForm((prev) => ({
-                      ...prev,
-                      slug: e.target.value
+            {/* Title */}
+            <Grid size={12}>
+              <Controller
+                name="title"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Judul Undangan *"
+                    placeholder="e.g. Destia & Rakafansa | The Wedding"
+                    fullWidth
+                    error={!!errors.title}
+                    helperText={errors.title?.message}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      const autoSlug = e.target.value
                         .toLowerCase()
-                        .replace(/[^a-z0-9-]/g, '-'),
-                    }))
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="admin-grid-2">
-              <div className="admin-form-group">
-                <label className="admin-label">Template Awal</label>
-                <select
-                  className="admin-select"
-                  value={createInvForm.templateId}
-                  onChange={(e) =>
-                    setCreateInvForm((prev) => ({
-                      ...prev,
-                      templateId: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="netflix">Netflix Cinematic Special (Aktif)</option>
-                  <option value="floral">Floral Botanical</option>
-                  <option value="minimalist">Modern Royal Minimalist</option>
-                </select>
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Status Awal</label>
-                <select
-                  className="admin-select"
-                  value={createInvForm.status}
-                  onChange={(e) =>
-                    setCreateInvForm((prev) => ({
-                      ...prev,
-                      status: e.target.value as InvitationStatus,
-                    }))
-                  }
-                >
-                  <option value="draft">Draft (Pratinjau)</option>
-                  <option value="published">Published (Live)</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="admin-form-group" style={{ marginBottom: 0 }}>
-              <label className="admin-label">Tanggal Pelaksanaan</label>
-              <input
-                type="date"
-                className="admin-input"
-                value={createInvForm.eventDate}
-                onChange={(e) =>
-                  setCreateInvForm((prev) => ({
-                    ...prev,
-                    eventDate: e.target.value,
-                  }))
-                }
+                        .replace(/[^a-z0-9]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '');
+                      setValue('slug', autoSlug, { shouldValidate: false });
+                    }}
+                  />
+                )}
               />
-            </div>
-          </div>
+            </Grid>
 
-          <div className="admin-modal__footer">
-            <button
-              type="button"
-              className="admin-btn admin-btn--outline"
-              onClick={() => setShowCreateInvModal(false)}
-              disabled={saving}
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="admin-btn admin-btn--primary"
-              disabled={saving}
-            >
-              {saving ? 'Membuat...' : 'Buat Undangan Sekarang'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            {/* Slug */}
+            <Grid size={12}>
+              <Controller
+                name="slug"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="URL Slug *"
+                    placeholder="destia-rakafansa"
+                    fullWidth
+                    error={!!errors.slug}
+                    helperText={
+                      errors.slug?.message ?? 'Otomatis dari judul, bisa diubah'
+                    }
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Box
+                              component="span"
+                              sx={{
+                                color: 'text.disabled',
+                                fontSize: '0.8rem',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              /undangan/
+                            </Box>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                    onChange={(e) => {
+                      field.onChange(
+                        e.target.value
+                          .toLowerCase()
+                          .replace(/[^a-z0-9-]/g, '-'),
+                      );
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+
+            {/* Template + Status */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="templateId"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Template Awal</InputLabel>
+                    <Select {...field} label="Template Awal">
+                      <MenuItem value="netflix">Netflix Cinematic</MenuItem>
+                      <MenuItem value="floral">Floral Botanical</MenuItem>
+                      <MenuItem value="minimalist">Modern Minimalist</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Status Awal</InputLabel>
+                    <Select {...field} label="Status Awal">
+                      <MenuItem value="draft">🟡 Draft</MenuItem>
+                      <MenuItem value="published">🟢 Published</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Grid>
+
+            {/* Event Date */}
+            <Grid size={12}>
+              <Controller
+                name="eventDate"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Tanggal Pelaksanaan"
+                    type="date"
+                    fullWidth
+                    slotProps={{ inputLabel: { shrink: true } }}
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            variant="outlined"
+            onClick={() => setShowCreateInvModal(false)}
+            disabled={saving}
+          >
+            Batal
+          </Button>
+          <Button type="submit" variant="contained" disabled={saving}>
+            {saving ? 'Membuat…' : 'Buat Undangan & Buka Editor'}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 };

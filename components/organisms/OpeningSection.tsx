@@ -1,10 +1,10 @@
 'use client';
 
-import type React from 'react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import CollectionsIcon from '@mui/icons-material/Collections';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CollectionsIcon from '@mui/icons-material/Collections';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import type React from 'react';
 import { useInView } from '@/hooks/useInView';
 import type { WeddingOpening } from '@/types/wedding';
 
@@ -24,9 +24,13 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
     opening?.locationText ||
     'Masjid Agung Al-Barkah & Hotel Santika Premiere, Bekasi';
   const quote =
-    opening?.quote ||
-    'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.';
-  const quoteSource = opening?.quoteSource || 'QS. AR-RUM : 21';
+    opening?.quote !== undefined
+      ? opening.quote
+      : 'Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.';
+  const quoteSource =
+    opening?.quoteSource !== undefined
+      ? opening.quoteSource
+      : 'QS. AR-RUM : 21';
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -100,17 +104,26 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
               onClick={() => scrollToSection('gallery')}
             >
               <CollectionsIcon sx={{ fontSize: 22 }} />
-              <span>PRODUCTION STILLS</span>
+              <span>PHOTO GALLERY</span>
             </button>
           </div>
 
-          {/* Sacred Quranic Quote */}
-          <div className="netflix-hero-poster__quote-card">
-            <blockquote className="opening__quote">
-              &ldquo;{quote}&rdquo;
-            </blockquote>
-            <cite className="opening__ref">{quoteSource}</cite>
-          </div>
+          {/* Wedding Quote / Sacred Verse Card */}
+          {(quote || quoteSource) && (
+            <div className="netflix-hero-poster__quote-card">
+              {quote && (
+                <blockquote
+                  className="opening__quote"
+                  style={{ whiteSpace: 'pre-line' }}
+                >
+                  {quote}
+                </blockquote>
+              )}
+              {quoteSource && !quote?.includes(quoteSource) && (
+                <cite className="opening__ref">{quoteSource}</cite>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>

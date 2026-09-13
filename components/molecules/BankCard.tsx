@@ -1,11 +1,11 @@
 'use client';
 
-import type React from 'react';
-import { useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { QRCodeSVG } from 'qrcode.react';
+import type React from 'react';
+import { useState } from 'react';
 import type { BankAccountData } from '@/types/invitation';
 
 export interface BankCardProps {
@@ -27,7 +27,9 @@ export const BankCard: React.FC<BankCardProps> = ({
   return (
     <div className="gift__card netflix-patron-card">
       <div className="netflix-patron-card__header">
-        <span className="netflix-patron-card__badge">VIP EXECUTIVE PRODUCER</span>
+        <span className="netflix-patron-card__badge">
+          VIP EXECUTIVE PRODUCER
+        </span>
         <span className="gift__bank-name">{account.bank}</span>
       </div>
 
@@ -57,7 +59,9 @@ export const BankCard: React.FC<BankCardProps> = ({
           }}
         >
           <QRCodeSVG value={qrTransferPayload} size={130} level="M" />
-          <span style={{ color: '#111827', fontSize: '0.72rem', fontWeight: 600 }}>
+          <span
+            style={{ color: '#111827', fontSize: '0.72rem', fontWeight: 600 }}
+          >
             Scan via Mobile Banking
           </span>
         </div>
@@ -91,8 +95,12 @@ export const BankCard: React.FC<BankCardProps> = ({
           style={{
             flex: '0 0 auto',
             padding: '0 12px',
-            backgroundColor: showQr ? 'var(--color-netflix-red, #e50914)' : 'rgba(255,255,255,0.1)',
-            borderColor: showQr ? 'var(--color-netflix-red, #e50914)' : 'rgba(255,255,255,0.2)',
+            backgroundColor: showQr
+              ? 'var(--color-netflix-red, #e50914)'
+              : 'rgba(255,255,255,0.1)',
+            borderColor: showQr
+              ? 'var(--color-netflix-red, #e50914)'
+              : 'rgba(255,255,255,0.2)',
           }}
           aria-label="Tampilkan QR Code Rekening"
           title="Tampilkan QR Code"
@@ -103,4 +111,3 @@ export const BankCard: React.FC<BankCardProps> = ({
     </div>
   );
 };
-

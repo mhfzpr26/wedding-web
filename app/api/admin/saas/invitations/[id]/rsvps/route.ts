@@ -18,7 +18,9 @@ export async function GET(_req: NextRequest, { params }: RouteContext) {
 
     const rsvps = await getTenantRsvps(id);
     const attendingCount = rsvps.filter((r) => r.attendance === 'Hadir').length;
-    const notAttendingCount = rsvps.filter((r) => r.attendance === 'Tidak Hadir').length;
+    const notAttendingCount = rsvps.filter(
+      (r) => r.attendance === 'Tidak Hadir',
+    ).length;
     const totalGuests = rsvps.reduce((acc, r) => acc + (r.guestCount || 0), 0);
 
     return NextResponse.json({

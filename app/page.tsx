@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { getWeddingConfig } from '@/lib/wedding-data';
 import { TemplateRouter } from '@/components/templates/TemplateRouter';
+import { getWeddingConfig } from '@/lib/wedding-data';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

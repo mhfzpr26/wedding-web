@@ -25,8 +25,14 @@ async function testDependenciesIntegration() {
     `Expected 400 Bad Request for empty name, got ${invalidRsvpRes.status}`,
   );
   const invalidRsvpData = await invalidRsvpRes.json();
-  assert.ok(invalidRsvpData.details?.name, 'Expected details.name error in response');
-  console.log('  ✅ [PASS] Invalid RSVP rejected with 400 and field error:', invalidRsvpData.error);
+  assert.ok(
+    invalidRsvpData.details?.name,
+    'Expected details.name error in response',
+  );
+  console.log(
+    '  ✅ [PASS] Invalid RSVP rejected with 400 and field error:',
+    invalidRsvpData.error,
+  );
 
   // 1B. Valid RSVP
   const validRsvpRes = await fetch(`${BASE_URL}/api/rsvp`, {
@@ -68,7 +74,10 @@ async function testDependenciesIntegration() {
   );
   const invalidWishData = await invalidWishRes.json();
   assert.ok(invalidWishData.details?.message, 'Expected details.message error');
-  console.log('  ✅ [PASS] Invalid wish rejected with 400:', invalidWishData.error);
+  console.log(
+    '  ✅ [PASS] Invalid wish rejected with 400:',
+    invalidWishData.error,
+  );
 
   // 2B. Valid Wish
   const validWishRes = await fetch(`${BASE_URL}/api/wishes`, {
@@ -91,7 +100,9 @@ async function testDependenciesIntegration() {
   // ==========================================
   // TEST 3: ZOD Validation on /api/admin/saas/clients
   // ==========================================
-  console.log('\n🧪 Test 3: Testing Zod Validation on /api/admin/saas/clients...');
+  console.log(
+    '\n🧪 Test 3: Testing Zod Validation on /api/admin/saas/clients...',
+  );
 
   const invalidClientRes = await fetch(`${BASE_URL}/api/admin/saas/clients`, {
     method: 'POST',
@@ -107,12 +118,17 @@ async function testDependenciesIntegration() {
     `Expected 400 for invalid client input, got ${invalidClientRes.status}`,
   );
   const invalidClientData = await invalidClientRes.json();
-  console.log('  ✅ [PASS] Invalid client rejected with 400:', invalidClientData.error);
+  console.log(
+    '  ✅ [PASS] Invalid client rejected with 400:',
+    invalidClientData.error,
+  );
 
   // ==========================================
   // TEST 4: ZOD Validation on /api/admin/saas/invitations
   // ==========================================
-  console.log('\n🧪 Test 4: Testing Zod Validation on /api/admin/saas/invitations...');
+  console.log(
+    '\n🧪 Test 4: Testing Zod Validation on /api/admin/saas/invitations...',
+  );
 
   const invalidInvRes = await fetch(`${BASE_URL}/api/admin/saas/invitations`, {
     method: 'POST',
@@ -128,9 +144,14 @@ async function testDependenciesIntegration() {
     `Expected 400 for invalid invitation, got ${invalidInvRes.status}`,
   );
   const invalidInvData = await invalidInvRes.json();
-  console.log('  ✅ [PASS] Invalid invitation rejected with 400:', invalidInvData.error);
+  console.log(
+    '  ✅ [PASS] Invalid invitation rejected with 400:',
+    invalidInvData.error,
+  );
 
-  console.log('\n🎉 [SUCCESS] All dependency integration tests passed flawlessly!');
+  console.log(
+    '\n🎉 [SUCCESS] All dependency integration tests passed flawlessly!',
+  );
 }
 
 testDependenciesIntegration().catch((err) => {

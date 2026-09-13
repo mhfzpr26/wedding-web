@@ -43,7 +43,7 @@ export interface WeddingCover {
   seriesBadge: string; // "A NETFLIX WEDDING SPECIAL"
   trendingRank: string; // "#1 in Weddings Today"
   title: string; // "DESTIA & RAKAFANSA"
-  matchPercentage: string; // "99% Match"
+  matchPercentage?: string; // e.g. "99% Match" (optional)
   year: string; // "2026"
   ratingBadge: string; // "SU / ALL AGES"
   qualityBadge: string; // "UHD 4K"
@@ -111,7 +111,7 @@ export interface WeddingClosing {
   names: string; // "DESTIA & RAKAFANSA"
   dateLocation: string; // "14 NOVEMBER 2026 • BEKASI, INDONESIA"
   copyright: string;
-  credits: WeddingClosingCredit[];
+  credits?: WeddingClosingCredit[];
 }
 
 export interface WeddingMusic {
@@ -190,4 +190,3 @@ export interface SaasStats {
   totalTemplates: number;
   totalRsvps: number;
 }
-

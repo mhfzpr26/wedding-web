@@ -1,8 +1,8 @@
 'use client';
 
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import type React from 'react';
 import { useState } from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export interface FileUploadFieldProps {

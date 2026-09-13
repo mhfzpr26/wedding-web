@@ -1,5 +1,12 @@
 'use client';
 
+import HourglassTopRoundedIcon from '@mui/icons-material/HourglassTopRounded';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type React from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 
@@ -10,62 +17,88 @@ export const CountdownEditorTab: React.FC = () => {
   if (!config) return null;
 
   return (
-    <div className="admin-card">
-      <h3 className="admin-card__title">
-        ⏱️ Target Waktu Hitung Mundur (Countdown)
-      </h3>
-      <div className="admin-form-group">
-        <label className="admin-label">Judul Hitung Mundur</label>
-        <input
-          type="text"
-          className="admin-input"
-          value={config.countdown?.title || ''}
-          onChange={(e) =>
-            setConfig((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    countdown: {
-                      ...prev.countdown,
-                      title: e.target.value,
-                    },
-                  }
-                : null,
-            )
-          }
-        />
-      </div>
+    <Card
+      elevation={0}
+      sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+    >
+      <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+            mb: 3,
+            pb: 2,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
+          <HourglassTopRoundedIcon color="primary" />
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Target Waktu Hitung Mundur (Countdown)
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Atur waktu mulai momen sakral akad / resepsi agar tamu dapat
+              melihat hitungan mundur secara real-time.
+            </Typography>
+          </Box>
+        </Box>
 
-      <div className="admin-form-group">
-        <label className="admin-label">
-          Target Tanggal & Jam (Format ISO / Picker)
-        </label>
-        <input
-          type="datetime-local"
-          className="admin-input"
-          value={
-            config.countdown?.targetDate
-              ? config.countdown.targetDate.slice(0, 16)
-              : ''
-          }
-          onChange={(e) =>
-            setConfig((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    countdown: {
-                      ...prev.countdown,
-                      targetDate: `${e.target.value}:00+07:00`,
-                    },
-                  }
-                : null,
-            )
-          }
-        />
-        <span className="admin-hint">
-          Target saat ini: {config.countdown?.targetDate}
-        </span>
-      </div>
-    </div>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              label="Judul Hitung Mundur"
+              placeholder="Contoh: Menuju Hari Bahagia"
+              fullWidth
+              size="small"
+              value={config.countdown?.title || ''}
+              onChange={(e) =>
+                setConfig((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        countdown: {
+                          ...prev.countdown,
+                          title: e.target.value,
+                        },
+                      }
+                    : null,
+                )
+              }
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              label="Target Tanggal & Jam"
+              type="datetime-local"
+              fullWidth
+              size="small"
+              slotProps={{ inputLabel: { shrink: true } }}
+              value={
+                config.countdown?.targetDate
+                  ? config.countdown.targetDate.slice(0, 16)
+                  : ''
+              }
+              helperText={`Format ISO tersimpan: ${config.countdown?.targetDate || 'Belum diatur'}`}
+              onChange={(e) =>
+                setConfig((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        countdown: {
+                          ...prev.countdown,
+                          targetDate: `${e.target.value}:00+07:00`,
+                        },
+                      }
+                    : null,
+                )
+              }
+            />
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };

@@ -19,17 +19,13 @@ export const clientSchema = z.object({
     .optional()
     .or(z.literal(''))
     .nullable(),
-  package: z
-    .string()
-    .default('Standard'),
+  package: z.string().default('Standard'),
   notes: z
     .string()
     .max(1000, 'Catatan maksimal 1000 karakter')
     .optional()
     .nullable(),
-  status: z
-    .enum(['active', 'inactive'])
-    .default('active'),
+  status: z.enum(['active', 'inactive']).default('active'),
 });
 
 export type ClientInput = z.infer<typeof clientSchema>;
@@ -45,10 +41,11 @@ export const invitationSchema = z.object({
     .trim()
     .min(3, 'Slug minimal 3 karakter')
     .max(100, 'Slug maksimal 100 karakter')
-    .regex(/^[a-z0-9-]+$/, 'Slug hanya boleh berisi huruf kecil, angka, dan strip (-)'),
-  clientId: z
-    .string()
-    .min(1, 'Klien pemilik undangan wajib dipilih'),
+    .regex(
+      /^[a-z0-9-]+$/,
+      'Slug hanya boleh berisi huruf kecil, angka, dan strip (-)',
+    ),
+  clientId: z.string().min(1, 'Klien pemilik undangan wajib dipilih'),
   templateId: z.string().default('netflix'),
   eventDate: z.string().optional().nullable(),
   status: z.enum(['draft', 'published', 'inactive']).default('draft'),

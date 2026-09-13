@@ -1,15 +1,37 @@
 'use client';
 
-import type React from 'react';
-import PeopleIcon from '@mui/icons-material/People';
 import AddIcon from '@mui/icons-material/Add';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useAdminStore, type ClientWithInvs } from '@/stores/useAdminStore';
+import EditIcon from '@mui/icons-material/Edit';
+import EmailIcon from '@mui/icons-material/Email';
+import PeopleIcon from '@mui/icons-material/People';
+import SearchIcon from '@mui/icons-material/Search';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import type React from 'react';
+import { useState } from 'react';
+import { type ClientWithInvs, useAdminStore } from '@/stores/useAdminStore';
 
 export const ClientsManager: React.FC = () => {
+  const [search, setSearch] = useState('');
   const clients = useAdminStore((s) => s.clients);
   const setClientForm = useAdminStore((s) => s.setClientForm);
   const setShowClientModal = useAdminStore((s) => s.setShowClientModal);
@@ -17,7 +39,27 @@ export const ClientsManager: React.FC = () => {
   const setShowCreateInvModal = useAdminStore((s) => s.setShowCreateInvModal);
   const setDeleteConfirm = useAdminStore((s) => s.setDeleteConfirm);
 
-  const handleOpenEditClient = (client: ClientWithInvs) => {
+  const filtered = clients.filter(
+    (c) =>
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.phone.includes(search) ||
+      (c.email ?? '').toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const handleOpenAdd = () => {
+    setClientForm({
+      id: '',
+      name: '',
+      phone: '',
+      email: '',
+      package: 'Standard',
+      notes: '',
+      status: 'active',
+    });
+    setShowClientModal(true);
+  };
+
+  const handleOpenEdit = (client: ClientWithInvs) => {
     setClientForm({
       id: client.id,
       name: client.name,
@@ -30,20 +72,16 @@ export const ClientsManager: React.FC = () => {
     setShowClientModal(true);
   };
 
-  const handleOpenCreateInvForClient = (
-    clientId: string,
-    clientName: string,
-  ) => {
-    const suggestedSlug = clientName
+  const handleCreateInvForClient = (clientId: string, clientName: string) => {
+    const slug = clientName
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9]/g, '-')
       .replace(/-+/g, '-');
-
     setCreateInvForm({
       clientId,
       title: `${clientName} | The Wedding`,
-      slug: suggestedSlug,
+      slug,
       templateId: 'netflix',
       status: 'draft',
       eventDate: new Date().toISOString().split('T')[0],
@@ -51,181 +89,300 @@ export const ClientsManager: React.FC = () => {
     setShowCreateInvModal(true);
   };
 
-  return (
-    <div className="admin-card">
-      <div className="admin-card__header">
-        <div className="admin-card__title-group">
-          <h2 className="admin-card__title">
-            <PeopleIcon /> CRM Pengelolaan Client
-          </h2>
-          <span className="admin-card__desc">
-            Data seluruh pemesan undangan, paket langganan, dan nomor kontak
-            WhatsApp untuk koordinasi cepat.
-          </span>
-        </div>
-        <button
-          type="button"
-          className="admin-btn admin-btn--primary"
-          onClick={() => {
-            setClientForm({
-              id: '',
-              name: '',
-              phone: '',
-              email: '',
-              package: 'Cinematic VIP',
-              notes: '',
-              status: 'active',
-            });
-            setShowClientModal(true);
-          }}
-        >
-          <AddIcon fontSize="small" /> Tambah Client Baru
-        </button>
-      </div>
+  const initials = (name: string) =>
+    name
+      .split(' ')
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase();
 
-      {clients.length === 0 ? (
-        <div
-          style={{
+  return (
+    <Card>
+      <CardHeader
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <PeopleIcon sx={{ color: 'primary.light', fontSize: 20 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1rem' }}>
+              CRM Pengelolaan Client
+            </Typography>
+          </Box>
+        }
+        subheader="Data pemesan undangan, paket, dan kontak WhatsApp untuk koordinasi cepat"
+        action={
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              flexDirection: { xs: 'column', sm: 'row' },
+              width: { xs: '100%', sm: 'auto' },
+            }}
+          >
+            <TextField
+              size="small"
+              placeholder="Cari client…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon
+                        sx={{ fontSize: 16, color: 'text.disabled' }}
+                      />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+              sx={{ width: { xs: '100%', sm: 200 } }}
+            />
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={handleOpenAdd}
+              sx={{ whiteSpace: 'nowrap' }}
+            >
+              Tambah Client
+            </Button>
+          </Box>
+        }
+        sx={{
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          pb: 1.5,
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'stretch', sm: 'flex-start' },
+          gap: { xs: 1.5, sm: 0 },
+          '& .MuiCardHeader-action': {
+            marginTop: { xs: 1, sm: 0 },
+            marginRight: 0,
+            alignSelf: { xs: 'stretch', sm: 'flex-start' },
+          },
+          '& .MuiCardHeader-subheader': {
+            fontSize: '0.78rem',
+            color: 'text.secondary',
+            mt: 0.3,
+          },
+        }}
+      />
+
+      {filtered.length === 0 ? (
+        <Box
+          sx={{
             textAlign: 'center',
-            padding: '3rem 1rem',
-            color: 'var(--admin-text-secondary)',
+            py: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1,
           }}
         >
-          <PeopleIcon style={{ fontSize: '3.5rem', opacity: 0.3 }} />
-          <p style={{ marginTop: '1rem', fontSize: '1rem' }}>
-            Belum ada data client. Tambahkan client pertama Anda.
-          </p>
-        </div>
+          <PeopleIcon
+            sx={{ fontSize: 48, color: 'primary.main', opacity: 0.3 }}
+          />
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {search
+              ? `Tidak ada client cocok dengan "${search}"`
+              : 'Belum ada data client.'}
+          </Typography>
+        </Box>
       ) : (
-        <div className="admin-table-wrapper">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Nama Client / PIC</th>
-                <th>Kontak WhatsApp</th>
-                <th>Email</th>
-                <th>Paket</th>
-                <th>Total Undangan</th>
-                <th>Status Akun</th>
-                <th style={{ textAlign: 'right' }}>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clients.map((client) => {
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{ bgcolor: 'transparent' }}
+        >
+          <Table size="small" sx={{ minWidth: 600 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Client / PIC</TableCell>
+                <TableCell>Kontak</TableCell>
+                <TableCell>Paket</TableCell>
+                <TableCell align="center">Undangan</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell align="right">Aksi</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filtered.map((client) => {
                 const cleanPhone = client.phone.replace(/[^0-9]/g, '');
                 const waPhone = cleanPhone.startsWith('0')
                   ? `62${cleanPhone.slice(1)}`
                   : cleanPhone;
 
                 return (
-                  <tr key={client.id}>
-                    <td>
-                      <div style={{ fontWeight: 700 }}>{client.name}</div>
-                      {client.notes && (
-                        <div
-                          style={{
-                            fontSize: '0.75rem',
-                            color: 'var(--admin-text-muted)',
+                  <TableRow key={client.id}>
+                    <TableCell>
+                      <Box
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                      >
+                        <Avatar
+                          sx={{
+                            width: 34,
+                            height: 34,
+                            bgcolor: 'rgba(99,102,241,0.2)',
+                            color: 'primary.light',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
                           }}
                         >
-                          {client.notes}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <a
-                        href={`https://wa.me/${waPhone}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="admin-btn admin-btn--sm admin-btn--success"
-                        style={{ textDecoration: 'none' }}
+                          {initials(client.name)}
+                        </Avatar>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 700, color: 'text.primary' }}
+                          >
+                            {client.name}
+                          </Typography>
+                          {client.notes && (
+                            <Typography
+                              variant="caption"
+                              sx={{ color: 'text.disabled' }}
+                            >
+                              {client.notes}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 0.3,
+                        }}
                       >
-                        <WhatsAppIcon fontSize="inherit" /> {client.phone}
-                      </a>
-                    </td>
-                    <td style={{ color: 'var(--admin-text-secondary)' }}>
-                      {client.email || '-'}
-                    </td>
-                    <td>
-                      <span
-                        style={{
-                          backgroundColor: 'rgba(255,255,255,0.08)',
-                          padding: '3px 8px',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
+                        <Tooltip title={`Chat WhatsApp: ${client.phone}`}>
+                          <Button
+                            component="a"
+                            href={`https://wa.me/${waPhone}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            size="small"
+                            startIcon={<WhatsAppIcon fontSize="small" />}
+                            sx={{
+                              color: '#25d366',
+                              bgcolor: 'rgba(37,211,102,0.08)',
+                              border: '1px solid rgba(37,211,102,0.2)',
+                              fontSize: '0.75rem',
+                              py: 0.3,
+                              px: 1,
+                              justifyContent: 'flex-start',
+                              width: 'fit-content',
+                              '&:hover': { bgcolor: 'rgba(37,211,102,0.15)' },
+                            }}
+                          >
+                            {client.phone}
+                          </Button>
+                        </Tooltip>
+                        {client.email && (
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.4,
+                            }}
+                          >
+                            <EmailIcon
+                              sx={{ fontSize: 11, color: 'text.disabled' }}
+                            />
+                            <Typography
+                              variant="caption"
+                              sx={{ color: 'text.secondary' }}
+                            >
+                              {client.email}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={client.package || 'Standard'}
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(255,255,255,0.06)',
+                          color: 'text.secondary',
                           fontWeight: 600,
+                          fontSize: '0.72rem',
                         }}
-                      >
-                        {client.package}
-                      </span>
-                    </td>
-                    <td>
-                      <span style={{ fontWeight: 700 }}>
-                        {client.invitationsCount ?? 0} Undangan
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        className={`admin-status-badge admin-status-badge--${
-                          client.status === 'active' ? 'published' : 'inactive'
-                        }`}
-                      >
-                        <span className="admin-status-badge__dot" />
-                        {client.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <div
-                        style={{
-                          display: 'inline-flex',
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                        {client.invitationsCount ?? 0}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={
+                          client.status === 'active' ? 'Aktif' : 'Nonaktif'
+                        }
+                        size="small"
+                        color={
+                          client.status === 'active' ? 'success' : 'default'
+                        }
+                        sx={{ fontWeight: 700, fontSize: '0.7rem', height: 20 }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Box
+                        sx={{
+                          display: 'flex',
                           alignItems: 'center',
-                          gap: '0.4rem',
+                          justifyContent: 'flex-end',
+                          gap: 0.5,
                         }}
                       >
-                        <button
-                          type="button"
-                          className="admin-btn admin-btn--secondary admin-btn--sm"
-                          title="Buat Undangan untuk Client ini"
-                          onClick={() =>
-                            handleOpenCreateInvForClient(
-                              client.id,
-                              client.name,
-                            )
-                          }
-                        >
-                          <AddCircleIcon fontSize="inherit" /> Buat Undangan
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-btn admin-btn--outline admin-btn--sm"
-                          title="Edit Data Client"
-                          onClick={() => handleOpenEditClient(client)}
-                        >
-                          <EditIcon fontSize="inherit" />
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-btn admin-btn--danger admin-btn--sm"
-                          title="Hapus Client"
-                          onClick={() =>
-                            setDeleteConfirm({
-                              type: 'client',
-                              id: client.id,
-                              title: client.name,
-                            })
-                          }
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                        <Tooltip title="Buat undangan untuk client ini">
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            startIcon={<AddCircleIcon fontSize="small" />}
+                            onClick={() =>
+                              handleCreateInvForClient(client.id, client.name)
+                            }
+                            sx={{ fontSize: '0.72rem', py: 0.3, px: 1 }}
+                          >
+                            Undangan
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Edit data client">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleOpenEdit(client)}
+                            sx={{ color: 'text.secondary' }}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Hapus client">
+                          <IconButton
+                            size="small"
+                            onClick={() =>
+                              setDeleteConfirm({
+                                type: 'client',
+                                id: client.id,
+                                title: client.name,
+                              })
+                            }
+                            sx={{ color: 'error.main' }}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Card>
   );
 };

@@ -13,8 +13,15 @@
   align-items: center;
   height: 64px;
   padding: 0 4%;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, opacity 0.4s ease;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease,
+    opacity 0.4s ease;
   opacity: 0;
   pointer-events: none;
 }
@@ -75,7 +82,9 @@
   align-items: center;
   gap: 0.3rem;
   white-space: nowrap;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
   text-decoration: none;
   opacity: 0.75;
 }
@@ -152,7 +161,8 @@
 }
 
 @keyframes livePulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -166,7 +176,10 @@
    Section Headers: Universal Netflix Badge Pill
    ========================================================================== */
 .netflix-badge-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   font-size: var(--font-size-tiny);
   font-weight: 800;
   letter-spacing: var(--tracking-badge);
@@ -174,9 +187,15 @@
   color: var(--color-red);
   background: rgba(229, 9, 20, 0.15);
   border: 1px solid rgba(229, 9, 20, 0.4);
-  padding: 0.3rem 0.85rem;
+  padding: 0.35rem 0.95rem;
   border-radius: 999px;
   box-shadow: 0 0 12px rgba(229, 9, 20, 0.2);
+  line-height: 1.2;
+}
+
+.netflix-badge-pill svg {
+  flex-shrink: 0;
+  font-size: 0.95rem;
 }
 
 /* ==========================================================================
@@ -229,8 +248,18 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.82) 35%, rgba(20, 20, 20, 0.4) 65%, rgba(20, 20, 20, 0.85) 100%),
-    radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.1) 0%, rgba(20, 20, 20, 0.88) 85%);
+    linear-gradient(
+      to top,
+      #141414 0%,
+      rgba(20, 20, 20, 0.82) 35%,
+      rgba(20, 20, 20, 0.4) 65%,
+      rgba(20, 20, 20, 0.85) 100%
+    ),
+    radial-gradient(
+      ellipse at 50% 45%,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(20, 20, 20, 0.88) 85%
+    );
   z-index: 1;
 }
 
@@ -241,7 +270,11 @@
   transform: translateX(-50%);
   width: 700px;
   height: 400px;
-  background: radial-gradient(circle, rgba(229, 9, 20, 0.18) 0%, rgba(20, 20, 20, 0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(229, 9, 20, 0.18) 0%,
+    rgba(20, 20, 20, 0) 70%
+  );
   filter: blur(50px);
   z-index: 2;
   pointer-events: none;
@@ -471,7 +504,10 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .netflix-cover__btn-play:hover {
@@ -497,7 +533,9 @@
   cursor: pointer;
   backdrop-filter: blur(8px);
   text-decoration: none;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .netflix-cover__btn-list:hover {
@@ -585,7 +623,9 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .netflix-cast-card:hover {
@@ -669,7 +709,9 @@
   height: auto;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(229, 9, 20, 0.15);
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(229, 9, 20, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -686,7 +728,12 @@
   position: absolute;
   width: 1px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, var(--color-red), transparent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--color-red),
+    transparent
+  );
 }
 
 .couple__connector-ornament {
@@ -728,7 +775,12 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, transparent, var(--color-red), transparent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--color-red),
+    transparent
+  );
   opacity: 0.6;
 }
 
@@ -858,7 +910,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-red), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-red),
+    transparent
+  );
 }
 
 .countdown__value {
@@ -914,13 +971,18 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .event__card:hover {
   border-color: rgba(229, 9, 20, 0.5);
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 9, 20, 0.15);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(229, 9, 20, 0.15);
 }
 
 .event__card::before {
@@ -930,7 +992,12 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-red), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-red),
+    transparent
+  );
 }
 
 .netflix-episode-badge {
@@ -1153,7 +1220,9 @@
   border-radius: 4px;
   font-family: var(--font-body);
   font-size: var(--font-size-p);
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .rsvp__input:focus,
@@ -1272,7 +1341,9 @@
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: var(--color-white) !important;
   border-radius: 4px;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .wishes__form-card input:focus,
@@ -1398,7 +1469,9 @@
   align-items: center;
   gap: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .gift__card:hover {
@@ -1413,7 +1486,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-red), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-red),
+    transparent
+  );
 }
 
 .gift__bank-name {
@@ -1681,7 +1759,10 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 1.5rem;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .netflix-episode-row:hover {
@@ -1720,7 +1801,9 @@
   height: 100%;
   object-fit: cover;
   filter: brightness(0.7);
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
 }
 
 .netflix-episode-row:hover .netflix-episode-row__thumb-img {
@@ -1742,7 +1825,9 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .netflix-episode-row:hover .netflix-episode-row__play-icon {
@@ -1931,7 +2016,10 @@
   border-radius: 8px;
   padding: 1.25rem 0.75rem;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .netflix-profile-avatar-card:hover {
@@ -2082,7 +2170,9 @@
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 12px !important;
   padding: 1.75rem !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   text-align: left;
   align-items: stretch !important;
 }
@@ -2172,7 +2262,9 @@
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .netflix-poster-card:hover {
@@ -2441,7 +2533,6 @@
   .netflix-cast-card__credits-box {
     padding: 0.5rem 0.75rem;
   }
-
 
   .netflix-episodes-header {
     margin-bottom: 0.85rem;
@@ -2883,8 +2974,12 @@
   border-radius: 12px;
   padding: 0.85rem 1.15rem;
   backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .netflix-cover__profile-card:hover {
@@ -2895,7 +2990,7 @@
 .netflix-cover__avatar-box {
   width: 58px;
   height: 58px;
-  background: #E50914;
+  background: #e50914;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -2923,12 +3018,12 @@
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.12em;
-  color: #E50914;
+  color: #e50914;
 }
 
 .netflix-cover__profile-text .netflix-cover__guest-label {
   font-size: 0.72rem;
-  color: #A3A3A3;
+  color: #a3a3a3;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -2936,7 +3031,7 @@
 .netflix-cover__profile-text .netflix-cover__guest-name {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
@@ -3010,8 +3105,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: #E50914;
-  color: #FFFFFF;
+  background: #e50914;
+  color: #ffffff;
   font-size: 0.75rem;
   font-weight: 800;
   padding: 0.25rem 0.65rem;
@@ -3027,7 +3122,7 @@
   gap: 0.35rem;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .netflix-hero-poster__title {
@@ -3042,7 +3137,7 @@
 .netflix-hero-poster__names {
   font-size: clamp(2rem, 6vw, 3.25rem);
   font-weight: 900;
-  color: #FFFFFF;
+  color: #ffffff;
   letter-spacing: -0.02em;
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.9);
   line-height: 1.1;
@@ -3051,7 +3146,7 @@
 .netflix-hero-poster__subtitle {
   font-size: clamp(1.2rem, 3.5vw, 1.85rem);
   font-weight: 800;
-  color: #E50914;
+  color: #e50914;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-shadow: 0 2px 8px rgba(229, 9, 20, 0.3);
@@ -3062,7 +3157,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: #D1D5DB;
+  color: #d1d5db;
   font-size: 0.88rem;
   font-style: italic;
   max-width: 90%;
@@ -3079,7 +3174,7 @@
 .netflix-tag-pill {
   display: inline-block;
   background: rgba(255, 255, 255, 0.12);
-  color: #E5E7EB;
+  color: #e5e7eb;
   border-radius: 4px;
   padding: 0.18rem 0.55rem;
   font-size: 0.76rem;
@@ -3096,9 +3191,9 @@
 }
 
 .netflix-spec-tag--gold {
-  background: #D97706 !important;
-  color: #FFFFFF !important;
-  border-color: #F59E0B !important;
+  background: #d97706 !important;
+  color: #ffffff !important;
+  border-color: #f59e0b !important;
   font-weight: 800 !important;
 }
 
@@ -3121,12 +3216,15 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
   border: none;
 }
 
 .netflix-hero-btn--primary {
-  background: #FFFFFF;
+  background: #ffffff;
   color: #000000;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
@@ -3138,7 +3236,7 @@
 
 .netflix-hero-btn--secondary {
   background: rgba(109, 109, 110, 0.7);
-  color: #FFFFFF;
+  color: #ffffff;
   backdrop-filter: blur(8px);
 }
 
@@ -3151,7 +3249,7 @@
   margin-top: 1rem;
   padding: 1rem 1.25rem;
   background: rgba(20, 20, 20, 0.6);
-  border-left: 3px solid #E50914;
+  border-left: 3px solid #e50914;
   border-radius: 0 8px 8px 0;
   max-width: 600px;
 }
@@ -3175,7 +3273,9 @@
   margin: 0 auto;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   background: #181818;
 }
 
@@ -3229,8 +3329,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.75) 100%),
-              linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+  background:
+    radial-gradient(circle, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.75) 100%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
 }
 
 .netflix-trailer__big-play-btn {
@@ -3246,12 +3347,14 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 0 30px rgba(229, 9, 20, 0.7);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease;
 }
 
 .netflix-trailer__big-play-btn:hover {
   transform: scale(1.12);
-  background: #F40612;
+  background: #f40612;
 }
 
 .netflix-trailer__play-pulse {
@@ -3261,7 +3364,7 @@
   right: -6px;
   bottom: -6px;
   border-radius: 50%;
-  border: 2px solid #E50914;
+  border: 2px solid #e50914;
   animation: trailerPulse 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
   pointer-events: none;
 }
@@ -3293,14 +3396,14 @@
 .netflix-trailer__poster-title {
   font-size: clamp(1rem, 3.5vw, 1.35rem);
   font-weight: 800;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
 .netflix-trailer__poster-duration {
   font-size: 0.75rem;
-  color: #D1D5DB;
+  color: #d1d5db;
 }
 
 .netflix-trailer__controls {
@@ -3308,7 +3411,12 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.5) 70%,
+    transparent 100%
+  );
   padding: 0.75rem 1rem 0.5rem;
   display: flex;
   flex-direction: column;
@@ -3345,7 +3453,7 @@
 
 .netflix-trailer__progress-bar-fill {
   height: 100%;
-  background: #E50914;
+  background: #e50914;
   border-radius: 3px;
   box-shadow: 0 0 8px rgba(229, 9, 20, 0.8);
 }
@@ -3355,7 +3463,7 @@
   top: 50%;
   width: 12px;
   height: 12px;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
@@ -3378,24 +3486,26 @@
 .netflix-trailer__ctrl-btn {
   background: none;
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .netflix-trailer__ctrl-btn:hover {
-  color: #E50914;
+  color: #e50914;
   transform: scale(1.1);
 }
 
 .netflix-trailer__timestamp {
   font-size: 0.72rem;
-  color: #D1D5DB;
+  color: #d1d5db;
   font-family: monospace;
 }
 
@@ -3405,7 +3515,7 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
   padding: 0.1rem 0.35rem;
   border-radius: 2px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .netflix-trailer__info-card {
@@ -3421,7 +3531,7 @@
 }
 
 .netflix-trailer__desc {
-  color: #D1D5DB;
+  color: #d1d5db;
   font-size: 0.88rem;
   line-height: 1.5;
   margin-bottom: 1rem;
@@ -3432,13 +3542,13 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.4rem 1rem;
   font-size: 0.78rem;
-  color: #9CA3AF;
+  color: #9ca3af;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 0.75rem;
 }
 
 .netflix-trailer__credits-grid strong {
-  color: #E5E7EB;
+  color: #e5e7eb;
 }
 
 /* ==========================================================================
@@ -3466,7 +3576,7 @@
 .netflix-gallery__tab {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #9CA3AF;
+  color: #9ca3af;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -3477,24 +3587,26 @@
 }
 
 .netflix-gallery__tab:hover {
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: rgba(255, 255, 255, 0.3);
 }
 
 .netflix-gallery__tab--active {
-  background: #E50914 !important;
-  color: #FFFFFF !important;
-  border-color: #E50914 !important;
+  background: #e50914 !important;
+  color: #ffffff !important;
+  border-color: #e50914 !important;
   box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
 }
 
 .netflix-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  column-count: 3;
+  column-gap: 1rem;
 }
 
 .netflix-gallery__card {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  display: block;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -3502,7 +3614,9 @@
   cursor: pointer;
   aspect-ratio: 4 / 3;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
 }
 
 .netflix-gallery__card--portrait {
@@ -3515,7 +3629,9 @@
 
 .netflix-gallery__card:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.8), 0 0 0 2px #E50914;
+  box-shadow:
+    0 12px 25px rgba(0, 0, 0, 0.8),
+    0 0 0 2px #e50914;
 }
 
 .netflix-gallery__img {
@@ -3535,7 +3651,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.2) 60%,
+    transparent 100%
+  );
   opacity: 0.85;
   display: flex;
   flex-direction: column;
@@ -3576,7 +3697,7 @@
 .netflix-gallery__card-tag {
   font-size: 0.65rem;
   font-weight: 700;
-  color: #E50914;
+  color: #e50914;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -3584,7 +3705,7 @@
 .netflix-gallery__card-title {
   font-size: 0.92rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   line-height: 1.25;
 }
@@ -3622,7 +3743,7 @@
   right: 0;
   background: rgba(255, 255, 255, 0.15);
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -3630,12 +3751,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
   z-index: 1010;
 }
 
 .netflix-lightbox__btn-close:hover {
-  background: #E50914;
+  background: #e50914;
   transform: scale(1.1);
 }
 
@@ -3645,7 +3768,7 @@
   transform: translateY(-50%);
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
+  color: #ffffff;
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -3654,12 +3777,14 @@
   justify-content: center;
   cursor: pointer;
   z-index: 1010;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .netflix-lightbox__nav-btn:hover {
-  background: #E50914;
-  border-color: #E50914;
+  background: #e50914;
+  border-color: #e50914;
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -3707,7 +3832,7 @@
 
 .netflix-lightbox__counter {
   font-size: 0.72rem;
-  color: #9CA3AF;
+  color: #9ca3af;
   align-self: flex-end;
   margin-top: -1.5rem;
 }
@@ -3715,13 +3840,13 @@
 .netflix-lightbox__title {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0.2rem 0 0;
 }
 
 .netflix-lightbox__tag {
   font-size: 0.76rem;
-  color: #A3A3A3;
+  color: #a3a3a3;
   margin: 0;
 }
 
@@ -3756,15 +3881,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(20, 20, 20, 0.8) 0%, transparent 60%);
+  background: linear-gradient(
+    to top,
+    rgba(20, 20, 20, 0.8) 0%,
+    transparent 60%
+  );
 }
 
 .netflix-cast-card__rank-badge {
   position: absolute;
   top: 0.65rem;
   left: 0.65rem;
-  background: #E50914;
-  color: #FFFFFF;
+  background: #e50914;
+  color: #ffffff;
   font-size: 0.68rem;
   font-weight: 800;
   padding: 0.2rem 0.5rem;
@@ -3794,7 +3923,7 @@
   bottom: 0.4rem;
   right: 0.4rem;
   background: rgba(0, 0, 0, 0.75);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.62rem;
   font-weight: 700;
   padding: 0.15rem 0.45rem;
@@ -3807,7 +3936,7 @@
   bottom: 0.4rem;
   left: 0.4rem;
   background: rgba(0, 0, 0, 0.8);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.62rem;
   font-weight: 700;
   padding: 0.2rem 0.45rem;
@@ -3834,8 +3963,12 @@
   }
 
   .netflix-gallery__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
+    column-count: 2;
+    column-gap: 0.75rem;
+  }
+
+  .netflix-gallery__card {
+    margin-bottom: 0.75rem;
   }
 
   .netflix-gallery__tabs {
@@ -3863,8 +3996,11 @@
 
 @media (max-width: 480px) {
   .netflix-gallery__grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    column-count: 1;
+    column-gap: 0;
+  }
+
+  .netflix-gallery__card {
+    margin-bottom: 0.85rem;
   }
 }
-

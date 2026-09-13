@@ -27,20 +27,21 @@
      Typography Tokens (Minor Third Scale - 1.200 Ratio, Base 16px)
      ============================================================ */
   --font-heading: "Bebas Neue", "Arial Black", Impact, sans-serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-script: var(--font-heading);
 
   /* Exact Minor Third scale tokens (typescale.com) */
-  --font-size-display-lg: 68.80px;
+  --font-size-display-lg: 68.8px;
   --font-size-display-md: 57.34px;
   --font-size-h1: 47.78px;
   --font-size-h2: 39.81px;
   --font-size-h3: 33.18px;
   --font-size-h4: 27.65px;
   --font-size-h5: 23.04px;
-  --font-size-h6: 19.20px;
-  --font-size-p: 16.00px;
-  --font-size-base: 16.00px;
+  --font-size-h6: 19.2px;
+  --font-size-p: 16px;
+  --font-size-base: 16px;
   --font-size-small: 13.33px;
   --font-size-sm: 13.33px;
   --font-size-tiny: 11.11px;

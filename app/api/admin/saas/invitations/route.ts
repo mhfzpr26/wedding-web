@@ -53,7 +53,8 @@ export async function POST(request: NextRequest) {
     const parsed = invitationSchema.safeParse(rawBody);
 
     if (!parsed.success) {
-      const firstError = parsed.error.issues[0]?.message || 'Input data undangan tidak valid';
+      const firstError =
+        parsed.error.issues[0]?.message || 'Input data undangan tidak valid';
       return NextResponse.json(
         {
           error: firstError,
@@ -63,7 +64,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { clientId, title, slug, templateId, status, eventDate } = parsed.data;
+    const { clientId, title, slug, templateId, status, eventDate } =
+      parsed.data;
 
     const newInvitation = await createInvitation({
       clientId,
@@ -77,7 +79,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newInvitation, { status: 201 });
   } catch (error: unknown) {
     console.error('Error creating invitation:', error);
-    const msg = error instanceof Error ? error.message : 'Gagal membuat undangan';
+    const msg =
+      error instanceof Error ? error.message : 'Gagal membuat undangan';
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

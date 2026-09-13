@@ -91,38 +91,36 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
           }}
         >
           <div className="netflix-section-header">
-            <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
-              AUDIENCE REVIEWS &amp; RATINGS
+            <div
+              className="netflix-badge-pill"
+              style={{ margin: '0 auto var(--spacing-xs)' }}
+            >
+              WISHES &amp; PRAYERS
             </div>
-            <h2 className="wishes__title" id="wishes-title">AUDIENCE REVIEWS</h2>
-            
-            {/* Netflix Rotten Tomatoes Style Score Banner */}
-            <div className="netflix-review-score-banner">
-              <div className="netflix-review-score-badge">
-                <span className="netflix-review-score-badge__icon">🍅</span>
-                <div className="netflix-review-score-badge__info">
-                  <span className="netflix-review-score-badge__pct">99%</span>
-                  <span className="netflix-review-score-badge__label">TOMATOMETER (CERTIFIED FRESH)</span>
-                </div>
-              </div>
-              <div className="netflix-review-score-badge">
-                <span className="netflix-review-score-badge__icon">🍿</span>
-                <div className="netflix-review-score-badge__info">
-                  <span className="netflix-review-score-badge__pct">100%</span>
-                  <span className="netflix-review-score-badge__label">AUDIENCE APPROVAL RATING</span>
-                </div>
-              </div>
-            </div>
+            <h2 className="wishes__title" id="wishes-title">
+              UCAPAN &amp; DOA RESTU
+            </h2>
 
-            <p style={{ color: 'var(--color-light-gray)', marginTop: '0.75rem', fontSize: 'var(--font-size-small)' }}>
-              Tinggalkan ulasan hangat &amp; doa restu untuk perjalanan hidup baru Destia &amp; Rakafansa
+            <p
+              style={{
+                color: 'var(--color-light-gray)',
+                marginTop: '0.75rem',
+                fontSize: 'var(--font-size-small)',
+              }}
+            >
+              Tinggalkan pesan hangat &amp; doa restu untuk perjalanan hidup
+              baru Destia &amp; Rakafansa
             </p>
           </div>
 
           <div className="wishes__form-card netflix-review-form-card">
             <form
               onSubmit={handleSubmit}
-              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.25rem',
+              }}
             >
               <div>
                 <label className="netflix-form-label" htmlFor="wish-name">
@@ -153,9 +151,15 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
                   }
                   className="rsvp__select"
                 >
-                  <option value="Hadir">👍 Hadir (Pasti Menonton Langsung)</option>
-                  <option value="Akan Hadir">💖 Insya Allah Hadir (Highly Recommended)</option>
-                  <option value="Tidak Hadir">🏠 Streaming from Home (Berhalangan)</option>
+                  <option value="Hadir">
+                    👍 Hadir (Pasti Menonton Langsung)
+                  </option>
+                  <option value="Akan Hadir">
+                    💖 Insya Allah Hadir (Highly Recommended)
+                  </option>
+                  <option value="Tidak Hadir">
+                    🏠 Streaming from Home (Berhalangan)
+                  </option>
                 </select>
               </div>
 
@@ -185,7 +189,9 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
                 disabled={isSubmitting}
                 className="rsvp__submit-btn wishes__submit-btn"
               >
-                {isSubmitting ? 'POSTING REVIEW...' : 'POST REVIEW (KIRIM ULASAN & DOA)'}
+                {isSubmitting
+                  ? 'POSTING REVIEW...'
+                  : 'POST REVIEW (KIRIM ULASAN & DOA)'}
               </Button>
             </form>
           </div>

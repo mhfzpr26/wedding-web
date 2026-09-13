@@ -140,6 +140,14 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
       tag: 'Masjid Agung Al-Barkah',
       aspect: 'landscape',
     },
+    {
+      id: 'p9',
+      src: '/images/venue-resepsi.jpg',
+      title: 'Grand Celebration Ballroom',
+      category: 'venue',
+      tag: 'Hotel Santika Premiere',
+      aspect: 'landscape',
+    },
   ],
   loveStory: [
     {
@@ -213,36 +221,14 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
     },
   ],
   closing: {
-    badge: 'END CREDITS • CAST & CREW',
+    badge: 'WARM REGARDS • TERIMA KASIH',
     title: 'SEE YOU AT THE PREMIERE',
     message:
       'Merupakan suatu kebahagiaan dan kehormatan yang teramat besar bagi kami atas kehadiran, doa restu, serta kasih sayang yang Anda curahkan.',
     names: 'DESTIA & RAKAFANSA',
     dateLocation: '14 NOVEMBER 2026 • BEKASI, INDONESIA',
     copyright:
-      '© 2026 DESTIA & RAKAFANSA WEDDING SPECIAL • A NETFLIX ORIGINAL CELEBRATION • ALL RIGHTS RESERVED',
-    credits: [
-      {
-        role: 'DIRECTED BY',
-        name: 'Love, Destiny & Divine Blessings',
-      },
-      {
-        role: 'LEAD ACTRESS',
-        name: 'Destia Dwi Ramadhani',
-      },
-      {
-        role: 'LEAD ACTOR',
-        name: 'Rakafansa Saputra',
-      },
-      {
-        role: 'EXECUTIVE PRODUCERS',
-        name: 'Keluarga Besar Ibu Sri Mulyati & Keluarga Besar Ibu Lenny Gusnita',
-      },
-      {
-        role: 'SPECIAL THANKS',
-        name: 'Seluruh Sahabat, Kerabat & Tamu Undangan Terhormat',
-      },
-    ],
+      '© 2026 DESTIA & RAKAFANSA WEDDING SPECIAL • ALL RIGHTS RESERVED',
   },
   music: {
     audioUrl: '',
@@ -298,18 +284,27 @@ export async function getWeddingConfig(): Promise<WeddingConfig> {
       gifts: parsed.gifts || DEFAULT_WEDDING_CONFIG.gifts,
     };
   } catch (error) {
-    console.error('Error reading wedding config, falling back to default:', error);
+    console.error(
+      'Error reading wedding config, falling back to default:',
+      error,
+    );
     return DEFAULT_WEDDING_CONFIG;
   }
 }
 
-export async function saveWeddingConfig(config: WeddingConfig): Promise<boolean> {
+export async function saveWeddingConfig(
+  config: WeddingConfig,
+): Promise<boolean> {
   try {
     const dir = path.dirname(CONFIG_FILE_PATH);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(config, null, 2), 'utf-8');
+    fs.writeFileSync(
+      CONFIG_FILE_PATH,
+      JSON.stringify(config, null, 2),
+      'utf-8',
+    );
 
     const tenantDir = path.join(
       process.cwd(),

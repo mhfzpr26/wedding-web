@@ -11,7 +11,9 @@ export async function GET() {
 
     // Attach count of invitations to each client
     const clientsWithMeta = clients.map((client) => {
-      const clientInvs = invitations.filter((inv) => inv.clientId === client.id);
+      const clientInvs = invitations.filter(
+        (inv) => inv.clientId === client.id,
+      );
       return {
         ...client,
         invitationsCount: clientInvs.length,
@@ -41,7 +43,8 @@ export async function POST(request: NextRequest) {
     const parsed = clientSchema.safeParse(rawBody);
 
     if (!parsed.success) {
-      const firstError = parsed.error.issues[0]?.message || 'Input data client tidak valid';
+      const firstError =
+        parsed.error.issues[0]?.message || 'Input data client tidak valid';
       return NextResponse.json(
         {
           error: firstError,
@@ -51,7 +54,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, phone, email, package: clientPackage, notes, status } = parsed.data;
+    const {
+      name,
+      phone,
+      email,
+      package: clientPackage,
+      notes,
+      status,
+    } = parsed.data;
 
     const newClient = await createClient({
       name,

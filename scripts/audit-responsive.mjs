@@ -1,10 +1,10 @@
-import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 import path from 'node:path';
+import { chromium } from 'playwright-core';
 
 const report = {
   desktop: { overflows: [], issues: [] },
-  mobile: { overflows: [], issues: [] }
+  mobile: { overflows: [], issues: [] },
 };
 
 const outDir = path.resolve('public/audit_screenshots');
@@ -15,7 +15,9 @@ if (!fs.existsSync(outDir)) {
 async function auditViewport(page, name, width, height, isMobile) {
   console.log(`\n=== Auditing ${name} (${width}x${height}) ===`);
   await page.setViewportSize({ width, height });
-  await page.goto('http://localhost:3000/?to=Tamu+Undangan', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:3000/?to=Tamu+Undangan', {
+    waitUntil: 'networkidle',
+  });
   await page.waitForTimeout(1000);
 
   // Check 1: Cover screen overflow
@@ -25,10 +27,13 @@ async function auditViewport(page, name, width, height, isMobile) {
     return {
       scrollWidth: Math.max(docEl.scrollWidth, body.scrollWidth),
       clientWidth: docEl.clientWidth,
-      hasHorizontalScroll: Math.max(docEl.scrollWidth, body.scrollWidth) > docEl.clientWidth + 1
+      hasHorizontalScroll:
+        Math.max(docEl.scrollWidth, body.scrollWidth) > docEl.clientWidth + 1,
     };
   });
-  console.log(`[Cover] doc scrollWidth: ${coverOverflow.scrollWidth}, clientWidth: ${coverOverflow.clientWidth}, overflow: ${coverOverflow.hasHorizontalScroll}`);
+  console.log(
+    `[Cover] doc scrollWidth: ${coverOverflow.scrollWidth}, clientWidth: ${coverOverflow.clientWidth}, overflow: ${coverOverflow.hasHorizontalScroll}`,
+  );
 
   await page.screenshot({ path: path.join(outDir, `${name}_01_cover.png`) });
 
@@ -48,10 +53,12 @@ async function auditViewport(page, name, width, height, isMobile) {
     return {
       scrollWidth: scrollW,
       clientWidth: clientW,
-      hasHorizontalScroll: scrollW > clientW + 1
+      hasHorizontalScroll: scrollW > clientW + 1,
     };
   });
-  console.log(`[Opened] doc scrollWidth: ${openedOverflow.scrollWidth}, clientWidth: ${openedOverflow.clientWidth}, overflow: ${openedOverflow.hasHorizontalScroll}`);
+  console.log(
+    `[Opened] doc scrollWidth: ${openedOverflow.scrollWidth}, clientWidth: ${openedOverflow.clientWidth}, overflow: ${openedOverflow.hasHorizontalScroll}`,
+  );
 
   // Find all elements overflowing horizontally
   const overflowingElements = await page.evaluate((vw) => {
@@ -63,14 +70,23 @@ async function auditViewport(page, name, width, height, isMobile) {
       if (rect.width > 0 && rect.height > 0) {
         if (rect.right > vw + 2 || rect.left < -2) {
           const style = window.getComputedStyle(el);
-          if (style.position !== 'fixed' && style.position !== 'sticky' && style.display !== 'none' && style.visibility !== 'hidden') {
+          if (
+            style.position !== 'fixed' &&
+            style.position !== 'sticky' &&
+            style.display !== 'none' &&
+            style.visibility !== 'hidden'
+          ) {
             bad.push({
               tag: el.tagName.toLowerCase(),
               className: el.className?.toString()?.slice(0, 80) || '',
               id: el.id || '',
-              rect: { left: Math.round(rect.left), right: Math.round(rect.right), width: Math.round(rect.width) },
+              rect: {
+                left: Math.round(rect.left),
+                right: Math.round(rect.right),
+                width: Math.round(rect.width),
+              },
               computedWidth: style.width,
-              computedMaxWidth: style.maxWidth
+              computedMaxWidth: style.maxWidth,
             });
           }
         }
@@ -79,13 +95,29 @@ async function auditViewport(page, name, width, height, isMobile) {
     return bad;
   }, width);
 
-  console.log(`Found ${overflowingElements.length} overflowing elements in ${name}:`);
+  console.log(
+    `Found ${overflowingElements.length} overflowing elements in ${name}:`,
+  );
   for (const item of overflowingElements.slice(0, 10)) {
-    console.log(` - <${item.tag} class="${item.className}" id="${item.id}">: rect=${JSON.stringify(item.rect)} width=${item.computedWidth} maxWidth=${item.computedMaxWidth}`);
+    console.log(
+      ` - <${item.tag} class="${item.className}" id="${item.id}">: rect=${JSON.stringify(item.rect)} width=${item.computedWidth} maxWidth=${item.computedMaxWidth}`,
+    );
   }
 
   // Check specific sections
-  const sections = ['#hero', '#trailer', '#couple', '#gallery', '#story', '#countdown', '#event', '#rsvp', '#wishes', '#gift', '#closing'];
+  const sections = [
+    '#hero',
+    '#trailer',
+    '#couple',
+    '#gallery',
+    '#story',
+    '#countdown',
+    '#event',
+    '#rsvp',
+    '#wishes',
+    '#gift',
+    '#closing',
+  ];
   for (const secId of sections) {
     const sec = page.locator(secId);
     if (await sec.isVisible()) {
@@ -99,12 +131,20 @@ async function auditViewport(page, name, width, height, isMobile) {
           vw,
           overflowRight: Math.round(r.right - vw),
           scrollWidth: node.scrollWidth,
-          clientWidth: node.clientWidth
+          clientWidth: node.clientWidth,
         };
       }, width);
-      if (secInfo.scrollWidth > secInfo.clientWidth + 1 || secInfo.overflowRight > 2) {
-        console.log(`Section ${secId} has overflow! ${JSON.stringify(secInfo)}`);
-        report[isMobile ? 'mobile' : 'desktop'].issues.push({ section: secId, ...secInfo });
+      if (
+        secInfo.scrollWidth > secInfo.clientWidth + 1 ||
+        secInfo.overflowRight > 2
+      ) {
+        console.log(
+          `Section ${secId} has overflow! ${JSON.stringify(secInfo)}`,
+        );
+        report[isMobile ? 'mobile' : 'desktop'].issues.push({
+          section: secId,
+          ...secInfo,
+        });
       }
     }
   }
@@ -125,7 +165,9 @@ async function auditViewport(page, name, width, height, isMobile) {
   if (await gallery.isVisible()) {
     await gallery.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
-    await page.screenshot({ path: path.join(outDir, `${name}_04_gallery.png`) });
+    await page.screenshot({
+      path: path.join(outDir, `${name}_04_gallery.png`),
+    });
   }
 
   const eventSec = page.locator('#event');
@@ -160,10 +202,14 @@ async function auditViewport(page, name, width, height, isMobile) {
   if (await closingSec.isVisible()) {
     await closingSec.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
-    await page.screenshot({ path: path.join(outDir, `${name}_09_closing.png`) });
+    await page.screenshot({
+      path: path.join(outDir, `${name}_09_closing.png`),
+    });
   }
 
-  report[isMobile ? 'mobile' : 'desktop'].overflows.push(...overflowingElements);
+  report[isMobile ? 'mobile' : 'desktop'].overflows.push(
+    ...overflowingElements,
+  );
 }
 
 async function run() {
@@ -175,7 +221,8 @@ async function run() {
     deviceScaleFactor: 2,
     isMobile: true,
     hasTouch: true,
-    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15'
+    userAgent:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15',
   });
   const mobilePage = await mobileCtx.newPage();
   await auditViewport(mobilePage, 'mobile_390', 390, 844, true);
@@ -185,7 +232,7 @@ async function run() {
     viewport: { width: 360, height: 740 },
     deviceScaleFactor: 2,
     isMobile: true,
-    hasTouch: true
+    hasTouch: true,
   });
   const smallMobilePage = await smallMobileCtx.newPage();
   await auditViewport(smallMobilePage, 'mobile_360', 360, 740, true);
@@ -193,7 +240,7 @@ async function run() {
   // 3. Desktop - 1440 x 900
   const desktopCtx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
-    deviceScaleFactor: 1
+    deviceScaleFactor: 1,
   });
   const desktopPage = await desktopCtx.newPage();
   await auditViewport(desktopPage, 'desktop_1440', 1440, 900, false);
@@ -201,7 +248,7 @@ async function run() {
   // 4. Desktop - 1920 x 1080 (Full HD)
   const fhdCtx = await browser.newContext({
     viewport: { width: 1920, height: 1080 },
-    deviceScaleFactor: 1
+    deviceScaleFactor: 1,
   });
   const fhdPage = await fhdCtx.newPage();
   await auditViewport(fhdPage, 'desktop_1920', 1920, 1080, false);

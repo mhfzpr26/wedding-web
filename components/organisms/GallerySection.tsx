@@ -1,12 +1,12 @@
 'use client';
 
-import type React from 'react';
-import { useState, useEffect, useCallback } from 'react';
-import CollectionsIcon from '@mui/icons-material/Collections';
-import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
+import CollectionsIcon from '@mui/icons-material/Collections';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 
 interface GalleryPhoto {
@@ -101,14 +101,19 @@ export interface GallerySectionProps {
 
 export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
   const { ref, inView } = useInView<HTMLElement>();
-  const [activeTab, setActiveTab] = useState<'all' | 'prewedding' | 'lead' | 'venue'>('all');
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<
+    'all' | 'prewedding' | 'lead' | 'venue'
+  >('all');
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(
+    null,
+  );
 
   const photoList = photos && photos.length > 0 ? photos : GALLERY_PHOTOS;
 
-  const filteredPhotos = activeTab === 'all'
-    ? photoList
-    : photoList.filter(p => p.category === activeTab);
+  const filteredPhotos =
+    activeTab === 'all'
+      ? photoList
+      : photoList.filter((p) => p.category === activeTab);
 
   const handleOpenLightbox = (index: number) => {
     setSelectedPhotoIndex(index);
@@ -120,7 +125,9 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
 
   const handlePrev = useCallback(() => {
     if (selectedPhotoIndex === null) return;
-    setSelectedPhotoIndex((selectedPhotoIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
+    setSelectedPhotoIndex(
+      (selectedPhotoIndex - 1 + filteredPhotos.length) % filteredPhotos.length,
+    );
   }, [selectedPhotoIndex, filteredPhotos.length]);
 
   const handleNext = useCallback(() => {
@@ -158,7 +165,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
         >
           <div className="netflix-badge-pill">
             <CollectionsIcon sx={{ fontSize: 16 }} />
-            <span>PRODUCTION STILLS • BEHIND THE SCENES</span>
+            <span>PHOTO GALLERY • MOMENTS &amp; MEMORIES</span>
           </div>
 
           <h2 id="gallery-heading" className="section-title">
@@ -166,7 +173,8 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
           </h2>
 
           <p className="section-subtitle">
-            Kumpulan potret sinematik dan kenangan terindah menuju hari pernikahan.
+            Kumpulan potret sinematik dan kenangan terindah menuju hari
+            pernikahan.
           </p>
 
           {/* Category Tabs */}
@@ -178,7 +186,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
               className={`netflix-gallery__tab ${activeTab === 'all' ? 'netflix-gallery__tab--active' : ''}`}
               onClick={() => setActiveTab('all')}
             >
-              ALL PHOTOS ({GALLERY_PHOTOS.length})
+              ALL PHOTOS ({photoList.length})
             </button>
             <button
               type="button"
@@ -265,7 +273,10 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
           aria-label="Tampilan Foto Penuh"
           onClick={handleCloseLightbox}
         >
-          <div className="netflix-lightbox__content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="netflix-lightbox__content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               type="button"
               className="netflix-lightbox__btn-close"
@@ -305,7 +316,9 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
             {/* Bottom Caption */}
             <div className="netflix-lightbox__caption">
               <div className="netflix-lightbox__caption-info">
-                <span className="netflix-spec-tag netflix-spec-tag--red">PRODUCTION STILL</span>
+                <span className="netflix-spec-tag netflix-spec-tag--red">
+                  PRODUCTION STILL
+                </span>
                 <span className="netflix-lightbox__counter">
                   {selectedPhotoIndex + 1} / {filteredPhotos.length}
                 </span>
@@ -313,7 +326,8 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
                   {filteredPhotos[selectedPhotoIndex].title}
                 </h4>
                 <p className="netflix-lightbox__tag">
-                  {filteredPhotos[selectedPhotoIndex].tag} • Netflix Original Wedding Collection
+                  {filteredPhotos[selectedPhotoIndex].tag} • Netflix Original
+                  Wedding Collection
                 </p>
               </div>
             </div>

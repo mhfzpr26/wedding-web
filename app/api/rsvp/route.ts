@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
     const parsed = rsvpSchema.safeParse(rawBody);
 
     if (!parsed.success) {
-      const firstError = parsed.error.issues[0]?.message || 'Input data RSVP tidak valid';
+      const firstError =
+        parsed.error.issues[0]?.message || 'Input data RSVP tidak valid';
       return NextResponse.json(
         {
           error: firstError,
@@ -48,7 +49,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, attendance, guestCount, notes, slug, invitationSlug, invitationId: rawInvId } = parsed.data;
+    const {
+      name,
+      attendance,
+      guestCount,
+      notes,
+      slug,
+      invitationSlug,
+      invitationId: rawInvId,
+    } = parsed.data;
 
     let targetInvitationId = rawInvId || 'inv-destia-rakafansa';
     const targetSlug = slug || invitationSlug;

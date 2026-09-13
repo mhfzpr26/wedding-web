@@ -1,20 +1,24 @@
 'use client';
 
+import TuneIcon from '@mui/icons-material/Tune';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 import type React from 'react';
-import { useAdminStore } from '@/stores/useAdminStore';
-import { TenantContextBar } from '@/components/admin/molecules/TenantContextBar';
 import { EditorTabNavigation } from '@/components/admin/molecules/EditorTabNavigation';
-import { TemplateSelectorTab } from '@/components/admin/organisms/editor/TemplateSelectorTab';
-import { CoupleEditorTab } from '@/components/admin/organisms/editor/CoupleEditorTab';
-import { EventsEditorTab } from '@/components/admin/organisms/editor/EventsEditorTab';
-import { MediaEditorTab } from '@/components/admin/organisms/editor/MediaEditorTab';
-import { CoverEditorTab } from '@/components/admin/organisms/editor/CoverEditorTab';
-import { CountdownEditorTab } from '@/components/admin/organisms/editor/CountdownEditorTab';
-import { GalleryEditorTab } from '@/components/admin/organisms/editor/GalleryEditorTab';
-import { StoryEditorTab } from '@/components/admin/organisms/editor/StoryEditorTab';
-import { GiftsEditorTab } from '@/components/admin/organisms/editor/GiftsEditorTab';
+import { TenantContextBar } from '@/components/admin/molecules/TenantContextBar';
 import { ClosingEditorTab } from '@/components/admin/organisms/editor/ClosingEditorTab';
+import { CountdownEditorTab } from '@/components/admin/organisms/editor/CountdownEditorTab';
+import { CoupleEditorTab } from '@/components/admin/organisms/editor/CoupleEditorTab';
+import { CoverEditorTab } from '@/components/admin/organisms/editor/CoverEditorTab';
+import { EventsEditorTab } from '@/components/admin/organisms/editor/EventsEditorTab';
+import { GalleryEditorTab } from '@/components/admin/organisms/editor/GalleryEditorTab';
+import { GiftsEditorTab } from '@/components/admin/organisms/editor/GiftsEditorTab';
+import { MediaEditorTab } from '@/components/admin/organisms/editor/MediaEditorTab';
 import { RsvpMonitorTab } from '@/components/admin/organisms/editor/RsvpMonitorTab';
+import { StoryEditorTab } from '@/components/admin/organisms/editor/StoryEditorTab';
+import { TemplateSelectorTab } from '@/components/admin/organisms/editor/TemplateSelectorTab';
+import { useAdminStore } from '@/stores/useAdminStore';
 
 export const StudioEditor: React.FC = () => {
   const config = useAdminStore((s) => s.config);
@@ -22,42 +26,51 @@ export const StudioEditor: React.FC = () => {
   const editorTab = useAdminStore((s) => s.editorTab);
 
   return (
-    <div>
-      {/* Top Editor Context Switcher Bar */}
+    <Box sx={{ mx: -3, mt: -3 }}>
+      {/* Context Switcher Bar */}
       <TenantContextBar />
 
       {configLoading || !config ? (
-        <div
-          style={{
+        <Box
+          sx={{
             textAlign: 'center',
-            padding: '5rem 0',
-            color: 'var(--admin-text-secondary)',
+            py: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2,
           }}
         >
-          <div className="admin-loading-spinner" style={{ margin: '0 auto' }} />
-          <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-            Memuat data konfigurasi tenant undangan...
-          </p>
-        </div>
+          <CircularProgress
+            size={32}
+            thickness={3}
+            sx={{ color: 'primary.main' }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <TuneIcon sx={{ color: 'text.disabled', fontSize: 18 }} />
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Memuat konfigurasi konten undangan…
+            </Typography>
+          </Box>
+        </Box>
       ) : (
         <>
-          {/* 11 Navigation Tabs for Content Studio */}
           <EditorTabNavigation />
-
-          {/* Active Sub-tab Organism */}
-          {editorTab === 'template' && <TemplateSelectorTab />}
-          {editorTab === 'couple' && <CoupleEditorTab />}
-          {editorTab === 'events' && <EventsEditorTab />}
-          {editorTab === 'media' && <MediaEditorTab />}
-          {editorTab === 'cover' && <CoverEditorTab />}
-          {editorTab === 'countdown' && <CountdownEditorTab />}
-          {editorTab === 'gallery' && <GalleryEditorTab />}
-          {editorTab === 'story' && <StoryEditorTab />}
-          {editorTab === 'gifts' && <GiftsEditorTab />}
-          {editorTab === 'closing' && <ClosingEditorTab />}
-          {editorTab === 'rsvps' && <RsvpMonitorTab />}
+          <Box sx={{ p: 3 }}>
+            {editorTab === 'template' && <TemplateSelectorTab />}
+            {editorTab === 'couple' && <CoupleEditorTab />}
+            {editorTab === 'events' && <EventsEditorTab />}
+            {editorTab === 'media' && <MediaEditorTab />}
+            {editorTab === 'cover' && <CoverEditorTab />}
+            {editorTab === 'countdown' && <CountdownEditorTab />}
+            {editorTab === 'gallery' && <GalleryEditorTab />}
+            {editorTab === 'story' && <StoryEditorTab />}
+            {editorTab === 'gifts' && <GiftsEditorTab />}
+            {editorTab === 'closing' && <ClosingEditorTab />}
+            {editorTab === 'rsvps' && <RsvpMonitorTab />}
+          </Box>
         </>
       )}
-    </div>
+    </Box>
   );
 };

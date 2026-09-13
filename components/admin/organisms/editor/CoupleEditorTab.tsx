@@ -1,8 +1,20 @@
 'use client';
 
-import type React from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import type React from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
+
+type PersonKey = 'bride' | 'groom';
 
 export const CoupleEditorTab: React.FC = () => {
   const config = useAdminStore((s) => s.config);
@@ -20,17 +32,14 @@ export const CoupleEditorTab: React.FC = () => {
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploading(fieldKey);
     try {
       const formData = new FormData();
       formData.append('file', file);
-
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
         body: formData,
       });
-
       if (res.ok) {
         const data = await res.json();
         onSuccess(data.url);
@@ -47,539 +56,233 @@ export const CoupleEditorTab: React.FC = () => {
     }
   };
 
+  const update = (person: PersonKey, field: string, value: string) =>
+    setConfig((prev) =>
+      prev
+        ? {
+            ...prev,
+            couple: {
+              ...prev.couple,
+              [person]: { ...prev.couple[person], [field]: value },
+            },
+          }
+        : null,
+    );
+
+  const updateParent = (
+    person: PersonKey,
+    parent: 'father' | 'mother',
+    value: string,
+  ) =>
+    setConfig((prev) =>
+      prev
+        ? {
+            ...prev,
+            couple: {
+              ...prev.couple,
+              [person]: {
+                ...prev.couple[person],
+                parents: { ...prev.couple[person].parents, [parent]: value },
+              },
+            },
+          }
+        : null,
+    );
+
+  const PersonCard = ({
+    person,
+    emoji,
+    label,
+    accentColor,
+    uploadKey,
+  }: {
+    person: PersonKey;
+    emoji: string;
+    label: string;
+    accentColor: string;
+    uploadKey: string;
+  }) => {
+    const p = config.couple[person];
+    return (
+      <Card>
+        <CardContent sx={{ p: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: 1.5,
+                bgcolor: `${accentColor}20`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.1rem',
+              }}
+            >
+              {emoji}
+            </Box>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 700, color: accentColor }}
+            >
+              {label}
+            </Typography>
+          </Box>
+
+          <Grid container spacing={2}>
+            <Grid size={12}>
+              <TextField
+                label="Nama Lengkap & Gelar"
+                value={p.name}
+                onChange={(e) => update(person, 'name', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Nama Panggilan"
+                value={p.callname}
+                onChange={(e) => update(person, 'callname', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Akun Instagram"
+                value={p.instagram || ''}
+                onChange={(e) => update(person, 'instagram', e.target.value)}
+                fullWidth
+                placeholder="@username"
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                label="Peran / Panggilan Khusus"
+                value={p.characterRole || ''}
+                onChange={(e) =>
+                  update(person, 'characterRole', e.target.value)
+                }
+                fullWidth
+                placeholder="e.g. Putri Pertama / The Bride"
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                label="Bio Singkat"
+                value={p.bio || ''}
+                onChange={(e) => update(person, 'bio', e.target.value)}
+                fullWidth
+                multiline
+                rows={3}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Nama Ayah"
+                value={p.parents.father}
+                onChange={(e) => updateParent(person, 'father', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Nama Ibu"
+                value={p.parents.mother}
+                onChange={(e) => updateParent(person, 'mother', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid size={12}>
+              <Divider sx={{ mb: 1.5 }} />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'text.secondary',
+                  fontWeight: 600,
+                  display: 'block',
+                  mb: 1.5,
+                }}
+              >
+                Foto Mempelai
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                {p.photo && (
+                  <Avatar
+                    src={p.photo}
+                    alt={p.name}
+                    sx={{
+                      width: 52,
+                      height: 52,
+                      border: `2px solid ${accentColor}`,
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
+                <Button
+                  component="label"
+                  variant="outlined"
+                  size="small"
+                  startIcon={<CloudUploadIcon fontSize="small" />}
+                  disabled={uploading === uploadKey}
+                  sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                >
+                  {uploading === uploadKey ? 'Uploading…' : 'Upload Foto'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) =>
+                      handleFileUpload(e, uploadKey, (url) =>
+                        update(person, 'photo', url),
+                      )
+                    }
+                  />
+                </Button>
+                <TextField
+                  size="small"
+                  label="atau URL foto"
+                  value={p.photo || ''}
+                  onChange={(e) => update(person, 'photo', e.target.value)}
+                  fullWidth
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
-    <div className="admin-grid-2">
-      {/* Mempelai Wanita */}
-      <div className="admin-card">
-        <h3 className="admin-card__title" style={{ color: '#ff758f' }}>
-          👰 Mempelai Wanita (The Bride)
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Nama Lengkap & Gelar</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.couple.bride.name}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        bride: {
-                          ...prev.couple.bride,
-                          name: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
+    <Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
+        <FavoriteIcon sx={{ color: 'error.light', fontSize: 18 }} />
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          Data Pasangan Pengantin
+        </Typography>
+      </Box>
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <PersonCard
+            person="bride"
+            emoji="👰"
+            label="Mempelai Wanita (The Bride)"
+            accentColor="#f472b6"
+            uploadKey="bridePhoto"
           />
-        </div>
-
-        <div className="admin-grid-2">
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Panggilan</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.bride.callname}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          bride: {
-                            ...prev.couple.bride,
-                            callname: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Akun Instagram</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.bride.instagram || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          bride: {
-                            ...prev.couple.bride,
-                            instagram: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">
-            Peran / Panggilan Khusus (Contoh: The Bride / Putri Pertama)
-          </label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.couple.bride.characterRole || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        bride: {
-                          ...prev.couple.bride,
-                          characterRole: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <PersonCard
+            person="groom"
+            emoji="🤵"
+            label="Mempelai Pria (The Groom)"
+            accentColor="#60a5fa"
+            uploadKey="groomPhoto"
           />
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Bio Singkat</label>
-          <textarea
-            className="admin-textarea"
-            rows={3}
-            value={config.couple.bride.bio || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        bride: {
-                          ...prev.couple.bride,
-                          bio: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-grid-2">
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Ayah</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.bride.parents.father}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          bride: {
-                            ...prev.couple.bride,
-                            parents: {
-                              ...prev.couple.bride.parents,
-                              father: e.target.value,
-                            },
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Ibu</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.bride.parents.mother}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          bride: {
-                            ...prev.couple.bride,
-                            parents: {
-                              ...prev.couple.bride.parents,
-                              mother: e.target.value,
-                            },
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Foto Mempelai Wanita</label>
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              alignItems: 'center',
-            }}
-          >
-            {config.couple.bride.photo && (
-              <img
-                src={config.couple.bride.photo}
-                alt="Bride"
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid var(--admin-primary)',
-                }}
-              />
-            )}
-            <label className="admin-btn admin-btn--secondary">
-              <CloudUploadIcon fontSize="small" />{' '}
-              {uploading === 'bridePhoto' ? 'Mengunggah...' : 'Upload Foto'}
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) =>
-                  handleFileUpload(e, 'bridePhoto', (url) =>
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            couple: {
-                              ...prev.couple,
-                              bride: {
-                                ...prev.couple.bride,
-                                photo: url,
-                              },
-                            },
-                          }
-                        : null,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <input
-              type="text"
-              className="admin-input"
-              style={{ flex: 1 }}
-              value={config.couple.bride.photo || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          bride: {
-                            ...prev.couple.bride,
-                            photo: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-              placeholder="atau masukkan URL foto..."
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Mempelai Pria */}
-      <div className="admin-card">
-        <h3 className="admin-card__title" style={{ color: '#60a5fa' }}>
-          🤵 Mempelai Pria (The Groom)
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Nama Lengkap & Gelar</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.couple.groom.name}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        groom: {
-                          ...prev.couple.groom,
-                          name: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-grid-2">
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Panggilan</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.groom.callname}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          groom: {
-                            ...prev.couple.groom,
-                            callname: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Akun Instagram</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.groom.instagram || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          groom: {
-                            ...prev.couple.groom,
-                            instagram: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">
-            Peran / Panggilan Khusus (Contoh: The Groom / Putra Pertama)
-          </label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.couple.groom.characterRole || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        groom: {
-                          ...prev.couple.groom,
-                          characterRole: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Bio Singkat</label>
-          <textarea
-            className="admin-textarea"
-            rows={3}
-            value={config.couple.groom.bio || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      couple: {
-                        ...prev.couple,
-                        groom: {
-                          ...prev.couple.groom,
-                          bio: e.target.value,
-                        },
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-grid-2">
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Ayah</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.groom.parents.father}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          groom: {
-                            ...prev.couple.groom,
-                            parents: {
-                              ...prev.couple.groom.parents,
-                              father: e.target.value,
-                            },
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Nama Ibu</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.couple.groom.parents.mother}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          groom: {
-                            ...prev.couple.groom,
-                            parents: {
-                              ...prev.couple.groom.parents,
-                              mother: e.target.value,
-                            },
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Foto Mempelai Pria</label>
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              alignItems: 'center',
-            }}
-          >
-            {config.couple.groom.photo && (
-              <img
-                src={config.couple.groom.photo}
-                alt="Groom"
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid var(--admin-primary)',
-                }}
-              />
-            )}
-            <label className="admin-btn admin-btn--secondary">
-              <CloudUploadIcon fontSize="small" />{' '}
-              {uploading === 'groomPhoto' ? 'Mengunggah...' : 'Upload Foto'}
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) =>
-                  handleFileUpload(e, 'groomPhoto', (url) =>
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            couple: {
-                              ...prev.couple,
-                              groom: {
-                                ...prev.couple.groom,
-                                photo: url,
-                              },
-                            },
-                          }
-                        : null,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <input
-              type="text"
-              className="admin-input"
-              style={{ flex: 1 }}
-              value={config.couple.groom.photo || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        couple: {
-                          ...prev.couple,
-                          groom: {
-                            ...prev.couple.groom,
-                            photo: e.target.value,
-                          },
-                        },
-                      }
-                    : null,
-                )
-              }
-              placeholder="atau masukkan URL foto..."
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };

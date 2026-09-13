@@ -1,33 +1,12 @@
+'use client';
+
+import MuiTextField, { type TextFieldProps } from '@mui/material/TextField';
 import type React from 'react';
 
-export interface AdminTextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string;
-  helperText?: string;
-}
-
-export const AdminTextarea: React.FC<AdminTextareaProps> = ({
-  label,
-  helperText,
-  className = '',
-  id,
+// Thin wrapper for multiline textarea using MUI TextField
+export const AdminTextarea: React.FC<TextFieldProps & { rows?: number }> = ({
   rows = 3,
   ...props
 }) => {
-  return (
-    <div className="admin-form-group">
-      {label && (
-        <label htmlFor={id} className="admin-label">
-          {label}
-        </label>
-      )}
-      <textarea
-        id={id}
-        rows={rows}
-        className={`admin-textarea ${className}`}
-        {...props}
-      />
-      {helperText && <p className="admin-helper-text">{helperText}</p>}
-    </div>
-  );
+  return <MuiTextField fullWidth multiline rows={rows} {...props} />;
 };

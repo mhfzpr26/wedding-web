@@ -25,7 +25,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
       }}
     >
       <span className="love-story__dot" aria-hidden="true" />
-      
+
       {/* Season Photo Still */}
       <div className="netflix-timeline__photo-wrap">
         {/* eslint-disable-next-line @next/next/no-img-element */}

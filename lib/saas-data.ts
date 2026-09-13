@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { AVAILABLE_TEMPLATES } from '@/components/templates/registry';
+import type { RsvpPayload, RsvpRecord } from '@/types/rsvp';
 import type {
   ClientRecord,
   InvitationRecord,
@@ -7,11 +9,9 @@ import type {
   SaasStats,
   WeddingConfig,
 } from '@/types/wedding';
-import type { RsvpPayload, RsvpRecord } from '@/types/rsvp';
 import type { WishPayload, WishRecord } from '@/types/wishes';
-import { DEFAULT_WEDDING_CONFIG } from './wedding-data';
-import { AVAILABLE_TEMPLATES } from '@/components/templates/registry';
 import { prisma } from './prisma';
+import { DEFAULT_WEDDING_CONFIG } from './wedding-data';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CLIENTS_FILE = path.join(DATA_DIR, 'clients.json');
@@ -120,7 +120,9 @@ export async function initializeSaasStorage(): Promise<void> {
                 attendance: r.attendance,
                 guestCount: r.guestCount || 1,
                 notes: r.notes || '',
-                submittedAt: r.submittedAt ? new Date(r.submittedAt) : new Date(),
+                submittedAt: r.submittedAt
+                  ? new Date(r.submittedAt)
+                  : new Date(),
               },
             });
           }
@@ -560,7 +562,9 @@ export async function updateInvitation(
 
       const check = await getInvitationBySlug(cleanSlug);
       if (check && check.id !== id) {
-        throw new Error(`Slug '${cleanSlug}' sudah digunakan oleh undangan lain`);
+        throw new Error(
+          `Slug '${cleanSlug}' sudah digunakan oleh undangan lain`,
+        );
       }
       finalSlug = cleanSlug;
     }
@@ -658,8 +662,14 @@ export async function getInvitationConfig(
         ...DEFAULT_WEDDING_CONFIG,
         ...parsed,
         cover: { ...DEFAULT_WEDDING_CONFIG.cover, ...(parsed.cover || {}) },
-        opening: { ...DEFAULT_WEDDING_CONFIG.opening, ...(parsed.opening || {}) },
-        trailer: { ...DEFAULT_WEDDING_CONFIG.trailer, ...(parsed.trailer || {}) },
+        opening: {
+          ...DEFAULT_WEDDING_CONFIG.opening,
+          ...(parsed.opening || {}),
+        },
+        trailer: {
+          ...DEFAULT_WEDDING_CONFIG.trailer,
+          ...(parsed.trailer || {}),
+        },
         couple: {
           bride: {
             ...DEFAULT_WEDDING_CONFIG.couple.bride,
@@ -674,7 +684,10 @@ export async function getInvitationConfig(
           ...DEFAULT_WEDDING_CONFIG.countdown,
           ...(parsed.countdown || {}),
         },
-        closing: { ...DEFAULT_WEDDING_CONFIG.closing, ...(parsed.closing || {}) },
+        closing: {
+          ...DEFAULT_WEDDING_CONFIG.closing,
+          ...(parsed.closing || {}),
+        },
         music: { ...DEFAULT_WEDDING_CONFIG.music, ...(parsed.music || {}) },
         gallery: parsed.gallery || DEFAULT_WEDDING_CONFIG.gallery,
         events: parsed.events || DEFAULT_WEDDING_CONFIG.events,
@@ -790,7 +803,8 @@ export async function saveTenantRsvp(
   const id = Date.now().toString();
   const name = payload.name.trim();
   const attendance = payload.attendance;
-  const guestCount = attendance === 'Hadir' ? Number(payload.guestCount || 1) : 0;
+  const guestCount =
+    attendance === 'Hadir' ? Number(payload.guestCount || 1) : 0;
   const notes = payload.notes ? payload.notes.trim() : '';
 
   try {
@@ -920,15 +934,21 @@ export async function saveTenantWish(
 export async function getSaasStats(): Promise<SaasStats> {
   await initializeSaasStorage();
   try {
-    const [totalClients, totalInvitations, publishedCount, draftCount, inactiveCount, totalRsvps] =
-      await Promise.all([
-        prisma.client.count(),
-        prisma.invitation.count(),
-        prisma.invitation.count({ where: { status: 'published' } }),
-        prisma.invitation.count({ where: { status: 'draft' } }),
-        prisma.invitation.count({ where: { status: 'inactive' } }),
-        prisma.rsvp.count(),
-      ]);
+    const [
+      totalClients,
+      totalInvitations,
+      publishedCount,
+      draftCount,
+      inactiveCount,
+      totalRsvps,
+    ] = await Promise.all([
+      prisma.client.count(),
+      prisma.invitation.count(),
+      prisma.invitation.count({ where: { status: 'published' } }),
+      prisma.invitation.count({ where: { status: 'draft' } }),
+      prisma.invitation.count({ where: { status: 'inactive' } }),
+      prisma.rsvp.count(),
+    ]);
 
     return {
       totalClients,
@@ -953,7 +973,8 @@ export async function getSaasStats(): Promise<SaasStats> {
     return {
       totalClients: clients.length,
       totalInvitations: invitations.length,
-      publishedCount: invitations.filter((i) => i.status === 'published').length,
+      publishedCount: invitations.filter((i) => i.status === 'published')
+        .length,
       draftCount: invitations.filter((i) => i.status === 'draft').length,
       inactiveCount: invitations.filter((i) => i.status === 'inactive').length,
       totalTemplates: AVAILABLE_TEMPLATES.length,

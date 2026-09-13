@@ -1,8 +1,19 @@
 'use client';
 
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import CollectionsRoundedIcon from '@mui/icons-material/CollectionsRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import type React from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useAdminStore } from '@/stores/useAdminStore';
 import type { WeddingGalleryItem } from '@/types/wedding';
 
@@ -44,145 +55,189 @@ export const GalleryEditorTab: React.FC = () => {
     }
   };
 
-  return (
-    <div className="admin-card">
-      <div className="admin-card__header">
-        <div className="admin-card__title-group">
-          <h3 className="admin-card__title">
-            🖼️ Galeri Foto Sinematik
-          </h3>
-          <span className="admin-card__desc">
-            Koleksi potret prewedding, akad, dan resepsi dengan rasio
-            portrait atau landscape.
-          </span>
-        </div>
-        <label className="admin-btn admin-btn--secondary">
-          <CloudUploadIcon fontSize="small" /> Tambah Foto Galeri
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: 'none' }}
-            onChange={(e) =>
-              handleFileUpload(e, (url) => {
-                const newItem: WeddingGalleryItem = {
-                  id: `photo_${Date.now()}`,
-                  src: url,
-                  title: 'New Moment',
-                  category: 'prewedding',
-                  tag: 'Cinematic Shot',
-                  aspect: 'portrait',
-                };
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        gallery: [
-                          ...(prev.gallery || []),
-                          newItem,
-                        ],
-                      }
-                    : null,
-                );
-              })
-            }
-          />
-        </label>
-      </div>
+  const handleRemovePhoto = (index: number) => {
+    setConfig((prev) =>
+      prev
+        ? {
+            ...prev,
+            gallery: prev.gallery.filter((_, i) => i !== index),
+          }
+        : null,
+    );
+  };
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          gap: '1rem',
-        }}
-      >
-        {config.gallery?.map((photo, index) => (
-          <div
-            key={photo.id || index}
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid var(--admin-border)',
-              borderRadius: 'var(--admin-radius-md)',
-              overflow: 'hidden',
+  return (
+    <Card
+      elevation={0}
+      sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+    >
+      <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'space-between',
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            gap: 2,
+            mb: 3,
+            pb: 2.5,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <CollectionsRoundedIcon color="primary" />
+              Galeri Foto Sinematik
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Koleksi potret prewedding, akad, dan resepsi dengan orientasi
+              portrait, landscape, atau square.
+            </Typography>
+          </Box>
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadRoundedIcon />}
+            sx={{
+              fontWeight: 600,
+              textTransform: 'none',
+              borderRadius: 2,
+              flexShrink: 0,
             }}
           >
-            <img
-              src={photo.src}
-              alt={photo.title}
-              style={{
-                width: '100%',
-                height: '140px',
-                objectFit: 'cover',
-              }}
-            />
-            <div style={{ padding: '0.75rem' }}>
-              <input
-                type="text"
-                className="admin-input"
-                style={{ marginBottom: '0.4rem', fontSize: '0.8rem' }}
-                value={photo.title}
-                placeholder="Judul Foto"
-                onChange={(e) => {
-                  const updated = [...config.gallery];
-                  updated[index].title = e.target.value;
+            Upload Foto
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) =>
+                handleFileUpload(e, (url) => {
+                  const newItem: WeddingGalleryItem = {
+                    id: `photo_${Date.now()}`,
+                    src: url,
+                    title: 'New Moment',
+                    category: 'prewedding',
+                    tag: 'Cinematic Shot',
+                    aspect: 'portrait',
+                  };
                   setConfig((prev) =>
-                    prev ? { ...prev, gallery: updated } : null,
+                    prev
+                      ? {
+                          ...prev,
+                          gallery: [...(prev.gallery || []), newItem],
+                        }
+                      : null,
                   );
-                }}
-              />
-              <div
-                style={{
+                })
+              }
+            />
+          </Button>
+        </Box>
+
+        <Grid container spacing={2.5}>
+          {config.gallery?.map((photo, index) => (
+            <Grid
+              size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+              key={photo.id || index}
+            >
+              <Card
+                variant="outlined"
+                sx={{
+                  borderRadius: 2,
+                  borderColor: 'divider',
+                  overflow: 'hidden',
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  flexDirection: 'column',
+                  transition:
+                    'transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+                  '&:hover': {
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                  },
                 }}
               >
-                <select
-                  className="admin-select"
-                  style={{
-                    fontSize: '0.75rem',
-                    padding: '0.25rem 0.4rem',
-                    width: 'auto',
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: 160,
+                    backgroundImage: `url(${photo.src})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    bgcolor: 'grey.100',
                   }}
-                  value={photo.aspect}
-                  onChange={(e) => {
-                    const updated = [...config.gallery];
-                    updated[index].aspect = e.target.value as
-                      | 'portrait'
-                      | 'landscape'
-                      | 'square';
-                    setConfig((prev) =>
-                      prev ? { ...prev, gallery: updated } : null,
-                    );
-                  }}
-                >
-                  <option value="portrait">Portrait</option>
-                  <option value="landscape">Landscape</option>
-                  <option value="square">Square</option>
-                </select>
-                <button
-                  type="button"
-                  className="admin-btn admin-btn--danger admin-btn--sm"
-                  onClick={() => {
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            gallery: prev.gallery.filter(
-                              (_, i) => i !== index,
-                            ),
-                          }
-                        : null,
-                    );
+                />
+                <Box
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    flexGrow: 1,
                   }}
                 >
-                  <DeleteIcon fontSize="inherit" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+                  <TextField
+                    size="small"
+                    placeholder="Judul / Caption Foto"
+                    fullWidth
+                    value={photo.title}
+                    onChange={(e) => {
+                      const updated = [...config.gallery];
+                      updated[index].title = e.target.value;
+                      setConfig((prev) =>
+                        prev ? { ...prev, gallery: updated } : null,
+                      );
+                    }}
+                  />
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <TextField
+                      select
+                      size="small"
+                      fullWidth
+                      value={photo.aspect || 'portrait'}
+                      onChange={(e) => {
+                        const updated = [...config.gallery];
+                        updated[index].aspect = e.target.value as
+                          | 'portrait'
+                          | 'landscape'
+                          | 'square';
+                        setConfig((prev) =>
+                          prev ? { ...prev, gallery: updated } : null,
+                        );
+                      }}
+                    >
+                      <MenuItem value="portrait">Portrait</MenuItem>
+                      <MenuItem value="landscape">Landscape</MenuItem>
+                      <MenuItem value="square">Square</MenuItem>
+                    </TextField>
+                    <Tooltip title="Hapus Foto">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => handleRemovePhoto(index)}
+                        sx={{
+                          border: '1px solid',
+                          borderColor: 'error.light',
+                          borderRadius: 1.5,
+                        }}
+                      >
+                        <DeleteOutlineRoundedIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };

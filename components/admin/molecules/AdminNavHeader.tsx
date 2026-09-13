@@ -1,13 +1,13 @@
 'use client';
 
-import type React from 'react';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import TuneIcon from '@mui/icons-material/Tune';
-import PaletteIcon from '@mui/icons-material/Palette';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import LayersIcon from '@mui/icons-material/Layers';
+import PaletteIcon from '@mui/icons-material/Palette';
+import PeopleIcon from '@mui/icons-material/People';
+import TuneIcon from '@mui/icons-material/Tune';
+import type React from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export const AdminNavHeader: React.FC = () => {
@@ -35,7 +35,9 @@ export const AdminNavHeader: React.FC = () => {
           <button
             type="button"
             className={`admin-primary-nav__item ${
-              primaryTab === 'dashboard' ? 'admin-primary-nav__item--active' : ''
+              primaryTab === 'dashboard'
+                ? 'admin-primary-nav__item--active'
+                : ''
             }`}
             onClick={() => setPrimaryTab('dashboard')}
           >
@@ -62,7 +64,9 @@ export const AdminNavHeader: React.FC = () => {
           <button
             type="button"
             className={`admin-primary-nav__item ${
-              primaryTab === 'templates' ? 'admin-primary-nav__item--active' : ''
+              primaryTab === 'templates'
+                ? 'admin-primary-nav__item--active'
+                : ''
             }`}
             onClick={() => setPrimaryTab('templates')}
           >

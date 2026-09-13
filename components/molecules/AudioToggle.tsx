@@ -1,8 +1,8 @@
 'use client';
 
-import type React from 'react';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import type React from 'react';
 
 export interface AudioToggleProps {
   isPlaying: boolean;

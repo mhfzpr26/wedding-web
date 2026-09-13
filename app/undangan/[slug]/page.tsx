@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { TemplateRouter } from '@/components/templates/TemplateRouter';
 import {
   getInvitationBySlug,
   getInvitationConfig,
   incrementInvitationViews,
 } from '@/lib/saas-data';
-import { TemplateRouter } from '@/components/templates/TemplateRouter';
 
 interface UndanganPageProps {
   params: Promise<{ slug: string }>;
@@ -238,8 +238,8 @@ export default async function UndanganPage({
         >
           <span>⚠️ MODE PRATINJAU (DRAFT)</span>
           <span style={{ fontWeight: 400, opacity: 0.9 }}>
-            — Undangan ini belum dipublikasikan ke publik. Hanya admin yang dapat
-            melihat tampilan ini.
+            — Undangan ini belum dipublikasikan ke publik. Hanya admin yang
+            dapat melihat tampilan ini.
           </span>
           <Link
             href="/admin"

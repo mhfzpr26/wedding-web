@@ -13,7 +13,9 @@ import { id } from 'date-fns/locale';
 /**
  * Parses input string or Date object safely.
  */
-export function safeParseDate(input: string | Date | null | undefined): Date | null {
+export function safeParseDate(
+  input: string | Date | null | undefined,
+): Date | null {
   if (!input) return null;
   if (input instanceof Date) return isValid(input) ? input : null;
 
@@ -128,10 +130,11 @@ export function generateGoogleCalendarUrl({
   const start = safeParseDate(startDate);
   if (!start) return '#';
 
-  const end = endDate ? safeParseDate(endDate) : new Date(start.getTime() + 3 * 60 * 60 * 1000); // default +3h
+  const end = endDate
+    ? safeParseDate(endDate)
+    : new Date(start.getTime() + 3 * 60 * 60 * 1000); // default +3h
 
-  const formatUtc = (d: Date) =>
-    d.toISOString().replace(/-|:|\.\d\d\d/g, '');
+  const formatUtc = (d: Date) => d.toISOString().replace(/-|:|\.\d\d\d/g, '');
 
   const startUtc = formatUtc(start);
   const endUtc = formatUtc(end || start);

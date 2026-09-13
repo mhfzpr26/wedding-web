@@ -1,7 +1,16 @@
 'use client';
 
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
+import MovieFilterRoundedIcon from '@mui/icons-material/MovieFilterRounded';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type React from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export const CoverEditorTab: React.FC = () => {
@@ -43,267 +52,328 @@ export const CoverEditorTab: React.FC = () => {
   };
 
   return (
-    <div className="admin-grid-2">
-      <div className="admin-card">
-        <h3 className="admin-card__title">
-          🎬 Cover Hero (Layar Depan)
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Judul Utama Undangan</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.cover?.title || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      cover: {
-                        ...prev.cover,
-                        title: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
+    <Grid container spacing={3}>
+      <Grid size={{ xs: 12, lg: 6 }}>
+        <Card
+          elevation={0}
+          sx={{
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+            height: '100%',
+          }}
+        >
+          <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                mb: 2.5,
+                pb: 2,
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+              }}
+            >
+              <MovieFilterRoundedIcon color="primary" />
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Cover Hero (Layar Depan)
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Tampilan awal poster sinematik undangan saat pertama kali
+                  dibuka.
+                </Typography>
+              </Box>
+            </Box>
 
-        <div className="admin-grid-3">
-          <div className="admin-form-group">
-            <label className="admin-label">Badge / Label Acara (Contoh: The Wedding)</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.cover?.seriesBadge || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        cover: {
-                          ...prev.cover,
-                          seriesBadge: e.target.value,
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Tahun Rilis</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.cover?.year || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        cover: {
-                          ...prev.cover,
-                          year: e.target.value,
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-          <div className="admin-form-group">
-            <label className="admin-label">Match %</label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.cover?.matchPercentage || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        cover: {
-                          ...prev.cover,
-                          matchPercentage: e.target.value,
-                        },
-                      }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Sinopsis Cover</label>
-          <textarea
-            className="admin-textarea"
-            rows={3}
-            value={config.cover?.synopsis || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      cover: {
-                        ...prev.cover,
-                        synopsis: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-
-        <div className="admin-form-group">
-          <label className="admin-label">Background Poster Cover</label>
-          <div
-            style={{
-              display: 'flex',
-              gap: '0.75rem',
-              alignItems: 'center',
-            }}
-          >
-            <label className="admin-btn admin-btn--secondary">
-              <CloudUploadIcon fontSize="small" /> Upload Cover
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+              <TextField
+                label="Judul Utama Undangan"
+                placeholder="Contoh: The Wedding of Romeo & Juliet"
+                fullWidth
+                size="small"
+                value={config.cover?.title || ''}
                 onChange={(e) =>
-                  handleFileUpload(e, (url) =>
-                    setConfig((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            cover: {
-                              ...prev.cover,
-                              bgImage: url,
-                            },
-                          }
-                        : null,
-                    ),
+                  setConfig((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          cover: {
+                            ...prev.cover,
+                            title: e.target.value,
+                          },
+                        }
+                      : null,
                   )
                 }
               />
-            </label>
-            <input
-              type="text"
-              className="admin-input"
-              value={config.cover?.bgImage || ''}
-              onChange={(e) =>
-                setConfig((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        cover: {
-                          ...prev.cover,
-                          bgImage: e.target.value,
-                        },
+
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 8 }}>
+                  <TextField
+                    label="Badge / Label Acara"
+                    placeholder="Contoh: The Wedding / WEDDING SPECIAL"
+                    fullWidth
+                    size="small"
+                    value={config.cover?.seriesBadge || ''}
+                    onChange={(e) =>
+                      setConfig((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              cover: {
+                                ...prev.cover,
+                                seriesBadge: e.target.value,
+                              },
+                            }
+                          : null,
+                      )
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 4 }}>
+                  <TextField
+                    label="Tahun Acara"
+                    placeholder="2026"
+                    fullWidth
+                    size="small"
+                    value={config.cover?.year || ''}
+                    onChange={(e) =>
+                      setConfig((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              cover: {
+                                ...prev.cover,
+                                year: e.target.value,
+                              },
+                            }
+                          : null,
+                      )
+                    }
+                  />
+                </Grid>
+              </Grid>
+
+              <TextField
+                label="Sinopsis Cover"
+                placeholder="Deskripsi singkat atau ringkasan cerita pernikahan..."
+                fullWidth
+                multiline
+                rows={3}
+                size="small"
+                value={config.cover?.synopsis || ''}
+                onChange={(e) =>
+                  setConfig((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          cover: {
+                            ...prev.cover,
+                            synopsis: e.target.value,
+                          },
+                        }
+                      : null,
+                  )
+                }
+              />
+
+              <Box>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontWeight: 600, mb: 1 }}
+                >
+                  Background Poster Cover
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<CloudUploadRoundedIcon />}
+                    sx={{
+                      flexShrink: 0,
+                      textTransform: 'none',
+                      borderRadius: 2,
+                    }}
+                  >
+                    Upload Cover
+                    <input
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={(e) =>
+                        handleFileUpload(e, (url) =>
+                          setConfig((prev) =>
+                            prev
+                              ? {
+                                  ...prev,
+                                  cover: {
+                                    ...prev.cover,
+                                    bgImage: url,
+                                  },
+                                }
+                              : null,
+                          ),
+                        )
                       }
-                    : null,
-                )
-              }
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="admin-card">
-        <h3 className="admin-card__title">
-          📜 Opening & Ayat Suci (Quran)
-        </h3>
-        <div className="admin-form-group">
-          <label className="admin-label">Headline Opening</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.opening?.title || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      opening: {
-                        ...prev.opening,
-                        title: e.target.value,
-                      },
+                    />
+                  </Button>
+                  <TextField
+                    placeholder="URL gambar poster cover..."
+                    fullWidth
+                    size="small"
+                    value={config.cover?.bgImage || ''}
+                    onChange={(e) =>
+                      setConfig((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              cover: {
+                                ...prev.cover,
+                                bgImage: e.target.value,
+                              },
+                            }
+                          : null,
+                      )
                     }
-                  : null,
-              )
-            }
-          />
-        </div>
+                  />
+                </Box>
+                {config.cover?.bgImage && (
+                  <Box
+                    sx={{
+                      mt: 1.5,
+                      height: 120,
+                      borderRadius: 2,
+                      overflow: 'hidden',
+                      backgroundImage: `url(${config.cover.bgImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
 
-        <div className="admin-form-group">
-          <label className="admin-label">Subheadline Opening</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.opening?.subtitle || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      opening: {
-                        ...prev.opening,
-                        subtitle: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
+      <Grid size={{ xs: 12, lg: 6 }}>
+        <Card
+          elevation={0}
+          sx={{
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+            height: '100%',
+          }}
+        >
+          <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                mb: 2.5,
+                pb: 2,
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+              }}
+            >
+              <FormatQuoteRoundedIcon color="primary" sx={{ fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Opening & Kutipan / Quote
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Salam pembuka, doa restu, ayat suci, atau kata mutiara
+                  pernikahan.
+                </Typography>
+              </Box>
+            </Box>
 
-        <div className="admin-form-group">
-          <label className="admin-label">Kutipan Ayat Suci</label>
-          <textarea
-            className="admin-textarea"
-            rows={4}
-            value={config.opening?.quote || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      opening: {
-                        ...prev.opening,
-                        quote: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+              <TextField
+                label="Headline Opening / Salam Pembuka"
+                placeholder="Contoh: Assalamu’alaikum / Destia & Rakafansa: / Dear Family & Friends"
+                fullWidth
+                size="small"
+                value={config.opening?.title || ''}
+                onChange={(e) =>
+                  setConfig((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          opening: {
+                            ...prev.opening,
+                            title: e.target.value,
+                          },
+                        }
+                      : null,
+                  )
+                }
+              />
 
-        <div className="admin-form-group">
-          <label className="admin-label">Sumber Ayat (QS / Hadist)</label>
-          <input
-            type="text"
-            className="admin-input"
-            value={config.opening?.quoteSource || ''}
-            onChange={(e) =>
-              setConfig((prev) =>
-                prev
-                  ? {
-                      ...prev,
-                      opening: {
-                        ...prev.opening,
-                        quoteSource: e.target.value,
-                      },
-                    }
-                  : null,
-              )
-            }
-          />
-        </div>
-      </div>
-    </div>
+              <TextField
+                label="Subheadline Opening / Pesan Pengantar"
+                placeholder="Contoh: Our Forever Chapter / Dengan memohon rahmat-Nya / You are cordially invited"
+                fullWidth
+                size="small"
+                value={config.opening?.subtitle || ''}
+                onChange={(e) =>
+                  setConfig((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          opening: {
+                            ...prev.opening,
+                            subtitle: e.target.value,
+                          },
+                        }
+                      : null,
+                  )
+                }
+              />
+
+              {/* 1 Single Unified Field for Quote & Source */}
+              <TextField
+                label="Kutipan / Ayat Suci / Quotes"
+                placeholder="Tuliskan kutipan ayat suci, kata mutiara, doa pernikahan, atau pesan romantis beserta sumbernya di sini..."
+                fullWidth
+                multiline
+                rows={5}
+                size="small"
+                helperText="1 Kolom Fleksibel: dapat diisi ayat suci (Al-Qur'an, Alkitab, dll), doa, atau puisi cinta beserta sumber/penulisnya langsung."
+                value={
+                  config.opening?.quoteSource &&
+                  config.opening?.quote &&
+                  !config.opening.quote.includes(config.opening.quoteSource)
+                    ? `${config.opening.quote}\n\n— ${config.opening.quoteSource}`
+                    : config.opening?.quote || ''
+                }
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setConfig((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          opening: {
+                            ...prev.opening,
+                            quote: val,
+                            quoteSource: '',
+                          },
+                        }
+                      : null,
+                  );
+                }}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };

@@ -1,15 +1,18 @@
 'use client';
 
-import type React from 'react';
-import { useEffect, useState } from 'react';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { CountdownUnit } from '@/components/molecules/CountdownUnit';
 import { useInView } from '@/hooks/useInView';
+import {
+  calculateCountdown,
+  formatWeddingDate,
+  generateGoogleCalendarUrl,
+} from '@/lib/date-utils';
 import type { TimeLeft } from '@/types/invitation';
 import type { WeddingCountdown } from '@/types/wedding';
-
-import { calculateCountdown, formatWeddingDate, generateGoogleCalendarUrl } from '@/lib/date-utils';
 
 export interface CountdownSectionProps {
   countdown?: WeddingCountdown;
@@ -38,7 +41,10 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
       location: 'Bekasi',
     });
 
-  const formattedTargetDate = formatWeddingDate(targetDateStr, 'MMMM dd, yyyy').toUpperCase();
+  const formattedTargetDate = formatWeddingDate(
+    targetDateStr,
+    'MMMM dd, yyyy',
+  ).toUpperCase();
 
   useEffect(() => {
     setIsMounted(true);
@@ -80,14 +86,24 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
           }}
         >
           <div className="netflix-section-header">
-            <div className="netflix-badge-pill" style={{ margin: '0 auto var(--spacing-xs)' }}>
+            <div
+              className="netflix-badge-pill"
+              style={{ margin: '0 auto var(--spacing-xs)' }}
+            >
               WORTH THE WAIT • GLOBAL PREMIERE
             </div>
             <h2 className="countdown__title" id="countdown-title">
               PREMIERES {formattedTargetDate}
             </h2>
-            <p style={{ color: 'var(--color-light-gray)', marginTop: '0.35rem', fontSize: 'var(--font-size-small)' }}>
-              Hitung mundur menuju momen penayangan perdana ikrar suci pernikahan
+            <p
+              style={{
+                color: 'var(--color-light-gray)',
+                marginTop: '0.35rem',
+                fontSize: 'var(--font-size-small)',
+              }}
+            >
+              Hitung mundur menuju momen penayangan perdana ikrar suci
+              pernikahan
             </p>
 
             <div style={{ marginTop: '0.85rem' }}>

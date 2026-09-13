@@ -1,5 +1,5 @@
-import { chromium } from 'playwright-core';
 import path from 'node:path';
+import { chromium } from 'playwright-core';
 
 async function run() {
   const browser = await chromium.launch({
@@ -12,12 +12,17 @@ async function run() {
   const page = await context.newPage();
 
   console.log('Navigating to invitation page...');
-  await page.goto('http://localhost:3000/undangan/destia-rakafansa?to=Budi+Santoso', {
-    waitUntil: 'networkidle',
-  });
+  await page.goto(
+    'http://localhost:3000/undangan/destia-rakafansa?to=Budi+Santoso',
+    {
+      waitUntil: 'networkidle',
+    },
+  );
 
   // Click cover enter button
-  const enterBtn = page.locator('.cover__btn, button:has-text("BUKA UNDANGAN")').first();
+  const enterBtn = page
+    .locator('.cover__btn, button:has-text("BUKA UNDANGAN")')
+    .first();
   if (await enterBtn.isVisible()) {
     await enterBtn.click();
     await page.waitForTimeout(800);
@@ -28,7 +33,11 @@ async function run() {
   if (await countdownSection.isVisible()) {
     await countdownSection.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
-    const ssPath = path.join(process.cwd(), '.tempmediaStorage', 'ui_feature_countdown.png');
+    const ssPath = path.join(
+      process.cwd(),
+      '.tempmediaStorage',
+      'ui_feature_countdown.png',
+    );
     await countdownSection.screenshot({ path: ssPath });
     console.log('Captured countdown section:', ssPath);
   }
@@ -44,7 +53,11 @@ async function run() {
       await qrToggle.click();
       await page.waitForTimeout(400);
     }
-    const ssPath = path.join(process.cwd(), '.tempmediaStorage', 'ui_feature_gift_qr.png');
+    const ssPath = path.join(
+      process.cwd(),
+      '.tempmediaStorage',
+      'ui_feature_gift_qr.png',
+    );
     await giftSection.screenshot({ path: ssPath });
     console.log('Captured gift with QR section:', ssPath);
   }
@@ -60,7 +73,11 @@ async function run() {
       await submitBtn.click();
       await page.waitForTimeout(1000);
     }
-    const ssPath = path.join(process.cwd(), '.tempmediaStorage', 'ui_feature_rsvp_pass.png');
+    const ssPath = path.join(
+      process.cwd(),
+      '.tempmediaStorage',
+      'ui_feature_rsvp_pass.png',
+    );
     await rsvpSection.screenshot({ path: ssPath });
     console.log('Captured RSVP with QR E-Pass:', ssPath);
   }
