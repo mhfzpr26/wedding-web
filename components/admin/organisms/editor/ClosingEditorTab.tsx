@@ -12,7 +12,7 @@ export const ClosingEditorTab: React.FC = () => {
   return (
     <div className="admin-card">
       <h3 className="admin-card__title">
-        🎬 Closing Section & End Credits Roll
+        💌 Pesan Penutup & Salam Hangat (Closing Section)
       </h3>
       <div className="admin-grid-2">
         <div className="admin-form-group">

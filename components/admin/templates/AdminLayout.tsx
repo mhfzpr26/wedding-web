@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useEffect } from 'react';
-import MovieIcon from '@mui/icons-material/Movie';
+import LayersIcon from '@mui/icons-material/Layers';
 import { useAdminStore } from '@/stores/useAdminStore';
 import { AdminNavHeader } from '@/components/admin/molecules/AdminNavHeader';
 import { DashboardOverview } from '@/components/admin/organisms/DashboardOverview';
@@ -36,17 +36,27 @@ export const AdminLayout: React.FC = () => {
   if (loading) {
     return (
       <div className="admin-loading-screen">
-        <MovieIcon
+        <div className="admin-loading-spinner" />
+        <div
           style={{
-            fontSize: '3.5rem',
-            color: 'var(--admin-red)',
-            animation: 'spin 2s linear infinite',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginTop: '1.5rem',
           }}
-        />
-        <h2 style={{ marginTop: '1.25rem', fontWeight: 800 }}>
-          WEDDING<span style={{ color: 'var(--admin-red)' }}>SAAS</span>
-        </h2>
-        <p style={{ color: 'var(--admin-text-secondary)', fontSize: '0.9rem' }}>
+        >
+          <LayersIcon sx={{ color: 'var(--admin-primary)', fontSize: 28 }} />
+          <h2 style={{ margin: 0, fontWeight: 800, fontSize: '1.4rem' }}>
+            WED<span style={{ color: 'var(--admin-primary-light)' }}>FLOW</span>
+          </h2>
+        </div>
+        <p
+          style={{
+            color: 'var(--admin-text-secondary)',
+            fontSize: '0.875rem',
+            marginTop: '0.5rem',
+          }}
+        >
           Menghubungkan ke PostgreSQL database & memuat command platform...
         </p>
       </div>

@@ -132,7 +132,7 @@ export const CoupleEditorTab: React.FC = () => {
 
         <div className="admin-form-group">
           <label className="admin-label">
-            Karakter / Role (Tema Netflix)
+            Peran / Panggilan Khusus (Contoh: The Bride / Putri Pertama)
           </label>
           <input
             type="text"
@@ -257,7 +257,7 @@ export const CoupleEditorTab: React.FC = () => {
                   height: '60px',
                   borderRadius: '50%',
                   objectFit: 'cover',
-                  border: '2px solid var(--admin-red)',
+                  border: '2px solid var(--admin-primary)',
                 }}
               />
             )}
@@ -398,7 +398,7 @@ export const CoupleEditorTab: React.FC = () => {
 
         <div className="admin-form-group">
           <label className="admin-label">
-            Karakter / Role (Tema Netflix)
+            Peran / Panggilan Khusus (Contoh: The Groom / Putra Pertama)
           </label>
           <input
             type="text"
@@ -523,7 +523,7 @@ export const CoupleEditorTab: React.FC = () => {
                   height: '60px',
                   borderRadius: '50%',
                   objectFit: 'cover',
-                  border: '2px solid var(--admin-red)',
+                  border: '2px solid var(--admin-primary)',
                 }}
               />
             )}

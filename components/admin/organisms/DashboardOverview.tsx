@@ -12,7 +12,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TuneIcon from '@mui/icons-material/Tune';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MovieIcon from '@mui/icons-material/Movie';
+import LayersIcon from '@mui/icons-material/Layers';
 import { useAdminStore } from '@/stores/useAdminStore';
 import type { InvitationStatus } from '@/types/wedding';
 
@@ -155,7 +155,7 @@ export const DashboardOverview: React.FC = () => {
               color: 'var(--admin-text-secondary)',
             }}
           >
-            <MovieIcon style={{ fontSize: '3.5rem', opacity: 0.3 }} />
+            <LayersIcon style={{ fontSize: '3.5rem', opacity: 0.3, color: 'var(--admin-primary)' }} />
             <p style={{ marginTop: '1rem', fontSize: '1rem' }}>
               Belum ada undangan yang dibuat. Silakan klik tombol &quot;Buat Undangan&quot;
               di atas.

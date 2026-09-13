@@ -7,6 +7,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import PaletteIcon from '@mui/icons-material/Palette';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import LayersIcon from '@mui/icons-material/Layers';
 import { useAdminStore } from '@/stores/useAdminStore';
 
 export const AdminNavHeader: React.FC = () => {
@@ -23,9 +24,10 @@ export const AdminNavHeader: React.FC = () => {
       <div className="admin-header__inner">
         <div className="admin-header__brand">
           <div className="admin-header__logo">
-            WEDDING<span>SAAS</span>
+            <LayersIcon sx={{ color: 'var(--admin-primary)', fontSize: 24 }} />
+            WED<span>FLOW</span>
           </div>
-          <span className="admin-header__badge">Super Admin Command</span>
+          <span className="admin-header__badge">Multi-Tenant SaaS</span>
         </div>
 
         {/* Primary SaaS Navigation Bar */}

@@ -164,10 +164,10 @@ export const MediaEditorTab: React.FC = () => {
 
       <div className="admin-card">
         <h3 className="admin-card__title">
-          🎬 Video Trailer Teaser (Cinema)
+          🎬 Video Teaser & Sinematografi Prewedding
         </h3>
         <div className="admin-form-group">
-          <label className="admin-label">Judul Video Film</label>
+          <label className="admin-label">Judul Video Teaser</label>
           <input
             type="text"
             className="admin-input"

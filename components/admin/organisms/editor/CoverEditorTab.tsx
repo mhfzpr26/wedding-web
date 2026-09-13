@@ -49,7 +49,7 @@ export const CoverEditorTab: React.FC = () => {
           🎬 Cover Hero (Layar Depan)
         </h3>
         <div className="admin-form-group">
-          <label className="admin-label">Judul Film / Undangan</label>
+          <label className="admin-label">Judul Utama Undangan</label>
           <input
             type="text"
             className="admin-input"
@@ -72,7 +72,7 @@ export const CoverEditorTab: React.FC = () => {
 
         <div className="admin-grid-3">
           <div className="admin-form-group">
-            <label className="admin-label">Series Badge</label>
+            <label className="admin-label">Badge / Label Acara (Contoh: The Wedding)</label>
             <input
               type="text"
               className="admin-input"

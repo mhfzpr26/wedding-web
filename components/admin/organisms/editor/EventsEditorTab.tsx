@@ -17,10 +17,10 @@ export const EventsEditorTab: React.FC = () => {
       <div className="admin-card__header">
         <div className="admin-card__title-group">
           <h3 className="admin-card__title">
-            Daftar Rangkaian Acara (Episodes)
+            Daftar Rangkaian Acara Pernikahan
           </h3>
           <span className="admin-card__desc">
-            Atur acara seperti Akad Nikah, Resepsi, atau Ngunduh Mantu dengan lokasi, link Google Maps, dan integrasi Google Calendar.
+            Atur seluruh sesi acara seperti Akad Nikah, Resepsi, atau Ngunduh Mantu dengan lokasi, link Google Maps, dan integrasi Google Calendar.
           </span>
         </div>
         <button
@@ -77,12 +77,12 @@ export const EventsEditorTab: React.FC = () => {
               <span
                 style={{
                   fontWeight: 800,
-                  color: 'var(--admin-red)',
+                  color: 'var(--admin-primary)',
                   fontSize: '0.9rem',
                   letterSpacing: '0.05em',
                 }}
               >
-                EPISODE {ev.episodeNumber || index + 1}: {ev.type}
+                SESI ACARA #{ev.episodeNumber || index + 1}: {ev.type}
               </span>
               <button
                 type="button"
@@ -119,7 +119,7 @@ export const EventsEditorTab: React.FC = () => {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Judul Episode</label>
+                <label className="admin-label">Judul Sesi Acara</label>
                 <input
                   type="text"
                   className="admin-input"
@@ -134,7 +134,7 @@ export const EventsEditorTab: React.FC = () => {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Durasi Tayang</label>
+                <label className="admin-label">Estimasi Durasi Acara</label>
                 <input
                   type="text"
                   className="admin-input"
@@ -252,7 +252,7 @@ export const EventsEditorTab: React.FC = () => {
             </div>
 
             <div className="admin-form-group" style={{ marginBottom: 0 }}>
-              <label className="admin-label">Sinopsis Episode</label>
+              <label className="admin-label">Deskripsi & Catatan Acara</label>
               <textarea
                 className="admin-textarea"
                 rows={2}

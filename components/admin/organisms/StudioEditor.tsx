@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-import MovieIcon from '@mui/icons-material/Movie';
 import { useAdminStore } from '@/stores/useAdminStore';
 import { TenantContextBar } from '@/components/admin/molecules/TenantContextBar';
 import { EditorTabNavigation } from '@/components/admin/molecules/EditorTabNavigation';
@@ -35,14 +34,8 @@ export const StudioEditor: React.FC = () => {
             color: 'var(--admin-text-secondary)',
           }}
         >
-          <MovieIcon
-            style={{
-              fontSize: '3rem',
-              opacity: 0.3,
-              animation: 'spin 2s linear infinite',
-            }}
-          />
-          <p style={{ marginTop: '1rem' }}>
+          <div className="admin-loading-spinner" style={{ margin: '0 auto' }} />
+          <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
             Memuat data konfigurasi tenant undangan...
           </p>
         </div>
