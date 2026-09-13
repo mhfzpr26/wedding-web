@@ -41,6 +41,14 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
     cover?.calendarUrl ||
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
 
+  // Clean up series badge so "NETFLIX" is not repeated after logo
+  const cleanSeriesBadge =
+    seriesBadge.replace(/^(A\s+)?NETFLIX\s+/i, '').trim() || 'WEDDING SPECIAL';
+
+  // Clean up trending rank so "#1" is not repeated after the #1 badge
+  const cleanTrendingText =
+    trendingRank.replace(/^#1\s*/i, '').trim() || 'in Weddings Today';
+
   const handleEnterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onEnter();
@@ -103,8 +111,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
             className="netflix-cover__logo-img"
           />
           <span className="netflix-cover__series-badge">
-            <span className="netflix-cover__n-badge">N</span>
-            {seriesBadge}
+            {cleanSeriesBadge}
           </span>
         </div>
 
@@ -119,7 +126,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           }}
         >
           <span className="netflix-cover__rank">#1</span>
-          <span className="netflix-cover__rank-text">{trendingRank}</span>
+          <span className="netflix-cover__rank-text">{cleanTrendingText}</span>
         </div>
 
         {/* Main Title */}
