@@ -166,10 +166,6 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
 
         {/* User Profile Badge */}
         <div className="netflix-nav__user">
-          <div className="netflix-nav__badge-live">
-            <span className="netflix-nav__dot-live" />
-            <span className="netflix-nav__live-text">SPECIAL EVENT</span>
-          </div>
           <div className="netflix-nav__profile" title={`Login sebagai: ${guestName || 'Tamu Undangan'}`}>
             <span className="netflix-nav__avatar">{guestInitial}</span>
             <span className="netflix-nav__username">{guestName ? guestName.split(' ')[0] : 'Guest'}</span>

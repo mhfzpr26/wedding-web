@@ -49,11 +49,11 @@ export const OpeningSection: React.FC = () => {
             <span className="netflix-badge-red">COMING SOON</span>
             <span className="netflix-hero-poster__date">
               <CalendarMonthIcon sx={{ fontSize: 18 }} />
-              12 September 2026
+              14 November 2026
             </span>
           </div>
 
-          {/* Series Headline (inspired by reference "Rafli & Fitri: Our Next Chapter") */}
+          {/* Series Headline */}
           <h1 className="netflix-hero-poster__title" id="opening-title">
             <span className="netflix-hero-poster__names">Destia &amp; Rakafansa:</span>
             <span className="netflix-hero-poster__subtitle">Our Forever Chapter</span>
@@ -63,24 +63,6 @@ export const OpeningSection: React.FC = () => {
           <div className="netflix-hero-poster__location">
             <LocationOnIcon sx={{ fontSize: 18, color: '#E50914' }} />
             <span>Masjid Agung Al-Barkah &amp; Hotel Santika Premiere, Bekasi</span>
-          </div>
-
-          {/* Genre Hashtags (matching reference pill tags) */}
-          <div className="netflix-hero-poster__tags">
-            <span className="netflix-tag-pill">#romance</span>
-            <span className="netflix-tag-pill">#sliceoflife</span>
-            <span className="netflix-tag-pill">#weddingfilm</span>
-            <span className="netflix-tag-pill">#truejourney</span>
-            <span className="netflix-tag-pill">#destiarakafansa</span>
-          </div>
-
-          {/* Specs & Ratings */}
-          <div className="netflix-hero-poster__specs">
-            <span className="netflix-spec-tag netflix-spec-tag--gold">TOP 1 TODAY</span>
-            <span className="netflix-spec-tag">100% MATCH</span>
-            <span className="netflix-spec-tag">TV-MA</span>
-            <span className="netflix-spec-tag">4K ULTRA HD</span>
-            <span className="netflix-spec-tag">DOLBY ATMOS</span>
           </div>
 
           {/* Quick Action Navigation Buttons */}

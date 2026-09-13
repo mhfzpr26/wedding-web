@@ -205,14 +205,13 @@ export const TrailerSection: React.FC = () => {
           <div className="netflix-trailer__info-card">
             <div className="netflix-trailer__meta-row">
               <span className="netflix-spec-tag netflix-spec-tag--red">NETFLIX ORIGINAL WEDDING SPECIAL</span>
-              <span className="netflix-spec-tag">TV-MA</span>
               <span className="netflix-spec-tag">100% MATCH</span>
-              <span className="netflix-spec-tag">CC / SUBTITLES</span>
+              <span className="netflix-spec-tag">4K ULTRA HD</span>
             </div>
 
             <p className="netflix-trailer__desc">
               Sebuah dokumenter sinematik kisah nyata dua insan, dari perjumpaan tak terduga hingga mengikat janji suci seumur hidup.
-              Saksikan peluncuran eksklusif hari bahagia Destia Dwi Ramadhani &amp; Rakafansa Saputra pada 12 September 2026.
+              Saksikan peluncuran eksklusif hari bahagia Destia Dwi Ramadhani &amp; Rakafansa Saputra pada 14 November 2026.
             </p>
 
             <div className="netflix-trailer__credits-grid">

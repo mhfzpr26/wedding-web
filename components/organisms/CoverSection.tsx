@@ -120,10 +120,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           <span className="netflix-cover__match">99% Match</span>
           <span className="netflix-cover__year">2026</span>
           <span className="netflix-cover__badge-pill netflix-cover__badge-pill--rating">SU / ALL AGES</span>
-          <span className="netflix-cover__badge-pill">1 SEASON</span>
           <span className="netflix-cover__badge-pill">UHD 4K</span>
-          <span className="netflix-cover__badge-pill">DOLBY VISION</span>
-          <span className="netflix-cover__badge-pill">SPATIAL AUDIO</span>
         </div>
 
         {/* Synopsis / Logline */}
@@ -139,7 +136,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.
         </p>
 
-        {/* Cast & Genres line */}
+        {/* Cast line */}
         <div
           className="netflix-cover__credits"
           style={{
@@ -149,10 +146,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           }}
         >
           <span className="netflix-cover__credit-item">
-            <strong>Starring:</strong> Destia Dwi Ramadhani, Rakafansa Saputra
-          </span>
-          <span className="netflix-cover__credit-item">
-            <strong>This Series is:</strong> Heartfelt, Romantic, Emotional, Inspiring
+            <strong>Starring:</strong> Destia Dwi Ramadhani &amp; Rakafansa Saputra
           </span>
         </div>
 

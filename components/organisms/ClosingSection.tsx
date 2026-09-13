@@ -6,30 +6,6 @@ import { useInView } from '@/hooks/useInView';
 export const ClosingSection: React.FC = () => {
   const { ref, inView } = useInView<HTMLElement>();
 
-  const moreLikeThis = [
-    {
-      title: 'Chapter 1: The Engagement Day',
-      match: '99% Match',
-      year: '2024',
-      tag: 'Romance',
-      img: '/images/netflix-cover-bg.jpg',
-    },
-    {
-      title: 'Chapter 2: Family Blessings',
-      match: '98% Match',
-      year: '2025',
-      tag: 'Heartfelt',
-      img: '/images/netflix-cover-bg.jpg',
-    },
-    {
-      title: 'Chapter 3: The Big Premiere',
-      match: '100% Match',
-      year: '2026',
-      tag: 'Special',
-      img: '/images/netflix-cover-bg.jpg',
-    },
-  ];
-
   return (
     <section
       id="closing"
@@ -38,44 +14,6 @@ export const ClosingSection: React.FC = () => {
       aria-labelledby="closing-title"
     >
       <div className="container">
-        {/* Netflix "More Like This" Section */}
-        <div
-          className="netflix-more-like-this"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
-        >
-          <div className="netflix-more-like-this__header">
-            <h3 className="netflix-more-like-this__title">MORE LIKE THIS</h3>
-            <span className="netflix-spec-tag">COLLECTION</span>
-          </div>
-
-          <div className="netflix-more-like-this__grid">
-            {moreLikeThis.map((item) => (
-              <div key={item.title} className="netflix-poster-card">
-                <div className="netflix-poster-card__thumb-box">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="netflix-poster-card__img"
-                  />
-                  <span className="netflix-poster-card__n-logo">N</span>
-                  <span className="netflix-poster-card__match-badge">{item.match}</span>
-                </div>
-                <div className="netflix-poster-card__meta">
-                  <span className="netflix-poster-card__name">{item.title}</span>
-                  <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.25rem' }}>
-                    <span className="netflix-spec-tag">{item.year}</span>
-                    <span className="netflix-spec-tag netflix-spec-tag--red">{item.tag}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Netflix End Credits Roll */}
         <div
