@@ -9,6 +9,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import { useInView } from '@/hooks/useInView';
+import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingTrailer } from '@/types/wedding';
 
 export interface TrailerSectionProps {
@@ -22,6 +23,8 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(32); // initial visual scrubber
 
+  const setTrailerPlaying = useInvitationStore((s) => s.setTrailerPlaying);
+
   const badge = trailer?.badge || 'EXCLUSIVE PREVIEW • TEASER FILM';
   const title = trailer?.title || 'OFFICIAL WEDDING TRAILER';
   const subtitle =
@@ -34,17 +37,28 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
 
   const handleTogglePlay = () => {
     if (!videoRef.current) {
-      setIsPlaying((prev) => !prev);
+      setIsPlaying((prev) => {
+        const next = !prev;
+        setTrailerPlaying(next);
+        return next;
+      });
       return;
     }
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
+      setTrailerPlaying(false);
     } else {
       videoRef.current
         .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(true));
+        .then(() => {
+          setIsPlaying(true);
+          setTrailerPlaying(true);
+        })
+        .catch(() => {
+          setIsPlaying(true);
+          setTrailerPlaying(true);
+        });
     }
   };
 
@@ -115,7 +129,14 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                   setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
                 }
               }}
-              onEnded={() => setIsPlaying(false)}
+              onPause={() => {
+                setIsPlaying(false);
+                setTrailerPlaying(false);
+              }}
+              onEnded={() => {
+                setIsPlaying(false);
+                setTrailerPlaying(false);
+              }}
             >
               {/* Fallback to sample cinematic video if available */}
               <source src={videoUrl} type="video/mp4" />

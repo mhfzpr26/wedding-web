@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ClosingSection } from '@/components/organisms/ClosingSection';
 import { CountdownSection } from '@/components/organisms/CountdownSection';
 import { CoupleSection } from '@/components/organisms/CoupleSection';
@@ -17,6 +17,7 @@ import { TrailerSection } from '@/components/organisms/TrailerSection';
 import { WishesSection } from '@/components/organisms/WishesSection';
 import { NetflixNavbar } from '@/components/molecules/NetflixNavbar';
 
+import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingConfig } from '@/types/wedding';
 
 export interface InvitationTemplateProps {
@@ -30,8 +31,15 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
   config,
   invitationSlug = '',
 }) => {
-  const [coverOpened, setCoverOpened] = useState(false);
-  const [audioStarted, setAudioStarted] = useState(false);
+  const coverOpened = useInvitationStore((s) => s.coverOpened);
+  const openCover = useInvitationStore((s) => s.openCover);
+  const setGuestName = useInvitationStore((s) => s.setGuestName);
+  const setInvitationSlug = useInvitationStore((s) => s.setInvitationSlug);
+
+  useEffect(() => {
+    if (guestName) setGuestName(guestName);
+    if (invitationSlug) setInvitationSlug(invitationSlug);
+  }, [guestName, invitationSlug, setGuestName, setInvitationSlug]);
 
   const fireCelebration = useCallback(async () => {
     try {
@@ -48,8 +56,7 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
   }, []);
 
   const handleEnter = useCallback(() => {
-    setCoverOpened(true);
-    setAudioStarted(true);
+    openCover();
     fireCelebration();
 
     setTimeout(() => {
@@ -58,7 +65,7 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         openingEl.scrollIntoView({ behavior: 'smooth' });
       }
     }, 400);
-  }, [fireCelebration]);
+  }, [openCover, fireCelebration]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -102,7 +109,7 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
 
       <NetflixNavbar guestName={guestName} visible={coverOpened} />
 
-      <FloatingAudio shouldPlay={audioStarted} music={config?.music} />
+      <FloatingAudio music={config?.music} />
 
       <main
         id="main-content"

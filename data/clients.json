@@ -1,14 +1,14 @@
 [
   {
-    "id": "client_1789293520954_qy4lk",
+    "id": "client_1789293949961_9o3is",
     "name": "Budi Santoso & Siti Nurhaliza",
     "phone": "081987654321",
     "email": "budi.siti@example.com",
     "package": "Cinematic VIP",
     "notes": "Paket Netflix Wedding Special",
     "status": "active",
-    "createdAt": "2026-09-13T09:58:40.957Z",
-    "updatedAt": "2026-09-13T09:58:40.957Z",
+    "createdAt": "2026-09-13T10:05:49.964Z",
+    "updatedAt": "2026-09-13T10:05:49.964Z",
     "invitationsCount": 0,
     "invitations": []
   },

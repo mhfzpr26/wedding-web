@@ -1,21 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import './admin.css';
 import type {
   ClientRecord,
-  InvitationRecord,
   InvitationStatus,
-  SaasStats,
   WeddingBankAccount,
-  WeddingConfig,
   WeddingEventItem,
   WeddingGalleryItem,
   WeddingTimelineItem,
 } from '@/types/wedding';
 import { AVAILABLE_TEMPLATES } from '@/components/templates/registry';
-import type { RsvpRecord } from '@/types/rsvp';
+import { useAdminStore } from '@/stores/useAdminStore';
 
 // MUI Icons
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -43,194 +40,62 @@ import TuneIcon from '@mui/icons-material/Tune';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
-type PrimaryTab = 'dashboard' | 'clients' | 'editor' | 'templates';
-
-type EditorTab =
-  | 'template'
-  | 'couple'
-  | 'events'
-  | 'media'
-  | 'cover'
-  | 'countdown'
-  | 'gallery'
-  | 'story'
-  | 'gifts'
-  | 'closing'
-  | 'rsvps';
-
-interface ClientWithInvs extends ClientRecord {
-  invitationsCount?: number;
-  invitations?: {
-    id: string;
-    title: string;
-    slug: string;
-    status: InvitationStatus;
-    templateId: string;
-  }[];
-}
-
-interface InvitationWithDetails extends InvitationRecord {
-  client?: {
-    id: string;
-    name: string;
-    phone: string;
-    package: string;
-  } | null;
-  rsvpsCount?: number;
-  attendingCount?: number;
-}
-
 export default function AdminPage() {
-  // Navigation states
-  const [primaryTab, setPrimaryTab] = useState<PrimaryTab>('dashboard');
-  const [editorTab, setEditorTab] = useState<EditorTab>('template');
+  // Zustand Central Admin Store
+  const primaryTab = useAdminStore((s) => s.primaryTab);
+  const setPrimaryTab = useAdminStore((s) => s.setPrimaryTab);
+  const editorTab = useAdminStore((s) => s.editorTab);
+  const setEditorTab = useAdminStore((s) => s.setEditorTab);
 
-  // SaaS Core Data
-  const [clients, setClients] = useState<ClientWithInvs[]>([]);
-  const [invitations, setInvitations] = useState<InvitationWithDetails[]>([]);
-  const [stats, setStats] = useState<SaasStats | null>(null);
+  const clients = useAdminStore((s) => s.clients);
+  const invitations = useAdminStore((s) => s.invitations);
+  const setInvitations = useAdminStore((s) => s.setInvitations);
+  const stats = useAdminStore((s) => s.stats);
 
-  // Active Scoped Editor State
-  const [selectedInvitationId, setSelectedInvitationId] = useState<string>('');
-  const [config, setConfig] = useState<WeddingConfig | null>(null);
-  const [editorSlug, setEditorSlug] = useState<string>('');
-  const [editorStatus, setEditorStatus] = useState<InvitationStatus>('draft');
-
-  // Scoped RSVP state for the active invitation
-  const [rsvps, setRsvps] = useState<RsvpRecord[]>([]);
-  const [rsvpStats, setRsvpStats] = useState({
-    totalResponses: 0,
-    attendingCount: 0,
-    notAttendingCount: 0,
-    totalGuests: 0,
-  });
-
-  // UI state
-  const [_loading, setLoading] = useState(true);
-  const [configLoading, setConfigLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    type: 'success' | 'error';
-    message: string;
-  } | null>(null);
-
-  // Modals state
-  const [showCreateInvModal, setShowCreateInvModal] = useState(false);
-  const [createInvForm, setCreateInvForm] = useState({
-    clientId: '',
-    title: '',
-    slug: '',
-    templateId: 'netflix',
-    status: 'draft' as InvitationStatus,
-    eventDate: new Date().toISOString().split('T')[0],
-  });
-
-  const [showClientModal, setShowClientModal] = useState(false);
-  const [clientForm, setClientForm] = useState({
-    id: '',
-    name: '',
-    phone: '',
-    email: '',
-    package: 'Cinematic VIP',
-    notes: '',
-    status: 'active' as 'active' | 'inactive',
-  });
-
-  const [deleteConfirm, setDeleteConfirm] = useState<{
-    type: 'invitation' | 'client';
-    id: string;
-    title: string;
-  } | null>(null);
-
-  const showToast = useCallback(
-    (type: 'success' | 'error', message: string) => {
-      setToast({ type, message });
-      setTimeout(() => {
-        setToast(null);
-      }, 3500);
-    },
-    [],
+  const selectedInvitationId = useAdminStore((s) => s.selectedInvitationId);
+  const setSelectedInvitationId = useAdminStore(
+    (s) => s.setSelectedInvitationId,
   );
+  const config = useAdminStore((s) => s.config);
+  const setConfig = useAdminStore((s) => s.setConfig);
+  const editorSlug = useAdminStore((s) => s.editorSlug);
+  const setEditorSlug = useAdminStore((s) => s.setEditorSlug);
+  const editorStatus = useAdminStore((s) => s.editorStatus);
+  const setEditorStatus = useAdminStore((s) => s.setEditorStatus);
 
-  // Fetch initial SaaS Overview
-  const refreshSaasData = useCallback(async () => {
-    try {
-      const [statsRes, clientsRes, invsRes] = await Promise.all([
-        fetch('/api/admin/saas/stats'),
-        fetch('/api/admin/saas/clients'),
-        fetch('/api/admin/saas/invitations'),
-      ]);
+  const rsvps = useAdminStore((s) => s.rsvps);
+  const rsvpStats = useAdminStore((s) => s.rsvpStats);
 
-      if (statsRes.ok) {
-        setStats(await statsRes.json());
-      }
-      if (clientsRes.ok) {
-        setClients(await clientsRes.json());
-      }
-      if (invsRes.ok) {
-        const invsData: InvitationWithDetails[] = await invsRes.json();
-        setInvitations(invsData);
-        if (invsData.length > 0 && !selectedInvitationId) {
-          setSelectedInvitationId(invsData[0].id);
-        }
-      }
-    } catch (err) {
-      console.error('Error loading SaaS data:', err);
-      showToast('error', 'Gagal memuat data dari server SaaS');
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedInvitationId, showToast]);
+  const configLoading = useAdminStore((s) => s.configLoading);
+  const saving = useAdminStore((s) => s.saving);
+  const setSaving = useAdminStore((s) => s.setSaving);
+  const uploading = useAdminStore((s) => s.uploading);
+  const setUploading = useAdminStore((s) => s.setUploading);
+  const toast = useAdminStore((s) => s.toast);
+  const showToast = useAdminStore((s) => s.showToast);
+
+  const showCreateInvModal = useAdminStore((s) => s.showCreateInvModal);
+  const setShowCreateInvModal = useAdminStore((s) => s.setShowCreateInvModal);
+  const createInvForm = useAdminStore((s) => s.createInvForm);
+  const setCreateInvForm = useAdminStore((s) => s.setCreateInvForm);
+
+  const showClientModal = useAdminStore((s) => s.showClientModal);
+  const setShowClientModal = useAdminStore((s) => s.setShowClientModal);
+  const clientForm = useAdminStore((s) => s.clientForm);
+  const setClientForm = useAdminStore((s) => s.setClientForm);
+
+  const deleteConfirm = useAdminStore((s) => s.deleteConfirm);
+  const setDeleteConfirm = useAdminStore((s) => s.setDeleteConfirm);
+
+  const refreshSaasData = useAdminStore((s) => s.refreshSaasData);
+  const loadInvitationConfig = useAdminStore((s) => s.loadInvitationConfig);
+  const openEditorForInvitation = useAdminStore(
+    (s) => s.openEditorForInvitation,
+  );
 
   useEffect(() => {
     refreshSaasData();
   }, [refreshSaasData]);
-
-  // Fetch isolated configuration and RSVPs for selected invitation
-  const loadInvitationConfig = useCallback(
-    async (invitationId: string) => {
-      if (!invitationId) return;
-      setConfigLoading(true);
-      try {
-        const [cfgRes, rsvpRes] = await Promise.all([
-          fetch(`/api/admin/saas/invitations/${invitationId}/config`),
-          fetch(`/api/admin/saas/invitations/${invitationId}/rsvps`),
-        ]);
-
-        if (cfgRes.ok) {
-          const cfg = await cfgRes.json();
-          setConfig(cfg);
-        } else {
-          showToast('error', 'Gagal memuat konfigurasi undangan');
-        }
-
-        if (rsvpRes.ok) {
-          const rsvpData = await rsvpRes.json();
-          setRsvps(rsvpData.rsvps || []);
-          setRsvpStats({
-            totalResponses: rsvpData.totalResponses || 0,
-            attendingCount: rsvpData.attendingCount || 0,
-            notAttendingCount: rsvpData.notAttendingCount || 0,
-            totalGuests: rsvpData.totalGuests || 0,
-          });
-        }
-
-        // Sync local slug & status from invitations list
-        const currentInv = invitations.find((i) => i.id === invitationId);
-        if (currentInv) {
-          setEditorSlug(currentInv.slug);
-          setEditorStatus(currentInv.status);
-        }
-      } catch (err) {
-        console.error('Error loading tenant config:', err);
-        showToast('error', 'Gagal memuat data spesifik undangan');
-      } finally {
-        setConfigLoading(false);
-      }
-    },
-    [invitations, showToast],
-  );
 
   useEffect(() => {
     if (selectedInvitationId) {
@@ -245,8 +110,7 @@ export default function AdminPage() {
 
   // Switch to Content Studio Editor for a specific invitation
   const handleOpenEditor = (invitationId: string) => {
-    setSelectedInvitationId(invitationId);
-    setPrimaryTab('editor');
+    openEditorForInvitation(invitationId);
   };
 
   // Quick Change Status in Table or Studio

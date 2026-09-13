@@ -1,9 +1,9 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AudioToggle } from '@/components/molecules/AudioToggle';
-
+import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingMusic } from '@/types/wedding';
 
 export interface FloatingAudioProps {
@@ -15,7 +15,11 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
   shouldPlay = false,
   music,
 }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const audioPlaying = useInvitationStore((s) => s.audioPlaying);
+  const trailerPlaying = useInvitationStore((s) => s.trailerPlaying);
+  const toggleAudio = useInvitationStore((s) => s.toggleAudio);
+  const setAudioPlaying = useInvitationStore((s) => s.setAudioPlaying);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<{
     ctx: AudioContext;
@@ -86,16 +90,14 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
-            setIsPlaying(true);
+            // Audio started successfully
           })
           .catch(() => {
             startSynthMelody();
-            setIsPlaying(true);
           });
       }
     } else {
       startSynthMelody();
-      setIsPlaying(true);
     }
   }, [startSynthMelody]);
 
@@ -105,22 +107,24 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
       audio.pause();
     }
     stopSynthMelody();
-    setIsPlaying(false);
   }, [stopSynthMelody]);
 
+  // Sync with shouldPlay prop if provided
   useEffect(() => {
-    if (shouldPlay && !isPlaying) {
-      handlePlay();
+    if (shouldPlay && !audioPlaying) {
+      setAudioPlaying(true);
     }
-  }, [shouldPlay, isPlaying, handlePlay]);
+  }, [shouldPlay, audioPlaying, setAudioPlaying]);
 
-  const toggleAudio = () => {
-    if (isPlaying) {
-      handlePause();
-    } else {
+  // Handle actual audio play/pause based on Zustand store
+  useEffect(() => {
+    const shouldActuallyPlay = audioPlaying && !trailerPlaying;
+    if (shouldActuallyPlay) {
       handlePlay();
+    } else {
+      handlePause();
     }
-  };
+  }, [audioPlaying, trailerPlaying, handlePlay, handlePause]);
 
   return (
     <div
@@ -134,7 +138,10 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
         loop
         preload="auto"
       />
-      <AudioToggle isPlaying={isPlaying} onToggle={toggleAudio} />
+      <AudioToggle
+        isPlaying={audioPlaying && !trailerPlaying}
+        onToggle={toggleAudio}
+      />
     </div>
   );
 };
