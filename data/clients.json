@@ -1,5 +1,16 @@
 [
   {
+    "id": "client_1789292328047_288gi",
+    "name": "Budi Santoso & Siti Nurhaliza",
+    "phone": "081987654321",
+    "email": "budi.siti@example.com",
+    "package": "Cinematic VIP",
+    "notes": "Paket Netflix Wedding Special",
+    "status": "active",
+    "createdAt": "2026-09-13T09:38:48.048Z",
+    "updatedAt": "2026-09-13T09:38:48.048Z"
+  },
+  {
     "id": "client-destia",
     "name": "Destia & Rakafansa",
     "phone": "081234567890",
@@ -7,7 +18,7 @@
     "package": "Cinematic VIP",
     "notes": "Client perdana paket Netflix Cinematic Theme",
     "status": "active",
-    "createdAt": "2026-09-13T09:28:44.906Z",
-    "updatedAt": "2026-09-13T09:28:44.906Z"
+    "createdAt": "2026-09-13T09:38:47.865Z",
+    "updatedAt": "2026-09-13T09:38:47.865Z"
   }
 ]
