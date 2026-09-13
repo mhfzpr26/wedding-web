@@ -21,110 +21,47 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
   const setAudioPlaying = useInvitationStore((s) => s.setAudioPlaying);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const synthRef = useRef<{
-    ctx: AudioContext;
-    timer: NodeJS.Timeout | null;
-  } | null>(null);
 
-  const startSynthMelody = useCallback(() => {
-    try {
-      if (synthRef.current) return;
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext })
-          .webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      synthRef.current = { ctx, timer: null };
-
-      const notes = [
-        261.63, 329.63, 392.0, 523.25, 329.63, 392.0, 493.88, 659.25, 220.0,
-        261.63, 329.63, 440.0, 174.61, 220.0, 261.63, 349.23,
-      ];
-      let step = 0;
-
-      const playPluck = () => {
-        if (!synthRef.current) return;
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(notes[step % notes.length], now);
-
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.exponentialRampToValueAtTime(0.12, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 1.3);
-
-        step++;
-        synthRef.current.timer = setTimeout(playPluck, 600);
-      };
-
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      playPluck();
-    } catch {
-      // Audio context error handling
-    }
-  }, []);
-
-  const stopSynthMelody = useCallback(() => {
-    if (synthRef.current) {
-      if (synthRef.current.timer) clearTimeout(synthRef.current.timer);
-      if (synthRef.current.ctx) synthRef.current.ctx.close();
-      synthRef.current = null;
-    }
-  }, []);
+  const audioUrl = music?.audioUrl ? music.audioUrl.trim() : '';
 
   const handlePlay = useCallback(() => {
     const audio = audioRef.current;
-    if (audio) {
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Audio started successfully
-          })
-          .catch(() => {
-            startSynthMelody();
-          });
-      }
-    } else {
-      startSynthMelody();
+    if (audio && audioUrl) {
+      audio.play().catch(() => {
+        // Browser prevented autoplay before user interaction
+      });
     }
-  }, [startSynthMelody]);
+  }, [audioUrl]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;
     if (audio) {
       audio.pause();
     }
-    stopSynthMelody();
-  }, [stopSynthMelody]);
+  }, []);
 
   // Sync with shouldPlay prop if provided
   useEffect(() => {
-    if (shouldPlay && !audioPlaying) {
+    if (shouldPlay && !audioPlaying && audioUrl) {
       setAudioPlaying(true);
     }
-  }, [shouldPlay, audioPlaying, setAudioPlaying]);
+  }, [shouldPlay, audioPlaying, audioUrl, setAudioPlaying]);
 
   // Handle actual audio play/pause based on Zustand store
   useEffect(() => {
+    if (!audioUrl) return;
     const shouldActuallyPlay = audioPlaying && !trailerPlaying;
     if (shouldActuallyPlay) {
       handlePlay();
     } else {
       handlePause();
     }
-  }, [audioPlaying, trailerPlaying, handlePlay, handlePause]);
+  }, [audioPlaying, trailerPlaying, audioUrl, handlePlay, handlePause]);
+
+  // If no music is configured by admin, do not render audio player
+  if (!audioUrl) {
+    return null;
+  }
 
   return (
     <div
@@ -134,7 +71,7 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
     >
       <audio
         ref={audioRef}
-        src={music?.audioUrl || '/audio/wedding-song.mp3'}
+        src={audioUrl}
         loop
         preload="auto"
       />

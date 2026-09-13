@@ -2127,7 +2127,7 @@ export default function AdminPage() {
                                   : null,
                               )
                             }
-                            placeholder="/audio/wedding-song.mp3"
+                            placeholder="URL file MP3 atau upload di atas (cth: /uploads/music.mp3)"
                           />
                         </div>
                       </div>

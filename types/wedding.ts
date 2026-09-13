@@ -115,8 +115,9 @@ export interface WeddingClosing {
 }
 
 export interface WeddingMusic {
-  audioUrl: string; // "/audio/wedding-song.mp3"
+  audioUrl: string;
   title: string;
+  artist?: string;
   autoplay: boolean;
 }
 

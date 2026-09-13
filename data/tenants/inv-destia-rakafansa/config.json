@@ -223,8 +223,8 @@
     ]
   },
   "music": {
-    "audioUrl": "/audio/wedding-song.mp3",
-    "title": "Wedding Celebration Instrumental",
-    "autoplay": true
+    "audioUrl": "",
+    "title": "",
+    "autoplay": false
   }
 }

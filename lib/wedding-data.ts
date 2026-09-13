@@ -245,9 +245,10 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
     ],
   },
   music: {
-    audioUrl: '/audio/wedding-song.mp3',
-    title: 'Wedding Celebration Instrumental',
-    autoplay: true,
+    audioUrl: '',
+    title: '',
+    artist: '',
+    autoplay: false,
   },
 };
 
