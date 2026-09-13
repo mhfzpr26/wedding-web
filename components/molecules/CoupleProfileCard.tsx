@@ -1,9 +1,9 @@
 import type React from 'react';
-import type { PersonProfile } from '@/types/invitation';
+import type { WeddingBrideGroom } from '@/types/wedding';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 export interface CoupleProfileCardProps {
-  person: PersonProfile;
+  person: WeddingBrideGroom;
   type: 'bride' | 'groom';
   rank: number;
 }
@@ -13,7 +13,9 @@ export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
   type,
   rank,
 }) => {
-  const photoSrc = type === 'bride' ? '/images/destia.jpg' : '/images/rakafansa.jpg';
+  const defaultPhoto =
+    type === 'bride' ? '/images/destia.jpg' : '/images/rakafansa.jpg';
+  const photoSrc = person.photo || defaultPhoto;
 
   return (
     <article className={`couple__person couple__person--${type} netflix-cast-card`}>

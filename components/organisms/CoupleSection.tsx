@@ -3,34 +3,45 @@
 import type React from 'react';
 import { CoupleProfileCard } from '@/components/molecules/CoupleProfileCard';
 import { useInView } from '@/hooks/useInView';
-import type { PersonProfile } from '@/types/invitation';
+import type { WeddingCouple } from '@/types/wedding';
 
-export const CoupleSection: React.FC = () => {
+export interface CoupleSectionProps {
+  couple?: WeddingCouple;
+}
+
+const DEFAULT_BRIDE = {
+  role: 'The Bride',
+  characterRole: 'DESTIA as THE BRIDE',
+  name: 'Destia Dwi Ramadhani',
+  callname: 'Destia',
+  bio: 'Pribadi yang hangat, penuh kebaikan, dan tulus. Siap mengarungi samudera kehidupan baru bersama sang pendamping hati.',
+  instagram: 'destiadwir',
+  photo: '/images/destia.jpg',
+  parents: {
+    mother: 'Ibu Sri Mulyati',
+    father: 'Alm. Bapak M. Hastronugi',
+  },
+};
+
+const DEFAULT_GROOM = {
+  role: 'The Groom',
+  characterRole: 'RAKAFANSA as THE GROOM',
+  name: 'Rakafansa Saputra',
+  callname: 'Rakafansa',
+  bio: 'Pria pekerja keras, berprinsip, dan setia. Berkomitmen menjadi nahkoda keluarga yang penuh amanah dan kasih sayang.',
+  instagram: 'rakafansa',
+  photo: '/images/rakafansa.jpg',
+  parents: {
+    mother: 'Ibu Lenny Gusnita',
+    father: 'Bapak Mashudi',
+  },
+};
+
+export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
   const { ref, inView } = useInView<HTMLElement>();
 
-  const brideData: PersonProfile = {
-    role: 'The Bride',
-    characterRole: 'DESTIA as THE BRIDE',
-    name: 'Destia Dwi Ramadhani',
-    bio: 'Pribadi yang hangat, penuh kebaikan, dan tulus. Siap mengarungi samudera kehidupan baru bersama sang pendamping hati.',
-    instagram: 'destiadwir',
-    parents: {
-      mother: 'Ibu Sri Mulyati',
-      father: 'Alm. Bapak M. Hastronugi',
-    },
-  };
-
-  const groomData: PersonProfile = {
-    role: 'The Groom',
-    characterRole: 'RAKAFANSA as THE GROOM',
-    name: 'Rakafansa Saputra',
-    bio: 'Pria pekerja keras, berprinsip, dan setia. Berkomitmen menjadi nahkoda keluarga yang penuh amanah dan kasih sayang.',
-    instagram: 'rakafansa',
-    parents: {
-      mother: 'Ibu Lenny Gusnita',
-      father: 'Bapak Mashudi',
-    },
-  };
+  const brideData = couple?.bride || DEFAULT_BRIDE;
+  const groomData = couple?.groom || DEFAULT_GROOM;
 
   return (
     <section

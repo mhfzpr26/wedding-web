@@ -17,12 +17,16 @@ import { TrailerSection } from '@/components/organisms/TrailerSection';
 import { WishesSection } from '@/components/organisms/WishesSection';
 import { NetflixNavbar } from '@/components/molecules/NetflixNavbar';
 
+import type { WeddingConfig } from '@/types/wedding';
+
 export interface InvitationTemplateProps {
   guestName?: string;
+  config?: WeddingConfig;
 }
 
 export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
   guestName = '',
+  config,
 }) => {
   const [coverOpened, setCoverOpened] = useState(false);
   const [audioStarted, setAudioStarted] = useState(false);
@@ -91,11 +95,12 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         onEnter={handleEnter}
         isOpen={coverOpened}
         guestName={guestName}
+        cover={config?.cover}
       />
 
       <NetflixNavbar guestName={guestName} visible={coverOpened} />
 
-      <FloatingAudio shouldPlay={audioStarted} />
+      <FloatingAudio shouldPlay={audioStarted} music={config?.music} />
 
       <main
         id="main-content"
@@ -109,17 +114,17 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
           transition: 'opacity 0.6s ease, visibility 0.6s ease',
         }}
       >
-        <OpeningSection />
-        <TrailerSection />
-        <CoupleSection />
-        <GallerySection />
-        <LoveStorySection />
-        <CountdownSection />
-        <EventSection />
+        <OpeningSection opening={config?.opening} />
+        <TrailerSection trailer={config?.trailer} />
+        <CoupleSection couple={config?.couple} />
+        <GallerySection photos={config?.gallery} />
+        <LoveStorySection timeline={config?.loveStory} />
+        <CountdownSection countdown={config?.countdown} />
+        <EventSection events={config?.events} />
         <RsvpSection defaultName={guestName} />
         <WishesSection defaultName={guestName} />
-        <GiftSection />
-        <ClosingSection />
+        <GiftSection gifts={config?.gifts} />
+        <ClosingSection closing={config?.closing} couple={config?.couple} />
       </main>
     </>
   );

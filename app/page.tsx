@@ -1,11 +1,16 @@
-import { InvitationTemplate } from '@/components/templates/InvitationTemplate';
+import type { Metadata } from 'next';
+import { getWeddingConfig } from '@/lib/wedding-data';
+import { TemplateRouter } from '@/components/templates/TemplateRouter';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function HomePage({ searchParams }: PageProps) {
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const params = await searchParams;
+  const config = await getWeddingConfig();
   const guestName =
     (typeof params?.to === 'string'
       ? params.to
@@ -13,5 +18,35 @@ export default async function HomePage({ searchParams }: PageProps) {
         ? params.u
         : '') || '';
 
-  return <InvitationTemplate guestName={guestName} />;
+  const guestTitle = guestName ? `Kepada Yth. ${guestName} - ` : '';
+
+  return {
+    title: `${guestTitle}${config.title}`,
+    description: `${config.seoDescription}${
+      guestName ? ` Spesial untuk ${guestName}.` : ''
+    }`,
+    openGraph: {
+      title: `${guestTitle}${config.title}`,
+      description: config.seoDescription,
+      images: [
+        {
+          url: config.cover?.bgImage || '/images/logo.png',
+          alt: config.title,
+        },
+      ],
+    },
+  };
+}
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const config = await getWeddingConfig();
+  const guestName =
+    (typeof params?.to === 'string'
+      ? params.to
+      : typeof params?.u === 'string'
+        ? params.u
+        : '') || '';
+
+  return <TemplateRouter config={config} guestName={guestName} />;
 }

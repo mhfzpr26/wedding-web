@@ -9,24 +9,42 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import { useInView } from '@/hooks/useInView';
+import type { WeddingTrailer } from '@/types/wedding';
 
-export const TrailerSection: React.FC = () => {
+export interface TrailerSectionProps {
+  trailer?: WeddingTrailer;
+}
+
+export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
   const { ref, inView } = useInView<HTMLElement>();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(32); // initial visual scrubber
 
+  const badge = trailer?.badge || 'EXCLUSIVE PREVIEW • TEASER FILM';
+  const title = trailer?.title || 'OFFICIAL WEDDING TRAILER';
+  const subtitle =
+    trailer?.subtitle ||
+    'Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan.';
+  const videoUrl = trailer?.videoUrl || '/videos/wedding-teaser.mp4';
+  const posterUrl = trailer?.posterUrl || '/images/gallery-1.jpg';
+  const duration = trailer?.duration || '02:30 • 4K UHD';
+  const filmTitle = trailer?.filmTitle || 'Destia & Rakafansa: The Journey';
+
   const handleTogglePlay = () => {
     if (!videoRef.current) {
-      setIsPlaying(prev => !prev);
+      setIsPlaying((prev) => !prev);
       return;
     }
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(true));
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(true));
     }
   };
 
@@ -63,15 +81,15 @@ export const TrailerSection: React.FC = () => {
         >
           <div className="netflix-badge-pill">
             <MovieFilterIcon sx={{ fontSize: 16 }} />
-            <span>EXCLUSIVE PREVIEW • TEASER FILM</span>
+            <span>{badge}</span>
           </div>
 
           <h2 id="trailer-heading" className="section-title">
-            OFFICIAL WEDDING TRAILER
+            {title}
           </h2>
 
           <p className="section-subtitle">
-            Satu-satunya teaser film resmi perjalanan cinta Destia &amp; Rakafansa menuju pelaminan.
+            {subtitle}
           </p>
         </div>
 
@@ -89,7 +107,7 @@ export const TrailerSection: React.FC = () => {
             <video
               ref={videoRef}
               className="netflix-trailer__video-element"
-              poster="/images/gallery-1.jpg"
+              poster={posterUrl}
               playsInline
               muted={isMuted}
               onTimeUpdate={() => {
@@ -100,7 +118,7 @@ export const TrailerSection: React.FC = () => {
               onEnded={() => setIsPlaying(false)}
             >
               {/* Fallback to sample cinematic video if available */}
-              <source src="/videos/wedding-teaser.mp4" type="video/mp4" />
+              <source src={videoUrl} type="video/mp4" />
             </video>
 
             {/* Poster Overlay when not playing */}
@@ -108,7 +126,7 @@ export const TrailerSection: React.FC = () => {
               <div className="netflix-trailer__poster-overlay" onClick={handleTogglePlay}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/gallery-1.jpg"
+                  src={posterUrl}
                   alt="Official Wedding Teaser Poster"
                   className="netflix-trailer__poster-img"
                 />
@@ -129,8 +147,8 @@ export const TrailerSection: React.FC = () => {
 
                 <div className="netflix-trailer__poster-meta">
                   <span className="netflix-badge-red">TEASER FILM</span>
-                  <h3 className="netflix-trailer__poster-title">Destia &amp; Rakafansa: The Journey</h3>
-                  <span className="netflix-trailer__poster-duration">Duration: 02:30 • 4K UHD</span>
+                  <h3 className="netflix-trailer__poster-title">{filmTitle}</h3>
+                  <span className="netflix-trailer__poster-duration">Duration: {duration}</span>
                 </div>
               </div>
             )}

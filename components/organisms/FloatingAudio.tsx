@@ -4,12 +4,16 @@ import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AudioToggle } from '@/components/molecules/AudioToggle';
 
+import type { WeddingMusic } from '@/types/wedding';
+
 export interface FloatingAudioProps {
   shouldPlay?: boolean;
+  music?: WeddingMusic;
 }
 
 export const FloatingAudio: React.FC<FloatingAudioProps> = ({
   shouldPlay = false,
+  music,
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -124,7 +128,12 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
       role="region"
       aria-label="Pemutar Musik Latar"
     >
-      <audio ref={audioRef} src="/audio/wedding-song.mp3" loop preload="auto" />
+      <audio
+        ref={audioRef}
+        src={music?.audioUrl || '/audio/wedding-song.mp3'}
+        loop
+        preload="auto"
+      />
       <AudioToggle isPlaying={isPlaying} onToggle={toggleAudio} />
     </div>
   );

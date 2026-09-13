@@ -93,14 +93,22 @@ const GALLERY_PHOTOS: GalleryPhoto[] = [
   },
 ];
 
-export const GallerySection: React.FC = () => {
+import type { WeddingGalleryItem } from '@/types/wedding';
+
+export interface GallerySectionProps {
+  photos?: WeddingGalleryItem[];
+}
+
+export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
   const { ref, inView } = useInView<HTMLElement>();
   const [activeTab, setActiveTab] = useState<'all' | 'prewedding' | 'lead' | 'venue'>('all');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
+  const photoList = photos && photos.length > 0 ? photos : GALLERY_PHOTOS;
+
   const filteredPhotos = activeTab === 'all'
-    ? GALLERY_PHOTOS
-    : GALLERY_PHOTOS.filter(p => p.category === activeTab);
+    ? photoList
+    : photoList.filter(p => p.category === activeTab);
 
   const handleOpenLightbox = (index: number) => {
     setSelectedPhotoIndex(index);

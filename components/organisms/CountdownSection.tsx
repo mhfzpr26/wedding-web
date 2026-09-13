@@ -7,8 +7,15 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { CountdownUnit } from '@/components/molecules/CountdownUnit';
 import { useInView } from '@/hooks/useInView';
 import type { TimeLeft } from '@/types/invitation';
+import type { WeddingCountdown } from '@/types/wedding';
 
-export const CountdownSection: React.FC = () => {
+export interface CountdownSectionProps {
+  countdown?: WeddingCountdown;
+}
+
+export const CountdownSection: React.FC<CountdownSectionProps> = ({
+  countdown,
+}) => {
   const { ref, inView } = useInView<HTMLElement>();
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
@@ -19,9 +26,14 @@ export const CountdownSection: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [reminded, setReminded] = useState(false);
 
+  const targetDateStr = countdown?.targetDate || '2026-11-14T09:00:00+07:00';
+  const calendarUrl =
+    countdown?.calendarUrl ||
+    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
+
   useEffect(() => {
     setIsMounted(true);
-    const targetDate = new Date('2026-11-14T00:00:00+07:00').getTime();
+    const targetDate = new Date(targetDateStr).getTime();
 
     const updateTimer = () => {
       const now = Date.now();
@@ -46,12 +58,10 @@ export const CountdownSection: React.FC = () => {
     const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [targetDateStr]);
 
   const handleRemindClick = () => {
     setReminded(true);
-    const calendarUrl =
-      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
     window.open(calendarUrl, '_blank', 'noopener,noreferrer');
   };
 

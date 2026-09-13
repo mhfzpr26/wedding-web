@@ -19,6 +19,7 @@ export interface StoryTimelineItemData {
 }
 
 export interface EventDetailData {
+  id?: string;
   type: string;
   title: string;
   episodeNumber?: number;

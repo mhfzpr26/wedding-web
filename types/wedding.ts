@@ -1,0 +1,145 @@
+export interface PersonParents {
+  mother: string;
+  father: string;
+}
+
+export interface WeddingBrideGroom {
+  name: string;
+  callname: string;
+  characterRole?: string;
+  bio?: string;
+  instagram?: string;
+  photo?: string;
+  parents: PersonParents;
+}
+
+export interface WeddingCouple {
+  bride: WeddingBrideGroom;
+  groom: WeddingBrideGroom;
+}
+
+export interface WeddingEventItem {
+  id: string;
+  type: string; // 'AKAD NIKAH' | 'RESEPSI PERNIKAHAN' | etc.
+  episodeNumber: number;
+  title: string;
+  duration: string;
+  synopsis: string;
+  date: string;
+  time: string;
+  venue: string;
+  address: string;
+  mapUrl: string;
+  calendarUrl: string;
+}
+
+export interface WeddingCountdown {
+  targetDate: string; // e.g. "2026-11-14T09:00:00+07:00"
+  title?: string;
+  calendarUrl?: string;
+}
+
+export interface WeddingCover {
+  seriesBadge: string; // "A NETFLIX WEDDING SPECIAL"
+  trendingRank: string; // "#1 in Weddings Today"
+  title: string; // "DESTIA & RAKAFANSA"
+  matchPercentage: string; // "99% Match"
+  year: string; // "2026"
+  ratingBadge: string; // "SU / ALL AGES"
+  qualityBadge: string; // "UHD 4K"
+  synopsis: string;
+  starring: string; // "Destia Dwi Ramadhani & Rakafansa Saputra"
+  bgImage: string; // "/images/netflix-cover-bg.jpg"
+  calendarUrl?: string;
+}
+
+export interface WeddingOpening {
+  posterImage: string; // "/images/gallery-1.jpg"
+  statusBadge: string; // "COMING SOON"
+  dateText: string; // "14 November 2026"
+  title: string; // "Destia & Rakafansa:"
+  subtitle: string; // "Our Forever Chapter"
+  locationText: string; // "Masjid Agung Al-Barkah & Hotel Santika Premiere, Bekasi"
+  quote: string;
+  quoteSource: string; // "QS. AR-RUM : 21"
+}
+
+export interface WeddingTrailer {
+  badge: string; // "EXCLUSIVE PREVIEW • TEASER FILM"
+  title: string; // "OFFICIAL WEDDING TRAILER"
+  subtitle: string; // "Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan."
+  videoUrl: string; // "/videos/wedding-teaser.mp4"
+  posterUrl: string; // "/images/gallery-1.jpg"
+  duration: string; // "02:30 • 4K UHD"
+  filmTitle: string; // "Destia & Rakafansa: The Journey"
+}
+
+export interface WeddingGalleryItem {
+  id: string;
+  src: string;
+  title: string;
+  category: 'prewedding' | 'lead' | 'venue';
+  tag: string;
+  aspect: 'portrait' | 'landscape' | 'square';
+}
+
+export interface WeddingTimelineItem {
+  year: string;
+  event: string;
+  desc: string;
+  season?: string;
+  duration?: string;
+}
+
+export interface WeddingBankAccount {
+  id: string;
+  bank: string;
+  number: string;
+  owner: string;
+}
+
+export interface WeddingClosingCredit {
+  role: string;
+  name: string;
+}
+
+export interface WeddingClosing {
+  badge: string; // "END CREDITS • CAST & CREW"
+  title: string; // "SEE YOU AT THE PREMIERE"
+  message: string;
+  names: string; // "DESTIA & RAKAFANSA"
+  dateLocation: string; // "14 NOVEMBER 2026 • BEKASI, INDONESIA"
+  copyright: string;
+  credits: WeddingClosingCredit[];
+}
+
+export interface WeddingMusic {
+  audioUrl: string; // "/audio/wedding-song.mp3"
+  title: string;
+  autoplay: boolean;
+}
+
+export interface WeddingTemplateMeta {
+  id: string;
+  name: string;
+  description: string;
+  thumbnail?: string;
+  available: boolean;
+}
+
+export interface WeddingConfig {
+  templateId: string; // 'netflix'
+  title: string;
+  seoDescription: string;
+  cover: WeddingCover;
+  opening: WeddingOpening;
+  trailer: WeddingTrailer;
+  couple: WeddingCouple;
+  gallery: WeddingGalleryItem[];
+  loveStory: WeddingTimelineItem[];
+  countdown: WeddingCountdown;
+  events: WeddingEventItem[];
+  gifts: WeddingBankAccount[];
+  closing: WeddingClosing;
+  music: WeddingMusic;
+}

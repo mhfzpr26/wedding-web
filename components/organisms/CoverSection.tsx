@@ -6,19 +6,40 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+import type { WeddingCover } from '@/types/wedding';
+
 export interface CoverSectionProps {
   onEnter: () => void;
   isOpen: boolean;
   guestName?: string;
+  cover?: WeddingCover;
 }
 
 export const CoverSection: React.FC<CoverSectionProps> = ({
   onEnter,
   isOpen,
   guestName,
+  cover,
 }) => {
   const animationsReady = true;
   const [savedToList, setSavedToList] = useState(false);
+
+  const bgImage = cover?.bgImage || '/images/netflix-cover-bg.jpg';
+  const seriesBadge = cover?.seriesBadge || 'A NETFLIX WEDDING SPECIAL';
+  const trendingRank = cover?.trendingRank || '#1 in Weddings Today';
+  const title = cover?.title || 'DESTIA & RAKAFANSA';
+  const matchPercentage = cover?.matchPercentage || '99% Match';
+  const year = cover?.year || '2026';
+  const ratingBadge = cover?.ratingBadge || 'SU / ALL AGES';
+  const qualityBadge = cover?.qualityBadge || 'UHD 4K';
+  const synopsis =
+    cover?.synopsis ||
+    'Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.';
+  const starring =
+    cover?.starring || 'Destia Dwi Ramadhani & Rakafansa Saputra';
+  const calendarUrl =
+    cover?.calendarUrl ||
+    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
 
   const handleEnterClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -28,8 +49,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   const handleSaveToList = (e: React.MouseEvent) => {
     e.preventDefault();
     setSavedToList(true);
-    const calendarUrl =
-      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
     window.open(calendarUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -43,17 +62,22 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
     opacity: isOpen ? 0 : 1,
     visibility: isOpen ? 'hidden' : 'visible',
     transform: isOpen ? 'scale(1.04)' : 'scale(1)',
-    transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+    transition:
+      'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
     pointerEvents: isOpen ? 'none' : 'auto',
   };
 
   return (
-    <section className="cover netflix-cover" aria-label="Cover undangan" style={coverStyle}>
+    <section
+      className="cover netflix-cover"
+      aria-label="Cover undangan"
+      style={coverStyle}
+    >
       {/* Background with cinematic Netflix backdrop and gradient */}
       <div className="netflix-cover__bg" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/netflix-cover-bg.jpg"
+          src={bgImage}
           alt="Cinematic Wedding Background"
           className="netflix-cover__backdrop-img"
         />
@@ -67,7 +91,8 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__brand"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(-20px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(-20px)',
             transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s',
           }}
         >
@@ -79,7 +104,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           />
           <span className="netflix-cover__series-badge">
             <span className="netflix-cover__n-badge">N</span>
-            A NETFLIX WEDDING SPECIAL
+            {seriesBadge}
           </span>
         </div>
 
@@ -88,24 +113,26 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__trending"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(15px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(15px)',
             transition: 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s',
           }}
         >
           <span className="netflix-cover__rank">#1</span>
-          <span className="netflix-cover__rank-text">in Weddings Today</span>
+          <span className="netflix-cover__rank-text">{trendingRank}</span>
         </div>
 
-        {/* Main Title: DESTIA & RAKAFANSA */}
+        {/* Main Title */}
         <h1
           className="netflix-cover__title"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
             transition: 'opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s',
           }}
         >
-          DESTIA <span className="netflix-cover__ampersand">&amp;</span> RAKAFANSA
+          {title}
         </h1>
 
         {/* Series Metadata Badges */}
@@ -113,14 +140,17 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__meta"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s',
           }}
         >
-          <span className="netflix-cover__match">99% Match</span>
-          <span className="netflix-cover__year">2026</span>
-          <span className="netflix-cover__badge-pill netflix-cover__badge-pill--rating">SU / ALL AGES</span>
-          <span className="netflix-cover__badge-pill">UHD 4K</span>
+          <span className="netflix-cover__match">{matchPercentage}</span>
+          <span className="netflix-cover__year">{year}</span>
+          <span className="netflix-cover__badge-pill netflix-cover__badge-pill--rating">
+            {ratingBadge}
+          </span>
+          <span className="netflix-cover__badge-pill">{qualityBadge}</span>
         </div>
 
         {/* Synopsis / Logline */}
@@ -128,12 +158,12 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__synopsis"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s',
           }}
         >
-          Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup.
-          Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.
+          {synopsis}
         </p>
 
         {/* Cast line */}
@@ -141,12 +171,13 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           className="netflix-cover__credits"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
-            transform: animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
+            transform:
+              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.8s ease 0.7s, transform 0.8s ease 0.7s',
           }}
         >
           <span className="netflix-cover__credit-item">
-            <strong>Starring:</strong> Destia Dwi Ramadhani &amp; Rakafansa Saputra
+            <strong>Starring:</strong> {starring}
           </span>
         </div>
 

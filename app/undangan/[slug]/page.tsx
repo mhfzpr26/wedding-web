@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { InvitationTemplate } from '@/components/templates/InvitationTemplate';
+import { getWeddingConfig } from '@/lib/wedding-data';
+import { TemplateRouter } from '@/components/templates/TemplateRouter';
 
 interface UndanganPageProps {
   params: Promise<{ slug: string }>;
@@ -12,6 +13,7 @@ export async function generateMetadata({
 }: UndanganPageProps): Promise<Metadata> {
   const { slug } = await params;
   const query = await searchParams;
+  const config = await getWeddingConfig();
   const guestName =
     (typeof query?.to === 'string'
       ? query.to
@@ -22,15 +24,20 @@ export async function generateMetadata({
   const guestTitle = guestName ? `Kepada Yth. ${guestName} - ` : '';
 
   return {
-    title: `${guestTitle}Undangan Pernikahan Destia & Rakafansa`,
-    description: `Undangan Pernikahan Destia Dwi Ramadhani & Rakafansa Saputra - 14 November 2026. ${
-      guestName ? `Spesial untuk ${guestName}` : ''
+    title: `${guestTitle}${config.title}`,
+    description: `${config.seoDescription}${
+      guestName ? ` Spesial untuk ${guestName}.` : ''
     }`,
     openGraph: {
-      title: `${guestTitle}The Wedding of Destia & Rakafansa`,
-      description:
-        'Sabtu, 14 November 2026 - Kami mengundang Anda untuk merayakan hari bahagia kami.',
+      title: `${guestTitle}${config.title}`,
+      description: config.seoDescription,
       url: `https://wedding.destia-rakafansa.com/undangan/${slug}`,
+      images: [
+        {
+          url: config.cover?.bgImage || '/images/logo.png',
+          alt: config.title,
+        },
+      ],
     },
   };
 }
@@ -39,6 +46,7 @@ export default async function UndanganPage({
   searchParams,
 }: UndanganPageProps) {
   const query = await searchParams;
+  const config = await getWeddingConfig();
   const guestName =
     (typeof query?.to === 'string'
       ? query.to
@@ -46,5 +54,5 @@ export default async function UndanganPage({
         ? query.u
         : '') || '';
 
-  return <InvitationTemplate guestName={guestName} />;
+  return <TemplateRouter config={config} guestName={guestName} />;
 }
