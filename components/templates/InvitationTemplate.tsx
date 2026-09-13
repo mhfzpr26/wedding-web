@@ -101,7 +101,12 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         id="main-content"
         style={{
           opacity: coverOpened ? 1 : 0,
-          transition: 'opacity 0.6s ease',
+          visibility: coverOpened ? 'visible' : 'hidden',
+          height: coverOpened ? 'auto' : 0,
+          overflow: coverOpened ? 'visible' : 'hidden',
+          width: '100%',
+          maxWidth: '100%',
+          transition: 'opacity 0.6s ease, visibility 0.6s ease',
         }}
       >
         <OpeningSection />

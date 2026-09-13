@@ -84,7 +84,7 @@ export const TrailerSection: React.FC = () => {
             transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
           }}
         >
-          <div className="netflix-trailer__cinema-frame">
+          <div className={`netflix-trailer__cinema-frame ${isPlaying ? 'netflix-trailer__cinema-frame--playing' : ''}`}>
             {/* HTML5 Video element */}
             <video
               ref={videoRef}

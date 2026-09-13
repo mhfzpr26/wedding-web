@@ -175,8 +175,7 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
                 type="submit"
                 variant="gold"
                 disabled={isSubmitting}
-                className="rsvp__submit-btn"
-                style={{ width: 'auto', alignSelf: 'flex-start', padding: '0.75rem 2rem' }}
+                className="rsvp__submit-btn wishes__submit-btn"
               >
                 {isSubmitting ? 'POSTING REVIEW...' : 'POST REVIEW (KIRIM ULASAN & DOA)'}
               </Button>
