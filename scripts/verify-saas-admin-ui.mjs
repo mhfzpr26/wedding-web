@@ -13,30 +13,71 @@ async function run() {
 
   console.log('Navigating to /admin...');
   await page.goto('http://localhost:3000/admin', { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1000);
 
-  // 1. Go to Studio Editor
+  // 1. Dashboard screenshot
+  await page.screenshot({
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_dashboard.png'),
+    fullPage: false,
+  });
+  console.log('📸 Captured saas_atomic_dashboard.png');
+
+  // 2. Data Client tab
+  await page.click('button:has-text("Data Client")');
+  await page.waitForTimeout(600);
+  await page.screenshot({
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_clients.png'),
+    fullPage: false,
+  });
+  console.log('📸 Captured saas_atomic_clients.png');
+
+  // 3. Studio Editor tab
   await page.click('button:has-text("Studio Editor Konten")');
   await page.waitForTimeout(600);
+  await page.screenshot({
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_editor_template.png'),
+    fullPage: false,
+  });
+  console.log('📸 Captured saas_atomic_editor_template.png');
 
-  // 2. Click Mempelai tab
+  // 4. Click Mempelai tab
   await page.click('button:has-text("2. Mempelai")');
   await page.waitForTimeout(400);
   await page.screenshot({
-    path: path.join(ARTIFACT_DIR, 'saas_editor_couple.png'),
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_editor_couple.png'),
     fullPage: false,
   });
-  console.log('📸 Captured saas_editor_couple.png');
+  console.log('📸 Captured saas_atomic_editor_couple.png');
 
-  // 3. Click Acara & Rangkaian tab
+  // 5. Click Acara & Rangkaian tab
   await page.click('button:has-text("3. Acara & Rangkaian")');
   await page.waitForTimeout(400);
   await page.screenshot({
-    path: path.join(ARTIFACT_DIR, 'saas_editor_events.png'),
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_editor_events.png'),
     fullPage: false,
   });
-  console.log('📸 Captured saas_editor_events.png');
+  console.log('📸 Captured saas_atomic_editor_events.png');
+
+  // 6. Click Musik & Video tab
+  await page.click('button:has-text("4. Musik & Video")');
+  await page.waitForTimeout(400);
+  await page.screenshot({
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_editor_media.png'),
+    fullPage: false,
+  });
+  console.log('📸 Captured saas_atomic_editor_media.png');
+
+  // 7. Click Katalog Template tab
+  await page.click('button:has-text("Katalog Template")');
+  await page.waitForTimeout(500);
+  await page.screenshot({
+    path: path.join(ARTIFACT_DIR, 'saas_atomic_templates.png'),
+    fullPage: false,
+  });
+  console.log('📸 Captured saas_atomic_templates.png');
 
   await browser.close();
+  console.log('🎉 All Atomic Design UI screenshots captured successfully!');
 }
 
 run().catch((err) => {
