@@ -1,48 +1,45 @@
-import fs from 'node:fs';
 import { type NextRequest, NextResponse } from 'next/server';
-import path from 'node:path';
-import type { RsvpPayload, RsvpRecord } from '@/types/rsvp';
+import type { RsvpPayload } from '@/types/rsvp';
+import {
+  getInvitationBySlug,
+  getTenantRsvps,
+  saveTenantRsvp,
+} from '@/lib/saas-data';
 
-const rsvpFilePath = path.join(process.cwd(), 'data', 'rsvp.json');
-
-function getRsvps(): RsvpRecord[] {
+export async function GET(request: NextRequest) {
   try {
-    if (!fs.existsSync(rsvpFilePath)) {
-      return [];
-    }
-    const fileData = fs.readFileSync(rsvpFilePath, 'utf-8');
-    return JSON.parse(fileData);
-  } catch (error) {
-    console.error('Error reading RSVP data:', error);
-    return [];
-  }
-}
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug') || searchParams.get('invitationSlug');
 
-function saveRsvps(rsvps: RsvpRecord[]): void {
-  try {
-    const dir = path.dirname(rsvpFilePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    let invitationId = 'inv-destia-rakafansa';
+    if (slug) {
+      const inv = await getInvitationBySlug(slug);
+      if (inv) invitationId = inv.id;
     }
-    fs.writeFileSync(rsvpFilePath, JSON.stringify(rsvps, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error saving RSVP data:', error);
-  }
-}
 
-export async function GET() {
-  const rsvps = getRsvps();
-  return NextResponse.json({
-    total: rsvps.length,
-    attending: rsvps.filter((r) => r.attendance === 'Hadir').length,
-    notAttending: rsvps.filter((r) => r.attendance === 'Tidak Hadir').length,
-  });
+    const rsvps = await getTenantRsvps(invitationId);
+    return NextResponse.json({
+      total: rsvps.length,
+      attending: rsvps.filter((r) => r.attendance === 'Hadir').length,
+      notAttending: rsvps.filter((r) => r.attendance === 'Tidak Hadir').length,
+    });
+  } catch (error) {
+    console.error('Error fetching RSVPs:', error);
+    return NextResponse.json(
+      { error: 'Gagal mengambil data RSVP' },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as RsvpPayload;
-    const { name, attendance, guestCount, notes } = body;
+    const body = (await request.json()) as RsvpPayload & {
+      slug?: string;
+      invitationSlug?: string;
+      invitationId?: string;
+    };
+    const { name, attendance, guestCount, notes, slug, invitationSlug, invitationId: rawInvId } = body;
 
     if (!name || !attendance) {
       return NextResponse.json(
@@ -51,18 +48,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const rsvps = getRsvps();
-    const newRsvp: RsvpRecord = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      attendance,
-      guestCount: attendance === 'Hadir' ? Number(guestCount || 1) : 0,
-      notes: notes ? notes.trim() : '',
-      submittedAt: new Date().toISOString(),
-    };
+    let targetInvitationId = rawInvId || 'inv-destia-rakafansa';
+    const targetSlug = slug || invitationSlug;
+    if (targetSlug) {
+      const inv = await getInvitationBySlug(targetSlug);
+      if (inv) targetInvitationId = inv.id;
+    }
 
-    rsvps.push(newRsvp);
-    saveRsvps(rsvps);
+    const newRsvp = await saveTenantRsvp(targetInvitationId, {
+      name,
+      attendance,
+      guestCount,
+      notes,
+    });
 
     return NextResponse.json(
       { message: 'Terima kasih atas konfirmasi kehadiran Anda', rsvp: newRsvp },

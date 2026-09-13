@@ -30,7 +30,8 @@
         "useSemanticElements": "off",
         "noStaticElementInteractions": "off",
         "useKeyWithClickEvents": "off",
-        "useValidAnchor": "off"
+        "useValidAnchor": "off",
+        "noLabelWithoutControl": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",

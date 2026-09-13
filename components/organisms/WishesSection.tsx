@@ -9,10 +9,12 @@ import type { WishPayload, WishRecord } from '@/types/wishes';
 
 export interface WishesSectionProps {
   defaultName?: string;
+  invitationSlug?: string;
 }
 
 export const WishesSection: React.FC<WishesSectionProps> = ({
   defaultName = '',
+  invitationSlug = '',
 }) => {
   const { ref, inView } = useInView<HTMLElement>();
   const [wishes, setWishes] = useState<WishRecord[]>([]);
@@ -28,7 +30,10 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
     async function fetchWishes() {
       setIsLoading(true);
       try {
-        const res = await fetch('/api/wishes');
+        const queryUrl = invitationSlug
+          ? `/api/wishes?slug=${encodeURIComponent(invitationSlug)}`
+          : '/api/wishes';
+        const res = await fetch(queryUrl);
         if (res.ok) {
           const data = await res.json();
           setWishes(data);
@@ -40,7 +45,7 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
       }
     }
     fetchWishes();
-  }, []);
+  }, [invitationSlug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +56,10 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
       const res = await fetch('/api/wishes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          invitationSlug,
+        }),
       });
 
       if (res.ok) {

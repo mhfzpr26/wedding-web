@@ -253,10 +253,21 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
 
 export async function getWeddingConfig(): Promise<WeddingConfig> {
   try {
-    if (!fs.existsSync(CONFIG_FILE_PATH)) {
+    const tenantConfigFile = path.join(
+      process.cwd(),
+      'data',
+      'tenants',
+      'inv-destia-rakafansa',
+      'config.json',
+    );
+    const targetFile = fs.existsSync(tenantConfigFile)
+      ? tenantConfigFile
+      : CONFIG_FILE_PATH;
+
+    if (!fs.existsSync(targetFile)) {
       return DEFAULT_WEDDING_CONFIG;
     }
-    const raw = fs.readFileSync(CONFIG_FILE_PATH, 'utf-8');
+    const raw = fs.readFileSync(targetFile, 'utf-8');
     const parsed = JSON.parse(raw) as Partial<WeddingConfig>;
     return {
       ...DEFAULT_WEDDING_CONFIG,
@@ -298,6 +309,20 @@ export async function saveWeddingConfig(config: WeddingConfig): Promise<boolean>
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(config, null, 2), 'utf-8');
+
+    const tenantDir = path.join(
+      process.cwd(),
+      'data',
+      'tenants',
+      'inv-destia-rakafansa',
+    );
+    if (fs.existsSync(tenantDir)) {
+      fs.writeFileSync(
+        path.join(tenantDir, 'config.json'),
+        JSON.stringify(config, null, 2),
+        'utf-8',
+      );
+    }
     return true;
   } catch (error) {
     console.error('Error saving wedding config:', error);

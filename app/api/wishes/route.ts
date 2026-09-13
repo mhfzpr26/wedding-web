@@ -1,44 +1,41 @@
-import fs from 'node:fs';
 import { type NextRequest, NextResponse } from 'next/server';
-import path from 'node:path';
-import type { WishPayload, WishRecord } from '@/types/wishes';
+import type { WishPayload } from '@/types/wishes';
+import {
+  getInvitationBySlug,
+  getTenantWishes,
+  saveTenantWish,
+} from '@/lib/saas-data';
 
-const dataFilePath = path.join(process.cwd(), 'data', 'wishes.json');
-
-function getWishes(): WishRecord[] {
+export async function GET(request: NextRequest) {
   try {
-    if (!fs.existsSync(dataFilePath)) {
-      return [];
-    }
-    const fileData = fs.readFileSync(dataFilePath, 'utf-8');
-    return JSON.parse(fileData);
-  } catch (error) {
-    console.error('Error reading wishes:', error);
-    return [];
-  }
-}
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug') || searchParams.get('invitationSlug');
 
-function saveWishes(wishes: WishRecord[]): void {
-  try {
-    const dir = path.dirname(dataFilePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    let invitationId = 'inv-destia-rakafansa';
+    if (slug) {
+      const inv = await getInvitationBySlug(slug);
+      if (inv) invitationId = inv.id;
     }
-    fs.writeFileSync(dataFilePath, JSON.stringify(wishes, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error saving wishes:', error);
-  }
-}
 
-export async function GET() {
-  const wishes = getWishes();
-  return NextResponse.json(wishes);
+    const wishes = await getTenantWishes(invitationId);
+    return NextResponse.json(wishes);
+  } catch (error) {
+    console.error('Error fetching wishes:', error);
+    return NextResponse.json(
+      { error: 'Gagal mengambil ucapan' },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as WishPayload;
-    const { name, status, message } = body;
+    const body = (await request.json()) as WishPayload & {
+      slug?: string;
+      invitationSlug?: string;
+      invitationId?: string;
+    };
+    const { name, status, message, slug, invitationSlug, invitationId: rawInvId } = body;
 
     if (!name || !message) {
       return NextResponse.json(
@@ -47,17 +44,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const currentWishes = getWishes();
-    const newWish: WishRecord = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      status: status || 'Hadir',
-      message: message.trim(),
-      createdAt: new Date().toISOString(),
-    };
+    let targetInvitationId = rawInvId || 'inv-destia-rakafansa';
+    const targetSlug = slug || invitationSlug;
+    if (targetSlug) {
+      const inv = await getInvitationBySlug(targetSlug);
+      if (inv) targetInvitationId = inv.id;
+    }
 
-    const updatedWishes = [newWish, ...currentWishes];
-    saveWishes(updatedWishes);
+    const newWish = await saveTenantWish(targetInvitationId, {
+      name,
+      status,
+      message,
+    });
 
     return NextResponse.json(newWish, { status: 201 });
   } catch (error) {

@@ -5,6 +5,7 @@ import { InvitationTemplate } from './InvitationTemplate';
 export interface TemplateProps {
   config: WeddingConfig;
   guestName?: string;
+  invitationSlug?: string;
 }
 
 export interface TemplateDefinition {

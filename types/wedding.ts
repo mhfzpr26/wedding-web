@@ -84,6 +84,7 @@ export interface WeddingGalleryItem {
 }
 
 export interface WeddingTimelineItem {
+  id?: string;
   year: string;
   event: string;
   desc: string;
@@ -143,3 +144,41 @@ export interface WeddingConfig {
   closing: WeddingClosing;
   music: WeddingMusic;
 }
+
+export type InvitationStatus = 'draft' | 'published' | 'inactive';
+
+export interface ClientRecord {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  package: string;
+  notes?: string;
+  status: 'active' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvitationRecord {
+  id: string;
+  clientId: string;
+  title: string;
+  slug: string;
+  templateId: string;
+  status: InvitationStatus;
+  eventDate: string;
+  viewsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SaasStats {
+  totalClients: number;
+  totalInvitations: number;
+  publishedCount: number;
+  draftCount: number;
+  inactiveCount: number;
+  totalTemplates: number;
+  totalRsvps: number;
+}
+

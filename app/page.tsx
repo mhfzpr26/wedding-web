@@ -48,5 +48,11 @@ export default async function HomePage({ searchParams }: PageProps) {
         ? params.u
         : '') || '';
 
-  return <TemplateRouter config={config} guestName={guestName} />;
+  return (
+    <TemplateRouter
+      config={config}
+      guestName={guestName}
+      invitationSlug="destia-rakafansa"
+    />
+  );
 }

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "client-destia",
+    "name": "Destia & Rakafansa",
+    "phone": "081234567890",
+    "email": "destia.rakafansa@example.com",
+    "package": "Cinematic VIP",
+    "notes": "Client perdana paket Netflix Cinematic Theme",
+    "status": "active",
+    "createdAt": "2026-09-13T09:28:44.906Z",
+    "updatedAt": "2026-09-13T09:28:44.906Z"
+  }
+]

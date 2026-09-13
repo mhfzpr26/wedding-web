@@ -22,11 +22,13 @@ import type { WeddingConfig } from '@/types/wedding';
 export interface InvitationTemplateProps {
   guestName?: string;
   config?: WeddingConfig;
+  invitationSlug?: string;
 }
 
 export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
   guestName = '',
   config,
+  invitationSlug = '',
 }) => {
   const [coverOpened, setCoverOpened] = useState(false);
   const [audioStarted, setAudioStarted] = useState(false);
@@ -121,8 +123,14 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         <LoveStorySection timeline={config?.loveStory} />
         <CountdownSection countdown={config?.countdown} />
         <EventSection events={config?.events} />
-        <RsvpSection defaultName={guestName} />
-        <WishesSection defaultName={guestName} />
+        <RsvpSection
+          defaultName={guestName}
+          invitationSlug={invitationSlug}
+        />
+        <WishesSection
+          defaultName={guestName}
+          invitationSlug={invitationSlug}
+        />
         <GiftSection gifts={config?.gifts} />
         <ClosingSection closing={config?.closing} couple={config?.couple} />
       </main>

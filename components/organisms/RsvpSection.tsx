@@ -10,10 +10,12 @@ import type { AttendanceStatus, RsvpPayload } from '@/types/rsvp';
 
 export interface RsvpSectionProps {
   defaultName?: string;
+  invitationSlug?: string;
 }
 
 export const RsvpSection: React.FC<RsvpSectionProps> = ({
   defaultName = '',
+  invitationSlug = '',
 }) => {
   const { ref, inView } = useInView<HTMLElement>();
   const [formData, setFormData] = useState<RsvpPayload>({
@@ -48,7 +50,10 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          invitationSlug,
+        }),
       });
 
       const data = await res.json();
