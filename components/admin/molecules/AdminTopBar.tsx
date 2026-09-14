@@ -1,11 +1,13 @@
 'use client';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import PaletteIcon from '@mui/icons-material/Palette';
 import PeopleIcon from '@mui/icons-material/People';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TuneIcon from '@mui/icons-material/Tune';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -13,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 import type React from 'react';
 import type { PrimaryTab } from '@/stores/useAdminStore';
 import { useAdminStore } from '@/stores/useAdminStore';
@@ -53,8 +56,22 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
   const primaryTab = useAdminStore((s) => s.primaryTab);
   const stats = useAdminStore((s) => s.stats);
   const refreshSaasData = useAdminStore((s) => s.refreshSaasData);
+  const setShowChangePasswordModal = useAdminStore(
+    (s) => s.setShowChangePasswordModal,
+  );
+  const router = useRouter();
 
   const meta = tabMeta[primaryTab];
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/admin/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
 
   return (
     <AppBar
@@ -193,6 +210,40 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
             }}
           >
             <RefreshIcon sx={{ fontSize: 16 }} />
+          </IconButton>
+        </Tooltip>
+
+        {/* Change Password Action */}
+        <Tooltip title="Ganti Password">
+          <IconButton
+            size="small"
+            onClick={() => setShowChangePasswordModal(true)}
+            sx={{
+              color: 'text.secondary',
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1.5,
+              '&:hover': { color: 'text.primary' },
+            }}
+          >
+            <VpnKeyIcon sx={{ fontSize: 16 }} />
+          </IconButton>
+        </Tooltip>
+
+        {/* Logout Action */}
+        <Tooltip title="Logout Admin">
+          <IconButton
+            size="small"
+            onClick={handleLogout}
+            sx={{
+              color: 'error.main',
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1.5,
+              '&:hover': { color: 'error.light', borderColor: 'error.main' },
+            }}
+          >
+            <LogoutIcon sx={{ fontSize: 16 }} />
           </IconButton>
         </Tooltip>
       </Toolbar>

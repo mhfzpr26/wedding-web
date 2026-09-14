@@ -23,8 +23,6 @@ export const rsvpSchema = z.object({
   invitationId: z.string().optional().nullable(),
 });
 
-export type RsvpInput = z.infer<typeof rsvpSchema>;
-
 export const wishSchema = z.object({
   name: z
     .string()
@@ -41,5 +39,3 @@ export const wishSchema = z.object({
   invitationSlug: z.string().optional().nullable(),
   invitationId: z.string().optional().nullable(),
 });
-
-export type WishInput = z.infer<typeof wishSchema>;

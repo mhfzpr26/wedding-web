@@ -1,8 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { EventCard } from '@/components/molecules/EventCard';
-import { useInView } from '@/hooks/useInView';
 import type { EventDetailData } from '@/types/invitation';
 import type { WeddingEventItem } from '@/types/wedding';
 
@@ -44,24 +44,20 @@ const DEFAULT_EVENTS: EventDetailData[] = [
 ];
 
 export const EventSection: React.FC<EventSectionProps> = ({ events }) => {
-  const { ref, inView } = useInView<HTMLElement>();
-
   const eventList = events && events.length > 0 ? events : DEFAULT_EVENTS;
 
   return (
-    <section
-      id="event"
-      ref={ref}
-      className="section event"
-      aria-labelledby="event-title"
-    >
+    <section id="event" className="section event" aria-labelledby="event-title">
       <div className="container">
         {/* Netflix Episodes Selector Header */}
-        <div className="netflix-episodes-header">
+        <motion.div
+          className="netflix-episodes-header"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
           <div className="netflix-episodes-header__top">
-            <div className="netflix-badge-pill">
-              SEASON 1 • EPISODES &amp; VENUES
-            </div>
             <h2 className="event__header-title" id="event-title">
               EPISODES
             </h2>
@@ -75,15 +71,14 @@ export const EventSection: React.FC<EventSectionProps> = ({ events }) => {
               {eventList.length} Episodes Available
             </span>
           </div>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
           className="netflix-episodes-list"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           {eventList.map((event, index) => (
             <EventCard
@@ -92,7 +87,7 @@ export const EventSection: React.FC<EventSectionProps> = ({ events }) => {
               index={index}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,8 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { CoupleProfileCard } from '@/components/molecules/CoupleProfileCard';
-import { useInView } from '@/hooks/useInView';
 import type { WeddingCouple } from '@/types/wedding';
 
 export interface CoupleSectionProps {
@@ -38,26 +38,23 @@ const DEFAULT_GROOM = {
 };
 
 export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
-  const { ref, inView } = useInView<HTMLElement>();
-
   const brideData = couple?.bride || DEFAULT_BRIDE;
   const groomData = couple?.groom || DEFAULT_GROOM;
 
   return (
     <section
       id="couple"
-      ref={ref}
       className="section couple"
       aria-labelledby="couple-title"
     >
       <div className="container">
-        <div className="netflix-section-header">
-          <div
-            className="netflix-badge-pill"
-            style={{ margin: '0 auto var(--spacing-xs)' }}
-          >
-            TOP 10 STARRING CAST • PEMERAN UTAMA
-          </div>
+        <motion.div
+          className="netflix-section-header"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
           <h2 className="couple__header-title" id="couple-title">
             MEET THE LEAD CAST
           </h2>
@@ -70,19 +67,18 @@ export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
           >
             Dua insan yang menjadi pemeran utama dalam film kehidupan nyata ini
           </p>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
           className="couple__container"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           <CoupleProfileCard person={brideData} type="bride" rank={1} />
           <CoupleProfileCard person={groomData} type="groom" rank={2} />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

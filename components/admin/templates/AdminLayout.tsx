@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { AdminSidebar } from '@/components/admin/molecules/AdminSidebar';
 import { AdminTopBar } from '@/components/admin/molecules/AdminTopBar';
 import { DeleteConfirmModal } from '@/components/admin/molecules/DeleteConfirmModal';
+import { ChangePasswordModal } from '@/components/admin/organisms/ChangePasswordModal';
 import { ClientModal } from '@/components/admin/organisms/ClientModal';
 import { ClientsManager } from '@/components/admin/organisms/ClientsManager';
 import { DashboardOverview } from '@/components/admin/organisms/DashboardOverview';
@@ -124,6 +125,7 @@ export const AdminLayout: React.FC = () => {
       <ClientModal />
       <InvitationModal />
       <DeleteConfirmModal />
+      <ChangePasswordModal />
     </Box>
   );
 };

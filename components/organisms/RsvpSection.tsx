@@ -1,12 +1,12 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Textarea } from '@/components/atoms/Textarea';
 import { GuestQrPass } from '@/components/molecules/GuestQrPass';
-import { useInView } from '@/hooks/useInView';
 import type { AttendanceStatus, RsvpPayload } from '@/types/rsvp';
 
 export interface RsvpSectionProps {
@@ -18,7 +18,6 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   defaultName = '',
   invitationSlug = '',
 }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const [formData, setFormData] = useState<RsvpPayload>({
     name: defaultName || '',
     attendance: 'Hadir',
@@ -112,28 +111,16 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   ];
 
   return (
-    <section
-      id="rsvp"
-      ref={ref}
-      className="section rsvp"
-      aria-labelledby="rsvp-title"
-    >
+    <section id="rsvp" className="section rsvp" aria-labelledby="rsvp-title">
       <div className="container">
-        <div
+        <motion.div
           className="rsvp__card netflix-rsvp-card"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className="netflix-section-header">
-            <div
-              className="netflix-badge-pill"
-              style={{ margin: '0 auto var(--spacing-xs)' }}
-            >
-              CONFIRM VIP STREAMING PASS
-            </div>
             <h2 className="rsvp__title" id="rsvp-title">
               WHO&apos;S WATCHING?
             </h2>
@@ -274,7 +261,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
               </Button>
             </form>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -3,11 +3,10 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
-import CollectionsIcon from '@mui/icons-material/Collections';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { useInView } from '@/hooks/useInView';
 
 interface GalleryPhoto {
   id: string;
@@ -100,7 +99,6 @@ export interface GallerySectionProps {
 }
 
 export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const [activeTab, setActiveTab] = useState<
     'all' | 'prewedding' | 'lead' | 'venue'
   >('all');
@@ -149,25 +147,18 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
   return (
     <section
       id="gallery"
-      ref={ref}
       className="section netflix-gallery-section"
       aria-labelledby="gallery-heading"
     >
       <div className="container">
         {/* Header */}
-        <div
+        <motion.div
           className="netflix-gallery__header"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <div className="netflix-badge-pill">
-            <CollectionsIcon sx={{ fontSize: 16 }} />
-            <span>PHOTO GALLERY • MOMENTS &amp; MEMORIES</span>
-          </div>
-
           <h2 id="gallery-heading" className="section-title">
             PHOTO GALLERY &amp; MOMENTS
           </h2>
@@ -216,16 +207,15 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
               VENUES
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Responsive Photo Grid */}
-        <div
+        <motion.div
           className="netflix-gallery__grid"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           {filteredPhotos.map((photo, idx) => (
             <div
@@ -261,7 +251,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Netflix Photo Lightbox Modal */}

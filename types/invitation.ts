@@ -1,15 +1,3 @@
-export interface PersonProfile {
-  role: string;
-  name: string;
-  characterRole?: string;
-  bio?: string;
-  instagram?: string;
-  parents: {
-    mother: string;
-    father: string;
-  };
-}
-
 export interface StoryTimelineItemData {
   year: string;
   event: string;

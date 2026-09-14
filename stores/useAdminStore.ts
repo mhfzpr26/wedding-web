@@ -33,7 +33,7 @@ export interface ClientWithInvs extends ClientRecord {
   }[];
 }
 
-export interface InvitationWithDetails extends InvitationRecord {
+interface InvitationWithDetails extends InvitationRecord {
   client?: {
     id: string;
     name: string;
@@ -44,12 +44,12 @@ export interface InvitationWithDetails extends InvitationRecord {
   attendingCount?: number;
 }
 
-export interface AdminToast {
+interface AdminToast {
   type: 'success' | 'error' | 'info';
   message: string;
 }
 
-export interface CreateInvFormData {
+interface CreateInvFormData {
   clientId: string;
   title: string;
   slug: string;
@@ -58,7 +58,7 @@ export interface CreateInvFormData {
   eventDate: string;
 }
 
-export interface ClientFormData {
+interface ClientFormData {
   id: string;
   name: string;
   phone: string;
@@ -68,7 +68,7 @@ export interface ClientFormData {
   status: 'active' | 'inactive';
 }
 
-export interface DeleteConfirmData {
+interface DeleteConfirmData {
   type: 'invitation' | 'client';
   id: string;
   title: string;
@@ -112,6 +112,7 @@ export interface AdminState {
   showClientModal: boolean;
   clientForm: ClientFormData;
   deleteConfirm: DeleteConfirmData | null;
+  showChangePasswordModal: boolean;
 
   // Actions
   showToast: (type: 'success' | 'error' | 'info', message: string) => void;
@@ -155,6 +156,7 @@ export interface AdminState {
       | ((prev: ClientFormData) => ClientFormData),
   ) => void;
   setDeleteConfirm: (confirm: DeleteConfirmData | null) => void;
+  setShowChangePasswordModal: (show: boolean) => void;
 
   // Async API Actions
   refreshSaasData: () => Promise<void>;
@@ -217,6 +219,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     status: 'active',
   },
   deleteConfirm: null,
+  showChangePasswordModal: false,
 
   // Actions
   showToast: (type, message) => {
@@ -271,6 +274,8 @@ export const useAdminStore = create<AdminState>((set, get) => ({
           : { ...state.clientForm, ...updater },
     })),
   setDeleteConfirm: (deleteConfirm) => set({ deleteConfirm }),
+  setShowChangePasswordModal: (showChangePasswordModal) =>
+    set({ showChangePasswordModal }),
 
   // Async API Actions
   refreshSaasData: async () => {

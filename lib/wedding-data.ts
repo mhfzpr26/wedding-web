@@ -39,7 +39,7 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
   },
   trailer: {
     badge: 'EXCLUSIVE PREVIEW • TEASER FILM',
-    title: 'OFFICIAL WEDDING TRAILER',
+    title: 'WEDDING TRAILER',
     subtitle:
       'Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan.',
     videoUrl: '/videos/wedding-teaser.mp4',

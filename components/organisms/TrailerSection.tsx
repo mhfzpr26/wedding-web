@@ -1,14 +1,13 @@
 'use client';
 
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useRef, useState } from 'react';
-import { useInView } from '@/hooks/useInView';
 import { useInvitationStore } from '@/stores/useInvitationStore';
 import type { WeddingTrailer } from '@/types/wedding';
 
@@ -17,7 +16,6 @@ export interface TrailerSectionProps {
 }
 
 export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -25,8 +23,7 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
 
   const setTrailerPlaying = useInvitationStore((s) => s.setTrailerPlaying);
 
-  const badge = trailer?.badge || 'EXCLUSIVE PREVIEW • TEASER FILM';
-  const title = trailer?.title || 'OFFICIAL WEDDING TRAILER';
+  const title = trailer?.title || 'WEDDING TRAILER';
   const subtitle =
     trailer?.subtitle ||
     'Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan.';
@@ -80,39 +77,31 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
   return (
     <section
       id="trailer"
-      ref={ref}
       className="section netflix-trailer-section"
       aria-labelledby="trailer-heading"
     >
       <div className="container">
-        <div
+        <motion.div
           className="netflix-trailer__header"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <div className="netflix-badge-pill">
-            <MovieFilterIcon sx={{ fontSize: 16 }} />
-            <span>{badge}</span>
-          </div>
-
           <h2 id="trailer-heading" className="section-title">
             {title}
           </h2>
 
           <p className="section-subtitle">{subtitle}</p>
-        </div>
+        </motion.div>
 
         {/* The 1 Dedicated Netflix Video Player */}
-        <div
+        <motion.div
           className="netflix-trailer__player-wrapper"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'scale(1)' : 'scale(0.97)',
-            transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
-          }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           <div
             className={`netflix-trailer__cinema-frame ${isPlaying ? 'netflix-trailer__cinema-frame--playing' : ''}`}
@@ -154,7 +143,7 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={posterUrl}
-                  alt="Official Wedding Teaser Poster"
+                  alt="Wedding Teaser Poster"
                   className="netflix-trailer__poster-img"
                 />
                 <div className="netflix-trailer__poster-vignette" />
@@ -291,7 +280,7 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

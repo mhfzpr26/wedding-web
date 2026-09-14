@@ -1,4 +1,4 @@
-export interface PersonParents {
+interface PersonParents {
   mother: string;
   father: string;
 }
@@ -66,7 +66,7 @@ export interface WeddingOpening {
 
 export interface WeddingTrailer {
   badge: string; // "EXCLUSIVE PREVIEW • TEASER FILM"
-  title: string; // "OFFICIAL WEDDING TRAILER"
+  title: string; // "WEDDING TRAILER"
   subtitle: string; // "Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan."
   videoUrl: string; // "/videos/wedding-teaser.mp4"
   posterUrl: string; // "/images/gallery-1.jpg"
@@ -99,7 +99,7 @@ export interface WeddingBankAccount {
   owner: string;
 }
 
-export interface WeddingClosingCredit {
+interface WeddingClosingCredit {
   role: string;
   name: string;
 }
@@ -119,14 +119,6 @@ export interface WeddingMusic {
   title: string;
   artist?: string;
   autoplay: boolean;
-}
-
-export interface WeddingTemplateMeta {
-  id: string;
-  name: string;
-  description: string;
-  thumbnail?: string;
-  available: boolean;
 }
 
 export interface WeddingConfig {

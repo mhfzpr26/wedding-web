@@ -1,8 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { TimelineItem } from '@/components/molecules/TimelineItem';
-import { useInView } from '@/hooks/useInView';
 import type { StoryTimelineItemData } from '@/types/invitation';
 import type { WeddingTimelineItem } from '@/types/wedding';
 
@@ -31,33 +31,23 @@ const DEFAULT_TIMELINE: StoryTimelineItemData[] = [
 export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   timeline,
 }) => {
-  const { ref, inView } = useInView<HTMLElement>();
-
   const timelineData =
     timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE;
 
   return (
     <section
       id="story"
-      ref={ref}
       className="section love-story"
       aria-labelledby="story-title"
     >
       <div className="container">
-        <div
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className="netflix-section-header">
-            <div
-              className="netflix-badge-pill"
-              style={{ margin: '0 auto var(--spacing-xs)' }}
-            >
-              TRAILERS &amp; MORE • THE STORY SO FAR
-            </div>
             <h2 className="love-story__title" id="story-title">
               OUR JOURNEY THROUGH SEASONS
             </h2>
@@ -72,20 +62,19 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
               pelaminan
             </p>
           </div>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
           className="love-story__timeline"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           {timelineData.map((item, index) => (
             <TimelineItem key={item.year} item={item} index={index} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

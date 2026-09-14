@@ -27,7 +27,7 @@ function ensureDirectoryExistence(dirPath: string) {
 let saasInitialized = false;
 
 // Auto-seed initial tenant data (Destia & Rakafansa) via Prisma ORM
-export async function initializeSaasStorage(): Promise<void> {
+async function initializeSaasStorage(): Promise<void> {
   if (saasInitialized) return;
 
   ensureDirectoryExistence(DATA_DIR);

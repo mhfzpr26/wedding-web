@@ -1,9 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useState } from 'react';
 import { BankCard } from '@/components/molecules/BankCard';
-import { useInView } from '@/hooks/useInView';
 import type { BankAccountData } from '@/types/invitation';
 import type { WeddingBankAccount } from '@/types/wedding';
 
@@ -25,7 +25,6 @@ const DEFAULT_GIFTS: BankAccountData[] = [
 ];
 
 export const GiftSection: React.FC<GiftSectionProps> = ({ gifts }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
 
   const bankAccounts = gifts && gifts.length > 0 ? gifts : DEFAULT_GIFTS;
@@ -41,28 +40,16 @@ export const GiftSection: React.FC<GiftSectionProps> = ({ gifts }) => {
   };
 
   return (
-    <section
-      id="gift"
-      ref={ref}
-      className="section gift"
-      aria-labelledby="gift-title"
-    >
+    <section id="gift" className="section gift" aria-labelledby="gift-title">
       <div className="container">
-        <div
+        <motion.div
           className="gift__container"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className="netflix-section-header">
-            <div
-              className="netflix-badge-pill"
-              style={{ margin: '0 auto var(--spacing-xs)' }}
-            >
-              EXECUTIVE PRODUCERS • BACK THE PRODUCTION
-            </div>
             <h2 className="gift__title" id="gift-title">
               WEDDING GIFT &amp; SUPPORT
             </h2>
@@ -85,7 +72,7 @@ export const GiftSection: React.FC<GiftSectionProps> = ({ gifts }) => {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

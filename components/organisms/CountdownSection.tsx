@@ -2,10 +2,10 @@
 
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { CountdownUnit } from '@/components/molecules/CountdownUnit';
-import { useInView } from '@/hooks/useInView';
 import {
   calculateCountdown,
   formatWeddingDate,
@@ -21,7 +21,6 @@ export interface CountdownSectionProps {
 export const CountdownSection: React.FC<CountdownSectionProps> = ({
   countdown,
 }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -73,25 +72,17 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   return (
     <section
       id="countdown"
-      ref={ref}
       className="section countdown"
       aria-labelledby="countdown-title"
     >
       <div className="container">
-        <div
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className="netflix-section-header">
-            <div
-              className="netflix-badge-pill"
-              style={{ margin: '0 auto var(--spacing-xs)' }}
-            >
-              WORTH THE WAIT • GLOBAL PREMIERE
-            </div>
             <h2 className="countdown__title" id="countdown-title">
               PREMIERES {formattedTargetDate}
             </h2>
@@ -127,17 +118,16 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
           className="countdown__timer"
           role="timer"
           aria-label="Hitung mundur menuju hari pernikahan"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           <CountdownUnit
             value={timeLeft.days}
@@ -159,7 +149,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
             label="Seconds"
             isMounted={isMounted}
           />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

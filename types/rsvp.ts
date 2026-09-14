@@ -12,9 +12,3 @@ export interface RsvpRecord extends RsvpPayload {
   submittedAt: string;
   guestCount: number;
 }
-
-export interface RsvpResponse {
-  message?: string;
-  rsvp?: RsvpRecord;
-  error?: string;
-}

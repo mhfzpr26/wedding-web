@@ -4,8 +4,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { motion } from 'framer-motion';
 import type React from 'react';
-import { useInView } from '@/hooks/useInView';
 import type { WeddingOpening } from '@/types/wedding';
 
 export interface OpeningSectionProps {
@@ -13,8 +13,6 @@ export interface OpeningSectionProps {
 }
 
 export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
-  const { ref, inView } = useInView<HTMLElement>();
-
   const posterImage = opening?.posterImage || '/images/gallery-1.jpg';
   const statusBadge = opening?.statusBadge || 'COMING SOON';
   const dateText = opening?.dateText || '14 November 2026';
@@ -42,7 +40,6 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
   return (
     <section
       id="opening"
-      ref={ref}
       className="section opening netflix-hero-poster"
       aria-labelledby="opening-title"
     >
@@ -58,13 +55,12 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
       </div>
 
       <div className="container" style={{ position: 'relative', zIndex: 10 }}>
-        <div
+        <motion.div
           className="netflix-hero-poster__content"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           {/* Netflix Badge Row */}
           <div className="netflix-hero-poster__badge-row">
@@ -124,7 +120,7 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
               )}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

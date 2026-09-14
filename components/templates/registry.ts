@@ -2,7 +2,7 @@ import type React from 'react';
 import type { WeddingConfig } from '@/types/wedding';
 import { InvitationTemplate } from './InvitationTemplate';
 
-export interface TemplateProps {
+interface TemplateProps {
   config: WeddingConfig;
   guestName?: string;
   invitationSlug?: string;
@@ -18,7 +18,7 @@ export interface TemplateDefinition {
   available: boolean;
 }
 
-export const TEMPLATE_REGISTRY: Record<string, TemplateDefinition> = {
+const TEMPLATE_REGISTRY: Record<string, TemplateDefinition> = {
   netflix: {
     id: 'netflix',
     name: 'Netflix Cinematic Experience',

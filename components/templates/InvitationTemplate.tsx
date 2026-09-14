@@ -42,23 +42,8 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
     if (invitationSlug) setInvitationSlug(invitationSlug);
   }, [guestName, invitationSlug, setGuestName, setInvitationSlug]);
 
-  const fireCelebration = useCallback(async () => {
-    try {
-      const confetti = (await import('canvas-confetti')).default;
-      confetti({
-        particleCount: 90,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#E50914', '#F40612', '#FFFFFF', '#B20710', '#222222'],
-      });
-    } catch {
-      // Confetti fallback
-    }
-  }, []);
-
   const handleEnter = useCallback(() => {
     openCover();
-    fireCelebration();
 
     setTimeout(() => {
       const openingEl = document.getElementById('opening');
@@ -66,7 +51,7 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         openingEl.scrollIntoView({ behavior: 'smooth' });
       }
     }, 400);
-  }, [openCover, fireCelebration]);
+  }, [openCover]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {

@@ -1,7 +1,7 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
-import { useInView } from '@/hooks/useInView';
 import type { WeddingClosing, WeddingCouple } from '@/types/wedding';
 
 export interface ClosingSectionProps {
@@ -13,9 +13,6 @@ export const ClosingSection: React.FC<ClosingSectionProps> = ({
   closing,
   couple,
 }) => {
-  const { ref, inView } = useInView<HTMLElement>();
-
-  const badge = closing?.badge || 'WARM REGARDS • TERIMA KASIH';
   const title = closing?.title || 'SEE YOU AT THE PREMIERE';
   const message =
     closing?.message ||
@@ -31,27 +28,18 @@ export const ClosingSection: React.FC<ClosingSectionProps> = ({
   return (
     <section
       id="closing"
-      ref={ref}
       className="section closing"
       aria-labelledby="closing-title"
     >
       <div className="container">
         {/* Netflix Closing Message */}
-        <div
+        <motion.div
           className="closing__content netflix-end-credits"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s',
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
-          <div
-            className="netflix-badge-pill"
-            style={{ margin: '0 auto var(--spacing-md)' }}
-          >
-            {badge}
-          </div>
-
           <h2 className="closing__title" id="closing-title">
             {title}
           </h2>
@@ -69,7 +57,7 @@ export const ClosingSection: React.FC<ClosingSectionProps> = ({
           <p className="closing__date">{dateLocation}</p>
 
           <div className="netflix-copyright-tag">{copyright}</div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

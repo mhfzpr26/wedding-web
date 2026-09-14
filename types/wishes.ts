@@ -1,4 +1,4 @@
-export type WishAttendanceStatus = 'Hadir' | 'Akan Hadir' | 'Tidak Hadir';
+type WishAttendanceStatus = 'Hadir' | 'Akan Hadir' | 'Tidak Hadir';
 
 export interface WishPayload {
   name: string;

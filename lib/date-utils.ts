@@ -4,7 +4,6 @@ import {
   differenceInMinutes,
   differenceInSeconds,
   format,
-  formatDistanceToNow,
   isValid,
   parseISO,
 } from 'date-fns';
@@ -13,9 +12,7 @@ import { id } from 'date-fns/locale';
 /**
  * Parses input string or Date object safely.
  */
-export function safeParseDate(
-  input: string | Date | null | undefined,
-): Date | null {
+function safeParseDate(input: string | Date | null | undefined): Date | null {
   if (!input) return null;
   if (input instanceof Date) return isValid(input) ? input : null;
 
@@ -44,39 +41,6 @@ export function formatWeddingDate(
     return format(date, pattern, { locale: id });
   } catch {
     return String(input);
-  }
-}
-
-/**
- * Format time in Indonesian style: "09:00 WIB"
- */
-export function formatWeddingTime(
-  input: string | Date | null | undefined,
-  suffix = 'WIB',
-): string {
-  const date = safeParseDate(input);
-  if (!date) return '';
-
-  try {
-    return `${format(date, 'HH:mm')} ${suffix}`.trim();
-  } catch {
-    return '';
-  }
-}
-
-/**
- * Format relative time in Indonesian: "2 jam yang lalu"
- */
-export function formatRelativeTime(
-  input: string | Date | null | undefined,
-): string {
-  const date = safeParseDate(input);
-  if (!date) return '-';
-
-  try {
-    return formatDistanceToNow(date, { addSuffix: true, locale: id });
-  } catch {
-    return '-';
   }
 }
 

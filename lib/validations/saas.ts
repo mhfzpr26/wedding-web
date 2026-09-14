@@ -28,8 +28,6 @@ export const clientSchema = z.object({
   status: z.enum(['active', 'inactive']).default('active'),
 });
 
-export type ClientInput = z.infer<typeof clientSchema>;
-
 export const invitationSchema = z.object({
   title: z
     .string()
@@ -50,5 +48,3 @@ export const invitationSchema = z.object({
   eventDate: z.string().optional().nullable(),
   status: z.enum(['draft', 'published', 'inactive']).default('draft'),
 });
-
-export type InvitationInput = z.infer<typeof invitationSchema>;

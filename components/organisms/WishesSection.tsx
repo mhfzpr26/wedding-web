@@ -1,10 +1,10 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { WishItem } from '@/components/molecules/WishItem';
-import { useInView } from '@/hooks/useInView';
 import type { WishPayload, WishRecord } from '@/types/wishes';
 
 export interface WishesSectionProps {
@@ -16,7 +16,6 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
   defaultName = '',
   invitationSlug = '',
 }) => {
-  const { ref, inView } = useInView<HTMLElement>();
   const [wishes, setWishes] = useState<WishRecord[]>([]);
   const [formData, setFormData] = useState<WishPayload>({
     name: defaultName || '',
@@ -77,26 +76,18 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
   return (
     <section
       id="wishes"
-      ref={ref}
-      className="section section--ivory wishes"
+      className="section wishes"
       aria-labelledby="wishes-title"
     >
       <div className="container">
-        <div
+        <motion.div
           className="wishes__container"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className="netflix-section-header">
-            <div
-              className="netflix-badge-pill"
-              style={{ margin: '0 auto var(--spacing-xs)' }}
-            >
-              WISHES &amp; PRAYERS
-            </div>
             <h2 className="wishes__title" id="wishes-title">
               UCAPAN &amp; DOA RESTU
             </h2>
@@ -219,7 +210,7 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
               wishes.map((item) => <WishItem key={item.id} wish={item} />)
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
