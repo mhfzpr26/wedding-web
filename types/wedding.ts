@@ -48,7 +48,7 @@ export interface WeddingCover {
   ratingBadge: string; // "SU / ALL AGES"
   qualityBadge?: string;
   synopsis: string;
-  starring: string; // "Destia Dwi Ramadhani & Rakafansa Saputra"
+  starring?: string; // "Destia Dwi Ramadhani & Rakafansa Saputra"
   bgImage: string; // "/images/netflix-cover-bg.jpg"
   calendarUrl?: string;
 }

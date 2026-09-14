@@ -33,8 +33,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   const synopsis =
     cover?.synopsis ||
     'Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.';
-  const starring =
-    cover?.starring || 'Destia Dwi Ramadhani & Rakafansa Saputra';
   const calendarUrl =
     cover?.calendarUrl ||
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi';
@@ -170,21 +168,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
         >
           {synopsis}
         </p>
-
-        {/* Cast line */}
-        <div
-          className="netflix-cover__credits"
-          style={{
-            opacity: animationsReady && !isOpen ? 1 : 0,
-            transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease 0.7s, transform 0.8s ease 0.7s',
-          }}
-        >
-          <span className="netflix-cover__credit-item">
-            <strong>Starring:</strong> {starring}
-          </span>
-        </div>
 
         {/* Guest VIP Pass Profile Box with Netflix Smiley Avatar */}
         <div

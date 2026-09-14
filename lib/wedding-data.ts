@@ -22,7 +22,6 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
     ratingBadge: 'SU / ALL AGES',
     synopsis:
       'Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.',
-    starring: 'Destia Dwi Ramadhani & Rakafansa Saputra',
     bgImage: '/images/netflix-cover-bg.jpg',
     calendarUrl:
       'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi',
