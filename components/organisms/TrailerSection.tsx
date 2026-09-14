@@ -159,6 +159,10 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                 />
                 <div className="netflix-trailer__poster-vignette" />
 
+                <div className="netflix-trailer__poster-badge-wrap">
+                  <span className="netflix-badge-red">TEASER FILM</span>
+                </div>
+
                 <button
                   type="button"
                   className="netflix-trailer__big-play-btn"
@@ -173,7 +177,6 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
                 </button>
 
                 <div className="netflix-trailer__poster-meta">
-                  <span className="netflix-badge-red">TEASER FILM</span>
                   <h3 className="netflix-trailer__poster-title">{filmTitle}</h3>
                   <span className="netflix-trailer__poster-duration">
                     Duration: {duration}
