@@ -47,9 +47,7 @@ export const BankCard: React.FC<BankCardProps> = ({
       {showQr && (
         <div className="gift__qr-box">
           <QRCodeSVG value={qrTransferPayload} size={140} level="M" />
-          <span className="gift__qr-label">
-            Scan via Mobile Banking / QRIS
-          </span>
+          <span className="gift__qr-label">Scan via Mobile Banking / QRIS</span>
         </div>
       )}
 
@@ -77,12 +75,18 @@ export const BankCard: React.FC<BankCardProps> = ({
           type="button"
           onClick={() => setShowQr((prev) => !prev)}
           className={`gift__btn gift__btn--qr ${showQr ? 'gift__btn--qr-active' : ''}`}
-          aria-label={showQr ? 'Tutup QR Code Rekening' : 'Tampilkan QR Code Rekening'}
+          aria-label={
+            showQr ? 'Tutup QR Code Rekening' : 'Tampilkan QR Code Rekening'
+          }
           title="Tampilkan QR Code"
         >
           <QrCode2Icon sx={{ fontSize: 18 }} />
-          <span className="gift__qr-text-full">{showQr ? 'TUTUP QR' : 'TAMPILKAN QR'}</span>
-          <span className="gift__qr-text-short">{showQr ? 'TUTUP QR' : 'QR CODE'}</span>
+          <span className="gift__qr-text-full">
+            {showQr ? 'TUTUP QR' : 'TAMPILKAN QR'}
+          </span>
+          <span className="gift__qr-text-short">
+            {showQr ? 'TUTUP QR' : 'QR CODE'}
+          </span>
         </button>
       </div>
     </div>
