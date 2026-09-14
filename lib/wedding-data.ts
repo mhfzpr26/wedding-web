@@ -20,7 +20,6 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
     matchPercentage: '99% Match',
     year: '2026',
     ratingBadge: 'SU / ALL AGES',
-    qualityBadge: 'UHD 4K',
     synopsis:
       'Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.',
     starring: 'Destia Dwi Ramadhani & Rakafansa Saputra',

@@ -30,7 +30,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   const title = cover?.title || 'DESTIA & RAKAFANSA';
   const year = cover?.year || '2026';
   const ratingBadge = cover?.ratingBadge || 'SU / ALL AGES';
-  const qualityBadge = cover?.qualityBadge || 'UHD 4K';
   const synopsis =
     cover?.synopsis ||
     'Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.';
@@ -157,7 +156,6 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           <span className="netflix-cover__badge-pill netflix-cover__badge-pill--rating">
             {ratingBadge}
           </span>
-          <span className="netflix-cover__badge-pill">{qualityBadge}</span>
         </div>
 
         {/* Synopsis / Logline */}

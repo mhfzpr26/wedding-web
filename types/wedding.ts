@@ -46,7 +46,7 @@ export interface WeddingCover {
   matchPercentage?: string; // e.g. "99% Match" (optional)
   year: string; // "2026"
   ratingBadge: string; // "SU / ALL AGES"
-  qualityBadge: string; // "UHD 4K"
+  qualityBadge?: string;
   synopsis: string;
   starring: string; // "Destia Dwi Ramadhani & Rakafansa Saputra"
   bgImage: string; // "/images/netflix-cover-bg.jpg"
