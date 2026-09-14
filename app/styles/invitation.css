@@ -1569,6 +1569,110 @@
   letter-spacing: var(--tracking-wide);
 }
 
+.gift__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.gift__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.65rem;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+  user-select: none;
+  min-width: 0;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.gift__btn--copy {
+  flex: 1;
+  background: rgba(229, 9, 20, 0.18);
+  border: 1px solid var(--color-red);
+  color: var(--color-white);
+}
+
+.gift__btn--copy:hover {
+  background: var(--color-red);
+  color: var(--color-white);
+  box-shadow: 0 4px 14px rgba(229, 9, 20, 0.45);
+  transform: translateY(-1px);
+}
+
+.gift__btn--copied {
+  background: #15803d !important;
+  border-color: #22c55e !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4) !important;
+}
+
+.gift__btn--qr {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+.gift__btn--qr:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.gift__btn--qr-active {
+  background: var(--color-red) !important;
+  border-color: var(--color-red) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(229, 9, 20, 0.5) !important;
+}
+
+.gift__qr-text-full {
+  display: inline;
+}
+
+.gift__qr-text-short {
+  display: none;
+}
+
+.gift__qr-box {
+  background-color: #ffffff;
+  padding: 1.1rem;
+  border-radius: 8px;
+  margin: 1.1rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  animation: fadeIn 0.3s ease;
+}
+
+.gift__qr-label {
+  color: #111827;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .gift__copy-btn {
   display: inline-flex;
   align-items: center;
@@ -2788,8 +2892,45 @@
     font-size: 1.05rem;
   }
 
-  .gift__copy-btn {
+  .gift__actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0.45rem;
+    margin-top: 0.85rem;
     width: 100%;
+  }
+
+  .gift__btn {
+    padding: 0.6rem 0.45rem;
+    font-size: clamp(0.66rem, 2.4vw, 0.74rem);
+    letter-spacing: 0.02em;
+    min-width: 0;
+  }
+
+  .gift__btn--copy {
+    flex: 1.15;
+  }
+
+  .gift__btn--qr {
+    flex: 0.95;
+  }
+
+  .gift__qr-text-full {
+    display: none;
+  }
+
+  .gift__qr-text-short {
+    display: inline;
+  }
+
+  .gift__qr-box {
+    padding: 0.75rem;
+    margin: 0.75rem auto;
+  }
+
+  .gift__copy-btn {
     justify-content: center;
     padding: 0.55rem;
     font-size: 0.75rem;

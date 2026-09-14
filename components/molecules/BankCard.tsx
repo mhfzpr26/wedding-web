@@ -45,33 +45,18 @@ export const BankCard: React.FC<BankCardProps> = ({
       </div>
 
       {showQr && (
-        <div
-          style={{
-            backgroundColor: '#ffffff',
-            padding: '12px',
-            borderRadius: '8px',
-            margin: '12px auto',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '6px',
-            width: 'fit-content',
-          }}
-        >
-          <QRCodeSVG value={qrTransferPayload} size={130} level="M" />
-          <span
-            style={{ color: '#111827', fontSize: '0.72rem', fontWeight: 600 }}
-          >
-            Scan via Mobile Banking
+        <div className="gift__qr-box">
+          <QRCodeSVG value={qrTransferPayload} size={140} level="M" />
+          <span className="gift__qr-label">
+            Scan via Mobile Banking / QRIS
           </span>
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+      <div className="gift__actions">
         <button
           type="button"
-          style={{ flex: 1 }}
-          className={`gift__copy-btn ${isCopied ? 'gift__copy-btn--copied' : ''}`}
+          className={`gift__btn gift__btn--copy ${isCopied ? 'gift__btn--copied' : ''}`}
           onClick={() => onCopy(account.number, account.bank)}
           aria-label={`Salin nomor rekening ${account.bank}`}
         >
@@ -91,21 +76,13 @@ export const BankCard: React.FC<BankCardProps> = ({
         <button
           type="button"
           onClick={() => setShowQr((prev) => !prev)}
-          className="gift__copy-btn"
-          style={{
-            flex: '0 0 auto',
-            padding: '0 12px',
-            backgroundColor: showQr
-              ? 'var(--color-netflix-red, #e50914)'
-              : 'rgba(255,255,255,0.1)',
-            borderColor: showQr
-              ? 'var(--color-netflix-red, #e50914)'
-              : 'rgba(255,255,255,0.2)',
-          }}
-          aria-label="Tampilkan QR Code Rekening"
+          className={`gift__btn gift__btn--qr ${showQr ? 'gift__btn--qr-active' : ''}`}
+          aria-label={showQr ? 'Tutup QR Code Rekening' : 'Tampilkan QR Code Rekening'}
           title="Tampilkan QR Code"
         >
           <QrCode2Icon sx={{ fontSize: 18 }} />
+          <span className="gift__qr-text-full">{showQr ? 'TUTUP QR' : 'TAMPILKAN QR'}</span>
+          <span className="gift__qr-text-short">{showQr ? 'TUTUP QR' : 'QR CODE'}</span>
         </button>
       </div>
     </div>
