@@ -5,7 +5,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
 import { useRef, useState } from 'react';
 import { useInvitationStore } from '@/stores/useInvitationStore';
@@ -16,7 +16,26 @@ export interface TrailerSectionProps {
 }
 
 export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  const headerOpacity = useTransform(smoothProgress, [0.1, 0.5], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.1, 0.5], [30, 0]);
+
+  const playerOpacity = useTransform(smoothProgress, [0.2, 0.7], [0, 1]);
+  const playerY = useTransform(smoothProgress, [0.2, 0.7], [50, 0]);
+  const playerScale = useTransform(smoothProgress, [0.2, 0.7], [0.94, 1]);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(32); // initial visual scrubber
@@ -76,6 +95,7 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="trailer"
       className="section netflix-trailer-section"
       aria-labelledby="trailer-heading"
@@ -83,10 +103,10 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
       <div className="container">
         <motion.div
           className="netflix-trailer__header"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            opacity: headerOpacity,
+            y: headerY,
+          }}
         >
           <h2 id="trailer-heading" className="section-title">
             {title}
@@ -98,10 +118,11 @@ export const TrailerSection: React.FC<TrailerSectionProps> = ({ trailer }) => {
         {/* The 1 Dedicated Netflix Video Player */}
         <motion.div
           className="netflix-trailer__player-wrapper"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+          style={{
+            opacity: playerOpacity,
+            y: playerY,
+            scale: playerScale,
+          }}
         >
           <div
             className={`netflix-trailer__cinema-frame ${isPlaying ? 'netflix-trailer__cinema-frame--playing' : ''}`}

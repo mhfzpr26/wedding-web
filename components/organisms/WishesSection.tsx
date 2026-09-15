@@ -1,8 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { WishItem } from '@/components/molecules/WishItem';
 import type { WishPayload, WishRecord } from '@/types/wishes';
@@ -16,6 +16,24 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
   defaultName = '',
   invitationSlug = '',
 }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  const headerOpacity = useTransform(smoothProgress, [0.1, 0.45], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.1, 0.45], [30, 0]);
+
+  const formCardOpacity = useTransform(smoothProgress, [0.2, 0.6], [0, 1]);
+  const formCardY = useTransform(smoothProgress, [0.2, 0.6], [35, 0]);
+  const formCardScale = useTransform(smoothProgress, [0.2, 0.6], [0.96, 1]);
+
   const [wishes, setWishes] = useState<WishRecord[]>([]);
   const [formData, setFormData] = useState<WishPayload>({
     name: defaultName || '',
@@ -75,19 +93,20 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
 
   return (
     <section
+      ref={sectionRef}
       id="wishes"
       className="section wishes"
       aria-labelledby="wishes-title"
     >
       <div className="container">
-        <motion.div
-          className="wishes__container"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
-          <div className="netflix-section-header">
+        <div className="wishes__container">
+          <motion.div
+            className="netflix-section-header"
+            style={{
+              opacity: headerOpacity,
+              y: headerY,
+            }}
+          >
             <h2 className="wishes__title" id="wishes-title">
               UCAPAN &amp; DOA RESTU
             </h2>
@@ -102,9 +121,16 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
               Tinggalkan pesan hangat &amp; doa restu untuk perjalanan hidup
               baru Destia &amp; Rakafansa
             </p>
-          </div>
+          </motion.div>
 
-          <div className="wishes__form-card netflix-review-form-card">
+          <motion.div
+            className="wishes__form-card netflix-review-form-card"
+            style={{
+              opacity: formCardOpacity,
+              y: formCardY,
+              scale: formCardScale,
+            }}
+          >
             <form
               onSubmit={handleSubmit}
               style={{
@@ -138,15 +164,18 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
                   id="wish-status"
                   value={formData.status}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, status: e.target.value }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      status: e.target.value,
+                    }))
                   }
                   className="rsvp__select"
                 >
                   <option value="Hadir">
-                    👍 Hadir (Pasti Menonton Langsung)
+                    🍿 Attending in Person (Pasti Hadir)
                   </option>
                   <option value="Akan Hadir">
-                    💖 Insya Allah Hadir (Highly Recommended)
+                    🎟️ 99% Match - Will Attend (Insya Allah Hadir)
                   </option>
                   <option value="Tidak Hadir">
                     🏠 Streaming from Home (Berhalangan)
@@ -185,9 +214,19 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
                   : 'POST REVIEW (KIRIM ULASAN & DOA)'}
               </Button>
             </form>
-          </div>
+          </motion.div>
 
-          <div className="wishes__list">
+          <motion.div
+            className="wishes__list"
+            initial={{ opacity: 0, x: 45, y: 35 }}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.25,
+            }}
+          >
             {isLoading ? (
               <p
                 style={{
@@ -209,8 +248,8 @@ export const WishesSection: React.FC<WishesSectionProps> = ({
             ) : (
               wishes.map((item) => <WishItem key={item.id} wish={item} />)
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

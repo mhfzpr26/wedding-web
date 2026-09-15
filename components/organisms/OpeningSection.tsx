@@ -4,8 +4,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
+import { useRef } from 'react';
 import type { WeddingOpening } from '@/types/wedding';
 
 export interface OpeningSectionProps {
@@ -13,6 +14,56 @@ export interface OpeningSectionProps {
 }
 
 export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    restDelta: 0.001,
+  });
+
+  // Background Parallax & Zoom (GSAP-like scrub)
+  const bgY = useTransform(smoothProgress, [0, 1], [0, 90]);
+  const bgScale = useTransform(smoothProgress, [0, 1], [1, 1.12]);
+
+  // Names Headline: scrubbed fade, rise, and subtle compression
+  const titleOpacity = useTransform(smoothProgress, [0, 0.5, 1], [1, 0.5, 0]);
+  const titleY = useTransform(smoothProgress, [0, 0.5, 1], [0, -30, -80]);
+  const titleScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 0.98, 0.94]);
+
+  // Date & Badge Row: independent scrub movement
+  const dateY = useTransform(smoothProgress, [0, 0.5, 1], [0, -20, -50]);
+  const dateOpacity = useTransform(smoothProgress, [0, 0.6, 1], [1, 0.6, 0]);
+
+  // Venue location pill
+  const locationY = useTransform(smoothProgress, [0, 0.7, 1], [0, -35, -70]);
+  const locationOpacity = useTransform(
+    smoothProgress,
+    [0, 0.6, 1],
+    [1, 0.4, 0],
+  );
+
+  // Action Buttons
+  const actionsY = useTransform(smoothProgress, [0, 0.7, 1], [0, -40, -85]);
+  const actionsOpacity = useTransform(
+    smoothProgress,
+    [0, 0.5, 0.9],
+    [1, 0.3, 0],
+  );
+
+  // Wedding Quote Card
+  const quoteY = useTransform(smoothProgress, [0, 0.8, 1], [0, -25, -60]);
+  const quoteOpacity = useTransform(
+    smoothProgress,
+    [0, 0.5, 0.85],
+    [1, 0.3, 0],
+  );
+
   const posterImage = opening?.posterImage || '/images/gallery-1.jpg';
   const statusBadge = opening?.statusBadge || 'COMING SOON';
   const dateText = opening?.dateText || '14 November 2026';
@@ -39,12 +90,19 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="opening"
       className="section opening netflix-hero-poster"
       aria-labelledby="opening-title"
     >
-      {/* Background Poster Image with Cinematic Gradient */}
-      <div className="netflix-hero-poster__bg">
+      {/* Background Poster Image with Cinematic Parallax */}
+      <motion.div
+        className="netflix-hero-poster__bg"
+        style={{
+          y: bgY,
+          scale: bgScale,
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={posterImage}
@@ -52,39 +110,59 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
           className="netflix-hero-poster__img"
         />
         <div className="netflix-hero-poster__gradient" />
-      </div>
+      </motion.div>
 
       <div className="container" style={{ position: 'relative', zIndex: 10 }}>
-        <motion.div
-          className="netflix-hero-poster__content"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
-          {/* Netflix Badge Row */}
-          <div className="netflix-hero-poster__badge-row">
+        <div className="netflix-hero-poster__content">
+          {/* Netflix Badge Row with Scrubbed Parallax */}
+          <motion.div
+            className="netflix-hero-poster__badge-row"
+            style={{
+              y: dateY,
+              opacity: dateOpacity,
+            }}
+          >
             <span className="netflix-badge-red">{statusBadge}</span>
             <span className="netflix-hero-poster__date">
               <CalendarMonthIcon sx={{ fontSize: 18 }} />
               {dateText}
             </span>
-          </div>
+          </motion.div>
 
-          {/* Series Headline */}
-          <h1 className="netflix-hero-poster__title" id="opening-title">
+          {/* Series Headline with Scroll-Linked Timeline */}
+          <motion.h1
+            className="netflix-hero-poster__title"
+            id="opening-title"
+            style={{
+              y: titleY,
+              opacity: titleOpacity,
+              scale: titleScale,
+            }}
+          >
             <span className="netflix-hero-poster__names">{title}</span>
             <span className="netflix-hero-poster__subtitle">{subtitle}</span>
-          </h1>
+          </motion.h1>
 
           {/* Venue Location Pill */}
-          <div className="netflix-hero-poster__location">
+          <motion.div
+            className="netflix-hero-poster__location"
+            style={{
+              y: locationY,
+              opacity: locationOpacity,
+            }}
+          >
             <LocationOnIcon sx={{ fontSize: 18, color: '#E50914' }} />
             <span>{locationText}</span>
-          </div>
+          </motion.div>
 
           {/* Quick Action Navigation Buttons */}
-          <div className="netflix-hero-poster__actions">
+          <motion.div
+            className="netflix-hero-poster__actions"
+            style={{
+              y: actionsY,
+              opacity: actionsOpacity,
+            }}
+          >
             <button
               type="button"
               className="netflix-hero-btn netflix-hero-btn--primary"
@@ -102,11 +180,17 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
               <CollectionsIcon sx={{ fontSize: 22 }} />
               <span>PHOTO GALLERY</span>
             </button>
-          </div>
+          </motion.div>
 
           {/* Wedding Quote / Sacred Verse Card */}
           {(quote || quoteSource) && (
-            <div className="netflix-hero-poster__quote-card">
+            <motion.div
+              className="netflix-hero-poster__quote-card"
+              style={{
+                y: quoteY,
+                opacity: quoteOpacity,
+              }}
+            >
               {quote && (
                 <blockquote
                   className="opening__quote"
@@ -118,9 +202,9 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
               {quoteSource && !quote?.includes(quoteSource) && (
                 <cite className="opening__ref">{quoteSource}</cite>
               )}
-            </div>
+            </motion.div>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

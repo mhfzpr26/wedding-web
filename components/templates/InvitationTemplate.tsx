@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect } from 'react';
 import { NetflixNavbar } from '@/components/molecules/NetflixNavbar';
@@ -100,9 +100,9 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
       {coverOpened && (
         <motion.main
           id="main-content"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, x: -16, y: 24 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           style={{
             width: '100%',
             maxWidth: '100%',

@@ -798,119 +798,319 @@
 /* ==========================================================================
    Love Story Section (Seasons & Milestones)
    ========================================================================== */
+/* ==========================================================================
+   Love Story Section (Through Seasons - Interactive Scrub Timeline)
+   ========================================================================== */
 .love-story {
   position: relative;
   background-color: var(--color-black);
 }
 
+.love-story--sticky-container {
+  position: relative;
+  min-height: 190vh;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.love-story__sticky-viewport {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-top: calc(52px + clamp(0.5rem, 1.5vh, 1.25rem));
+  padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
+  padding-left: clamp(0.75rem, 3vw, 1.5rem);
+  padding-right: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+.love-story__content-wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.love-story__header {
+  margin-bottom: clamp(0.4rem, 1.2vh, 0.85rem);
+  text-align: center;
+  flex-shrink: 0;
+}
+
 .love-story__title {
   font-family: var(--font-heading);
-  font-size: clamp(var(--font-size-h3), 4.5vw, var(--font-size-h2));
-  font-weight: 400;
-  line-height: var(--line-height-heading);
+  font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.15;
   color: var(--color-white);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
+  margin-bottom: 0.2rem;
 }
 
-.love-story__timeline {
+.love-story__subtitle {
+  color: var(--color-light-gray);
+  font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+  margin-top: 0.15rem;
+  line-height: 1.35;
+}
+
+.love-story__progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 600px;
+  margin: clamp(0.35rem, 0.8vh, 0.65rem) auto 0;
+}
+
+.love-story__progress-tag {
+  flex-shrink: 0;
+  font-size: clamp(0.6rem, 1.5vw, 0.72rem);
+  padding: 0.15rem 0.45rem;
+}
+
+.love-story__progress-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
   position: relative;
-  max-width: 800px;
+}
+
+.love-story__progress-fill {
+  height: 100%;
+  background: var(--color-red, #e50914);
+  border-radius: 2px;
+}
+
+/* Showcase Grid: Mobile First */
+.love-story__showcase-grid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 1vh, 0.75rem);
+  width: 100%;
+  max-width: 520px;
   margin: 0 auto;
-  padding-left: 2rem;
+  flex: 1;
+  min-height: 0;
 }
 
-.love-story__timeline::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    transparent,
-    var(--color-red),
-    transparent
-  );
-  opacity: 0.6;
-}
-
-.love-story__item {
+.love-story__photo-stack {
   position: relative;
-  padding: var(--spacing-md) 0 var(--spacing-md) var(--spacing-lg);
-  opacity: 0;
-  transform: translateX(-30px);
-  transition: all 0.6s ease;
+  height: clamp(140px, 20vh, 190px);
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111;
+  flex-shrink: 0;
 }
 
-.love-story__item.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.love-story__item:nth-child(1) {
-  transition-delay: 0.1s;
-}
-.love-story__item:nth-child(2) {
-  transition-delay: 0.2s;
-}
-.love-story__item:nth-child(3) {
-  transition-delay: 0.3s;
-}
-
-.love-story__dot {
+.love-story__photo-item {
   position: absolute;
-  left: -2.625rem;
-  top: 1.5rem;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--color-red);
-  border: 3px solid var(--color-black);
-  box-shadow: 0 0 12px var(--color-red);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.love-story__photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.08);
+}
+
+.love-story__photo-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid #e50914;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
   z-index: 2;
+}
+
+/* Narrative Stack: Responsive Stacking Context */
+.love-story__narrative-stack {
+  position: relative;
+  display: grid;
+  grid-template-areas: "card";
+  width: 100%;
+  height: auto;
+}
+
+.netflix-timeline-item {
+  grid-area: card;
+  width: 100%;
+  background: #181818;
+  padding: clamp(0.75rem, 1.8vh, 1.2rem) clamp(0.85rem, 2.2vw, 1.25rem);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+  height: auto;
+  max-height: clamp(230px, 46vh, 360px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(229, 9, 20, 0.5) transparent;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.netflix-timeline__header-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+  flex-shrink: 0;
 }
 
 .netflix-timeline__season-badge {
   display: inline-block;
-  font-size: var(--font-size-tiny);
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
   font-weight: 800;
   letter-spacing: var(--tracking-widest);
   color: var(--color-red);
   background: rgba(229, 9, 20, 0.15);
   border: 1px solid rgba(229, 9, 20, 0.35);
-  padding: 0.15rem 0.5rem;
+  padding: 0.12rem 0.45rem;
   border-radius: 4px;
-  margin-bottom: 0.25rem;
-}
-
-.love-story__year {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-h4);
-  font-weight: 400;
-  line-height: var(--line-height-heading);
-  color: var(--color-red);
-  margin-bottom: 0.25rem;
-  letter-spacing: var(--tracking-wide);
 }
 
 .love-story__event {
   font-family: var(--font-body);
-  font-size: var(--font-size-h6);
-  font-weight: 600;
-  color: var(--color-white);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
-  line-height: var(--line-height-snug);
+  color: #fff;
+  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+  font-weight: 700;
+  margin: 0.2rem 0 0.35rem;
+  line-height: 1.3;
+  flex-shrink: 0;
 }
 
 .love-story__desc {
   font-family: var(--font-body);
-  font-size: var(--font-size-p);
   color: var(--color-light-gray);
-  line-height: var(--line-height-base);
+  line-height: 1.55;
+  font-size: clamp(0.78rem, 2vw, 0.88rem);
+  margin: 0;
+  white-space: pre-line;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Tablet and Desktop Responsiveness (>= 768px) */
+@media (min-width: 768px) {
+  .love-story__sticky-viewport {
+    padding-top: calc(64px + clamp(1rem, 2.5vh, 2.5rem));
+    padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .love-story__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .love-story__title {
+    font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+    margin-bottom: 0.35rem;
+  }
+
+  .love-story__subtitle {
+    font-size: var(--font-size-small);
+  }
+
+  .love-story__progress-bar {
+    gap: 1rem;
+    max-width: 640px;
+    margin: 0.75rem auto 0;
+  }
+
+  .love-story__progress-tag {
+    font-size: var(--font-size-tiny);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .love-story__progress-track {
+    height: 4px;
+  }
+
+  .love-story__showcase-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    max-width: 1080px;
+    flex: none;
+    height: auto;
+  }
+
+  .love-story__photo-stack {
+    height: clamp(340px, 46vh, 440px);
+    border-radius: 14px;
+  }
+
+  .love-story__photo-badge {
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .love-story__narrative-stack {
+    height: auto;
+    width: 100%;
+  }
+
+  .netflix-timeline-item {
+    padding: 1.5rem 1.85rem;
+    border-radius: 12px;
+    height: auto;
+    max-height: clamp(320px, 48vh, 440px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(229, 9, 20, 0.5) transparent;
+    align-self: center;
+  }
+
+  .netflix-timeline__header-tags {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .netflix-timeline__season-badge {
+    font-size: var(--font-size-tiny);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .love-story__event {
+    font-size: 1.35rem;
+    margin: 0.4rem 0 0.5rem;
+  }
+
+  .love-story__desc {
+    font-size: 0.95rem;
+    line-height: 1.68;
+  }
 }
 
 /* ==========================================================================
@@ -919,6 +1119,7 @@
 .countdown {
   position: relative;
   background-color: var(--color-black);
+  padding-top: clamp(1.75rem, 3.5vh, 2.5rem);
 }
 
 .countdown__title {
@@ -3915,7 +4116,7 @@
    ========================================================================== */
 .netflix-gallery-section {
   background: #141414;
-  padding: 3.5rem 0;
+  padding: 3rem 0 1.25rem;
 }
 
 .netflix-gallery__header {
@@ -4321,6 +4522,10 @@
     font-size: 1.15rem;
   }
 
+  .netflix-gallery-section {
+    padding: 2rem 0 0.75rem;
+  }
+
   .netflix-gallery__grid {
     column-count: 2;
     column-gap: 0.75rem;
@@ -4362,4 +4567,349 @@
   .netflix-gallery__card {
     margin-bottom: 0.85rem;
   }
+}
+
+/* ==========================================================================
+   NETFLIX "WHO'S WATCHING" PROFILE PICKER & VIP TICKET PASS
+   ========================================================================== */
+
+.netflix-profile-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  margin-bottom: 1.75rem;
+}
+
+.netflix-profile-picker__label {
+  font-family:
+    var(--font-netflix), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #a3a3a3;
+  text-transform: uppercase;
+}
+
+.netflix-profile-picker__grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.netflix-profile-avatar-card {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+  position: relative;
+  outline: none;
+}
+
+.netflix-profile-avatar-card__title {
+  font-family:
+    var(--font-netflix), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #a3a3a3;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+
+.netflix-profile-avatar-card__sub {
+  font-size: 0.72rem;
+  color: #6b7280;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.netflix-profile-avatar-card--active {
+  transform: scale(1.06);
+}
+
+.netflix-profile-avatar-card--active .netflix-profile-avatar-card__title {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.netflix-profile-avatar-card:hover {
+  transform: scale(1.08);
+}
+
+.netflix-profile-avatar-card:hover .netflix-profile-avatar-card__title {
+  color: #ffffff;
+}
+
+.netflix-profile-avatar-card__icon-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.netflix-profile-avatar-card__check {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e50914;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #141414;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   NETFLIX VIP CINEMA PREMIERE TICKET PASS
+   -------------------------------------------------------------------------- */
+
+.netflix-ticket-pass {
+  position: relative;
+  background: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  max-width: 440px;
+  width: 100%;
+  margin: 1.5rem auto 0;
+  overflow: hidden;
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.85),
+    0 0 30px rgba(229, 9, 20, 0.15);
+  text-align: center;
+}
+
+/* Perforated ticket circular notches */
+.netflix-ticket-pass__notch-left,
+.netflix-ticket-pass__notch-right {
+  position: absolute;
+  top: 130px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 5;
+}
+
+.netflix-ticket-pass__notch-left {
+  left: -12px;
+}
+
+.netflix-ticket-pass__notch-right {
+  right: -12px;
+}
+
+/* Perforated dashed divider */
+.netflix-ticket-pass__divider {
+  position: absolute;
+  top: 141px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
+  z-index: 4;
+}
+
+/* Ticket Header Banner */
+.netflix-ticket-pass__header {
+  background: linear-gradient(135deg, #e50914 0%, #8b050c 100%);
+  padding: 1.25rem 1.25rem 1.75rem;
+  position: relative;
+}
+
+.netflix-ticket-pass__brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.netflix-ticket-pass__brand-logo {
+  height: 18px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.netflix-ticket-pass__badge {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fbbf24;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.netflix-ticket-pass__event-title {
+  font-family:
+    var(--font-netflix), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.netflix-ticket-pass__event-sub {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 0.2rem;
+  letter-spacing: 0.5px;
+}
+
+/* Ticket Body */
+.netflix-ticket-pass__body {
+  padding: 1.75rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.netflix-ticket-pass__guest-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.netflix-ticket-pass__guest-info {
+  text-align: left;
+  flex: 1;
+}
+
+.netflix-ticket-pass__guest-label {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.netflix-ticket-pass__guest-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.1rem 0 0;
+}
+
+.netflix-ticket-pass__guest-seat {
+  font-size: 0.72rem;
+  color: #fbbf24;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+
+/* High Contrast QR Frame */
+.netflix-ticket-pass__qr-frame {
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 12px;
+  display: inline-block;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  margin-bottom: 1rem;
+}
+
+.netflix-ticket-pass__instructions {
+  font-size: 0.74rem;
+  color: #9ca3af;
+  line-height: 1.45;
+  margin: 0 0 1.15rem;
+  max-width: 320px;
+}
+
+/* Barcode Simulation */
+.netflix-ticket-pass__barcode-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.netflix-ticket-pass__barcode {
+  display: flex;
+  align-items: stretch;
+  gap: 2.5px;
+  height: 34px;
+  opacity: 0.8;
+}
+
+.netflix-ticket-pass__barcode-bar {
+  background: #ffffff;
+  border-radius: 1px;
+}
+
+.netflix-ticket-pass__barcode-code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #6b7280;
+}
+
+/* Ticket Action Buttons */
+.netflix-ticket-pass__actions {
+  display: flex;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.netflix-ticket-pass__btn-copy {
+  flex: 1;
+  background: #e50914;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.netflix-ticket-pass__btn-copy:hover {
+  background: #b20710;
+  transform: translateY(-1px);
+}
+
+.netflix-ticket-pass__btn-copy--copied {
+  background: #059669;
 }

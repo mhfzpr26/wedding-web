@@ -4,6 +4,15 @@ import { QRCodeSVG } from 'qrcode.react';
 import type React from 'react';
 import { useState } from 'react';
 import { FaCheckCircle, FaTicketAlt } from 'react-icons/fa';
+import {
+  NetflixAvatar,
+  type NetflixAvatarVariant,
+} from '@/components/atoms/NetflixAvatar';
+
+const BARCODE_BARS = [
+  2, 4, 1, 3, 5, 2, 1, 4, 2, 6, 1, 3, 2, 5, 1, 4, 2, 3, 1, 5, 2, 4, 1, 3, 6, 2,
+  1, 4, 2, 3, 5, 1, 2, 4, 1, 3, 5, 2, 1,
+].map((w, i) => ({ id: `bar-${i}`, w }));
 
 export interface GuestQrPassProps {
   guestName: string;
@@ -11,14 +20,16 @@ export interface GuestQrPassProps {
   invitationTitle?: string;
   attendance?: string;
   guestCount?: number;
+  avatarVariant?: NetflixAvatarVariant;
 }
 
 export const GuestQrPass: React.FC<GuestQrPassProps> = ({
   guestName,
   invitationSlug = 'wedding',
-  invitationTitle = 'The Wedding Celebration',
+  invitationTitle = 'DESTIA & RAKAFANSA',
   attendance = 'Hadir',
   guestCount = 1,
+  avatarVariant = 'red',
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -36,122 +47,108 @@ export const GuestQrPass: React.FC<GuestQrPassProps> = ({
     }
   };
 
+  const serialCode = `NFLX-2026-DR-${Math.abs(
+    guestName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) * 42,
+  )
+    .toString()
+    .padStart(5, '0')}`;
+
   return (
     <div
-      style={{
-        backgroundColor: '#111827',
-        border: '1px solid #374151',
-        borderRadius: '12px',
-        padding: '24px',
-        maxWidth: '420px',
-        margin: '24px auto 0',
-        color: '#f9fafb',
-        textAlign: 'center',
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)',
-      }}
+      className="netflix-ticket-pass"
+      role="region"
+      aria-label="Netflix VIP Premiere Ticket Pass"
     >
-      <div
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          backgroundColor: '#064e3b',
-          color: '#34d399',
-          border: '1px solid #059669',
-          padding: '4px 12px',
-          borderRadius: '9999px',
-          fontSize: '0.78rem',
-          fontWeight: 700,
-          letterSpacing: '0.5px',
-          textTransform: 'uppercase',
-          marginBottom: '16px',
-        }}
-      >
-        <FaCheckCircle />
-        <span>VIP Digital Guest Pass</span>
+      {/* Perforated ticket circular notches */}
+      <div className="netflix-ticket-pass__notch-left" aria-hidden="true" />
+      <div className="netflix-ticket-pass__notch-right" aria-hidden="true" />
+      <div className="netflix-ticket-pass__divider" aria-hidden="true" />
+
+      {/* Ticket Header Banner */}
+      <div className="netflix-ticket-pass__header">
+        <div className="netflix-ticket-pass__brand-row">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/netflix-logo.svg"
+            alt="Netflix"
+            className="netflix-ticket-pass__brand-logo"
+          />
+          <span className="netflix-ticket-pass__badge">
+            VIP ALL-ACCESS PASS
+          </span>
+        </div>
+
+        <h3 className="netflix-ticket-pass__event-title">{invitationTitle}</h3>
+        <p className="netflix-ticket-pass__event-sub">
+          Season 1 Premiere • Red Carpet Admission
+        </p>
       </div>
 
-      <h3
-        style={{
-          fontSize: '1.25rem',
-          fontWeight: 800,
-          margin: '0 0 6px',
-          color: '#ffffff',
-        }}
-      >
-        {guestName}
-      </h3>
-      <p
-        style={{
-          fontSize: '0.82rem',
-          color: '#9ca3af',
-          margin: '0 0 20px',
-        }}
-      >
-        {invitationTitle} • {guestCount} Tamu ({attendance})
-      </p>
+      {/* Ticket Body */}
+      <div className="netflix-ticket-pass__body">
+        {/* Guest Profile Row */}
+        <div className="netflix-ticket-pass__guest-row">
+          <NetflixAvatar variant={avatarVariant} size="md" active={false} />
+          <div className="netflix-ticket-pass__guest-info">
+            <span className="netflix-ticket-pass__guest-label">
+              VIP GUEST ACCOUNT
+            </span>
+            <p className="netflix-ticket-pass__guest-name">{guestName}</p>
+            <span className="netflix-ticket-pass__guest-seat">
+              {guestCount} VIP {guestCount > 1 ? 'PASSES' : 'PASS'} • (
+              {attendance.toUpperCase()})
+            </span>
+          </div>
+          <FaCheckCircle style={{ color: '#10b981', fontSize: '1.25rem' }} />
+        </div>
 
-      {/* QR Code Container with High-Contrast White Frame for reliable optical scanning */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          padding: '16px',
-          borderRadius: '10px',
-          display: 'inline-block',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
-          marginBottom: '18px',
-        }}
-      >
-        <QRCodeSVG
-          value={qrValue}
-          size={180}
-          level="H"
-          marginSize={2}
-          fgColor="#000000"
-          bgColor="#ffffff"
-        />
-      </div>
+        {/* High-Contrast QR Code Container */}
+        <div className="netflix-ticket-pass__qr-frame">
+          <QRCodeSVG
+            value={qrValue}
+            size={170}
+            level="H"
+            marginSize={2}
+            fgColor="#000000"
+            bgColor="#ffffff"
+          />
+        </div>
 
-      <p
-        style={{
-          fontSize: '0.75rem',
-          color: '#9ca3af',
-          margin: '0 0 16px',
-          lineHeight: 1.5,
-        }}
-      >
-        Tunjukkan QR Code ini kepada resepsionis / penerima tamu saat tiba di
-        lokasi acara untuk check-in buku tamu digital.
-      </p>
+        <p className="netflix-ticket-pass__instructions">
+          Tunjukkan QR Pass ini kepada Usher / Meja Penerima Tamu untuk
+          pemindaian VIP Check-in di lokasi acara.
+        </p>
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '10px',
-        }}
-      >
-        <button
-          type="button"
-          onClick={handleCopyPass}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            backgroundColor: copied ? '#059669' : '#1f2937',
-            color: '#ffffff',
-            border: '1px solid #374151',
-            borderRadius: '8px',
-            padding: '8px 16px',
-            fontSize: '0.82rem',
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'background-color 0.15s ease',
-          }}
-        >
-          <FaTicketAlt />
-          <span>{copied ? 'Tautan Pass Disalin!' : 'Salin Tautan Pass'}</span>
-        </button>
+        {/* Simulated Barcode & Serial */}
+        <div className="netflix-ticket-pass__barcode-wrap">
+          <div className="netflix-ticket-pass__barcode" aria-hidden="true">
+            {BARCODE_BARS.map((bar) => (
+              <span
+                key={bar.id}
+                className="netflix-ticket-pass__barcode-bar"
+                style={{ width: `${bar.w}px` }}
+              />
+            ))}
+          </div>
+          <span className="netflix-ticket-pass__barcode-code">
+            {serialCode}
+          </span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="netflix-ticket-pass__actions">
+          <button
+            type="button"
+            onClick={handleCopyPass}
+            className={`netflix-ticket-pass__btn-copy ${
+              copied ? 'netflix-ticket-pass__btn-copy--copied' : ''
+            }`}
+            aria-label="Salin tautan pass digital"
+          >
+            <FaTicketAlt />
+            <span>{copied ? 'Tautan Pass Disalin!' : 'Salin Tautan Pass'}</span>
+          </button>
+        </div>
       </div>
     </div>
   );

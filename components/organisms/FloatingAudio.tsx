@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 import { AudioToggle } from '@/components/molecules/AudioToggle';
@@ -64,16 +65,19 @@ export const FloatingAudio: React.FC<FloatingAudioProps> = ({
   }
 
   return (
-    <div
+    <motion.div
       className="audio-player"
       role="region"
       aria-label="Pemutar Musik Latar"
+      initial={{ opacity: 0, x: 30, y: 30 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
     >
       <audio ref={audioRef} src={audioUrl} loop preload="auto" />
       <AudioToggle
         isPlaying={audioPlaying && !trailerPlaying}
         onToggle={toggleAudio}
       />
-    </div>
+    </motion.div>
   );
 };

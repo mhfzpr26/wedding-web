@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
+import { useRef } from 'react';
 import { EventCard } from '@/components/molecules/EventCard';
 import type { EventDetailData } from '@/types/invitation';
 import type { WeddingEventItem } from '@/types/wedding';
@@ -44,22 +45,59 @@ const DEFAULT_EVENTS: EventDetailData[] = [
 ];
 
 export const EventSection: React.FC<EventSectionProps> = ({ events }) => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 26,
+    restDelta: 0.001,
+  });
+
+  // Header scrub
+  const headerOpacity = useTransform(smoothProgress, [0.05, 0.25], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.05, 0.25], [35, 0]);
+
+  // Vertical Wedding Timeline Progress Line (0% -> 100%)
+  const lineHeight = useTransform(smoothProgress, [0.15, 0.85], ['0%', '100%']);
+
+  // Episode 1 (Akad / Matrimony) Reactive Marker & Card:
+  const marker1Scale = useTransform(smoothProgress, [0.15, 0.35], [0.7, 1]);
+  const marker1Opacity = useTransform(smoothProgress, [0.15, 0.35], [0.4, 1]);
+  const card1Y = useTransform(smoothProgress, [0.15, 0.38], [40, 0]);
+  const card1Opacity = useTransform(smoothProgress, [0.15, 0.35], [0.3, 1]);
+
+  // Episode 2 (Reception) Reactive Marker & Card:
+  const marker2Scale = useTransform(smoothProgress, [0.45, 0.7], [0.7, 1]);
+  const marker2Opacity = useTransform(smoothProgress, [0.45, 0.7], [0.4, 1]);
+  const card2Y = useTransform(smoothProgress, [0.45, 0.72], [40, 0]);
+  const card2Opacity = useTransform(smoothProgress, [0.45, 0.7], [0.3, 1]);
+
   const eventList = events && events.length > 0 ? events : DEFAULT_EVENTS;
 
   return (
-    <section id="event" className="section event" aria-labelledby="event-title">
+    <section
+      ref={sectionRef}
+      id="event"
+      className="section event"
+      aria-labelledby="event-title"
+    >
       <div className="container">
-        {/* Netflix Episodes Selector Header */}
+        {/* Netflix Episodes Selector Header with Scroll-Linked Reveal */}
         <motion.div
           className="netflix-episodes-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            opacity: headerOpacity,
+            y: headerY,
+          }}
         >
           <div className="netflix-episodes-header__top">
             <h2 className="event__header-title" id="event-title">
-              EPISODES
+              EPISODES &amp; TIMELINE
             </h2>
           </div>
 
@@ -73,21 +111,104 @@ export const EventSection: React.FC<EventSectionProps> = ({ events }) => {
           </div>
         </motion.div>
 
-        <motion.div
-          className="netflix-episodes-list"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+        {/* Timeline Container with Vertical Progress Line */}
+        <div
+          className="wedding-timeline-wrapper"
+          style={{
+            position: 'relative',
+            paddingLeft: '2.5rem',
+          }}
         >
-          {eventList.map((event, index) => (
-            <EventCard
-              key={event.id || event.type}
-              event={event}
-              index={index}
+          {/* Vertical Progress Line Track */}
+          <div
+            className="wedding-timeline-track"
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '12px',
+              top: '24px',
+              bottom: '24px',
+              width: '3px',
+              background: 'rgba(255, 255, 255, 0.12)',
+              borderRadius: '2px',
+            }}
+          >
+            {/* Dynamic Scrubbed Red Glowing Progress Line */}
+            <motion.div
+              style={{
+                width: '100%',
+                height: lineHeight,
+                background: '#E50914',
+                boxShadow: '0 0 12px rgba(229, 9, 20, 0.9)',
+                borderRadius: '2px',
+              }}
             />
-          ))}
-        </motion.div>
+          </div>
+
+          {/* Episode List with Reactive Markers */}
+          <div
+            className="netflix-episodes-list"
+            style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
+          >
+            {eventList.map((event, index) => {
+              const isFirst = index === 0;
+              const markerScale = isFirst ? marker1Scale : marker2Scale;
+              const markerOpacity = isFirst ? marker1Opacity : marker2Opacity;
+              const cardY = isFirst ? card1Y : card2Y;
+              const cardOpacity = isFirst ? card1Opacity : card2Opacity;
+
+              return (
+                <div
+                  key={event.id || event.type}
+                  style={{
+                    position: 'relative',
+                  }}
+                >
+                  {/* Reactive Timeline Dot Marker (scale: 0.7 -> 1, opacity: 0.4 -> 1) */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      left: '-2.5rem',
+                      top: '28px',
+                      transform: 'translateX(-50%)',
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      background: '#141414',
+                      border: '2px solid #E50914',
+                      boxShadow: '0 0 10px rgba(229, 9, 20, 0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      scale: markerScale,
+                      opacity: markerOpacity,
+                      zIndex: 2,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: '#E50914',
+                      }}
+                    />
+                  </motion.div>
+
+                  {/* Scrubbed Event Content Card (y: 40 -> 0) */}
+                  <motion.div
+                    style={{
+                      y: cardY,
+                      opacity: cardOpacity,
+                    }}
+                  >
+                    <EventCard event={event} index={index} />
+                  </motion.div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

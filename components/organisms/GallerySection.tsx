@@ -4,9 +4,9 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface GalleryPhoto {
   id: string;
@@ -99,6 +99,35 @@ export interface GallerySectionProps {
 }
 
 export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  // Header scrub
+  const headerOpacity = useTransform(smoothProgress, [0.05, 0.2], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.05, 0.2], [40, 0]);
+
+  // Parallax per column (idx % 4) - subtle to keep bottom content connected
+  const col0Y = useTransform(smoothProgress, [0, 1], [15, -15]);
+  const col1Y = useTransform(smoothProgress, [0, 1], [25, -25]);
+  const col2Y = useTransform(smoothProgress, [0, 1], [10, -10]);
+  const col3Y = useTransform(smoothProgress, [0, 1], [20, -20]);
+
+  // Subtle tilt for visual asymmetry
+  const col0Rotate = useTransform(smoothProgress, [0, 1], [-1.5, 1.5]);
+  const col2Rotate = useTransform(smoothProgress, [0, 1], [1.5, -1.5]);
+
+  // Card reveal scrub
+  const cardOpacity = useTransform(smoothProgress, [0.05, 0.25], [0.3, 1]);
+  const cardScale = useTransform(smoothProgress, [0.05, 0.25], [0.94, 1]);
+
   const [activeTab, setActiveTab] = useState<
     'all' | 'prewedding' | 'lead' | 'venue'
   >('all');
@@ -146,18 +175,19 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="gallery"
       className="section netflix-gallery-section"
       aria-labelledby="gallery-heading"
     >
       <div className="container">
-        {/* Header */}
+        {/* Header with Scroll-Linked Scrub */}
         <motion.div
           className="netflix-gallery__header"
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            opacity: headerOpacity,
+            y: headerY,
+          }}
         >
           <h2 id="gallery-heading" className="section-title">
             PHOTO GALLERY &amp; MOMENTS
@@ -209,49 +239,58 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ photos }) => {
           </div>
         </motion.div>
 
-        {/* Responsive Photo Grid */}
-        <motion.div
-          className="netflix-gallery__grid"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-        >
-          {filteredPhotos.map((photo, idx) => (
-            <div
-              key={photo.id}
-              className={`netflix-gallery__card netflix-gallery__card--${photo.aspect}`}
-              onClick={() => handleOpenLightbox(idx)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleOpenLightbox(idx);
-                }
-              }}
-              aria-label={`Lihat foto ${photo.title}`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.src}
-                alt={photo.title}
-                className="netflix-gallery__img"
-                loading="lazy"
-              />
+        {/* Asymmetric Multi-Speed Parallax Photo Grid */}
+        <div className="netflix-gallery__grid">
+          {filteredPhotos.map((photo, idx) => {
+            const parallaxY = [col0Y, col1Y, col2Y, col3Y][idx % 4];
+            const rotate = idx % 2 === 0 ? col0Rotate : col2Rotate;
 
-              <div className="netflix-gallery__overlay">
-                <div className="netflix-gallery__zoom-icon">
-                  <ZoomInIcon sx={{ fontSize: 24, color: '#FFFFFF' }} />
+            return (
+              <motion.div
+                key={photo.id}
+                className={`netflix-gallery__card netflix-gallery__card--${photo.aspect}`}
+                onClick={() => handleOpenLightbox(idx)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleOpenLightbox(idx);
+                  }
+                }}
+                aria-label={`Lihat foto ${photo.title}`}
+                style={{
+                  y: parallaxY,
+                  rotate: rotate,
+                  opacity: cardOpacity,
+                  scale: cardScale,
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo.src}
+                  alt={photo.title}
+                  className="netflix-gallery__img"
+                  loading="lazy"
+                />
+
+                <div className="netflix-gallery__overlay">
+                  <div className="netflix-gallery__zoom-icon">
+                    <ZoomInIcon sx={{ fontSize: 24, color: '#FFFFFF' }} />
+                  </div>
+                  <div className="netflix-gallery__card-meta">
+                    <span className="netflix-gallery__card-tag">
+                      {photo.tag}
+                    </span>
+                    <h3 className="netflix-gallery__card-title">
+                      {photo.title}
+                    </h3>
+                  </div>
                 </div>
-                <div className="netflix-gallery__card-meta">
-                  <span className="netflix-gallery__card-tag">{photo.tag}</span>
-                  <h3 className="netflix-gallery__card-title">{photo.title}</h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Netflix Photo Lightbox Modal */}

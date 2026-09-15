@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
+import { useRef } from 'react';
 import { CoupleProfileCard } from '@/components/molecules/CoupleProfileCard';
 import type { WeddingCouple } from '@/types/wedding';
 
@@ -38,22 +39,65 @@ const DEFAULT_GROOM = {
 };
 
 export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  // Typography header scrub
+  const headerOpacity = useTransform(smoothProgress, [0.08, 0.28], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.08, 0.28], [40, 0]);
+
+  // Bride card: x: -100 -> 0 layered scrub
+  const brideX = useTransform(
+    smoothProgress,
+    [0.12, 0.42, 0.8, 1],
+    [-100, 0, 0, -40],
+  );
+  const brideOpacity = useTransform(
+    smoothProgress,
+    [0.12, 0.38, 0.85, 1],
+    [0, 1, 1, 0.3],
+  );
+
+  // Groom card: x: 100 -> 0 layered scrub
+  const groomX = useTransform(
+    smoothProgress,
+    [0.12, 0.42, 0.8, 1],
+    [100, 0, 0, 40],
+  );
+  const groomOpacity = useTransform(
+    smoothProgress,
+    [0.12, 0.38, 0.85, 1],
+    [0, 1, 1, 0.3],
+  );
+
   const brideData = couple?.bride || DEFAULT_BRIDE;
   const groomData = couple?.groom || DEFAULT_GROOM;
 
   return (
     <section
+      ref={sectionRef}
       id="couple"
       className="section couple"
       aria-labelledby="couple-title"
+      style={{ overflow: 'hidden' }}
     >
       <div className="container">
         <motion.div
           className="netflix-section-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            opacity: headerOpacity,
+            y: headerY,
+          }}
         >
           <h2 className="couple__header-title" id="couple-title">
             MEET THE LEAD CAST
@@ -69,16 +113,34 @@ export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
           </p>
         </motion.div>
 
-        <motion.div
+        <div
           className="couple__container"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+          style={{
+            position: 'relative',
+          }}
         >
-          <CoupleProfileCard person={brideData} type="bride" rank={1} />
-          <CoupleProfileCard person={groomData} type="groom" rank={2} />
-        </motion.div>
+          {/* Bride Card (Scrolls in from Left: -100 -> 0) */}
+          <motion.div
+            style={{
+              x: brideX,
+              opacity: brideOpacity,
+              width: '100%',
+            }}
+          >
+            <CoupleProfileCard person={brideData} type="bride" rank={1} />
+          </motion.div>
+
+          {/* Groom Card (Scrolls in from Right: 100 -> 0) */}
+          <motion.div
+            style={{
+              x: groomX,
+              opacity: groomOpacity,
+              width: '100%',
+            }}
+          >
+            <CoupleProfileCard person={groomData} type="groom" rank={2} />
+          </motion.div>
+        </div>
       </div>
     </section>
   );

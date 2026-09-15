@@ -1,10 +1,14 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import {
+  NetflixAvatar,
+  type NetflixAvatarVariant,
+} from '@/components/atoms/NetflixAvatar';
 import { Textarea } from '@/components/atoms/Textarea';
 import { GuestQrPass } from '@/components/molecules/GuestQrPass';
 import type { AttendanceStatus, RsvpPayload } from '@/types/rsvp';
@@ -18,6 +22,21 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
   defaultName = '',
   invitationSlug = '',
 }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  const rsvpOpacity = useTransform(smoothProgress, [0.1, 0.6], [0, 1]);
+  const rsvpY = useTransform(smoothProgress, [0.1, 0.6], [40, 0]);
+  const rsvpScale = useTransform(smoothProgress, [0.1, 0.6], [0.96, 1]);
+
   const [formData, setFormData] = useState<RsvpPayload>({
     name: defaultName || '',
     attendance: 'Hadir',
@@ -81,44 +100,53 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
     count: string;
     title: string;
     subtitle: string;
-    avatarBg: string;
-    avatarInitial: string;
+    avatarVariant: NetflixAvatarVariant;
   }[] = [
     {
       id: 'Hadir',
       count: '1',
-      title: 'Hadir Sendiri',
-      subtitle: '1 VIP Ticket',
-      avatarBg: 'linear-gradient(135deg, #e50914 0%, #b20710 100%)',
-      avatarInitial: '👤',
+      title: 'VIP Guest',
+      subtitle: '1 VIP Seat',
+      avatarVariant: 'red',
     },
     {
       id: 'Hadir',
       count: '2',
-      title: 'Hadir Berdua (+1)',
-      subtitle: '2 VIP Tickets',
-      avatarBg: 'linear-gradient(135deg, #0071eb 0%, #004da6 100%)',
-      avatarInitial: '👥',
+      title: 'VIP + Guest',
+      subtitle: '2 VIP Seats',
+      avatarVariant: 'blue',
     },
     {
       id: 'Tidak Hadir',
       count: '0',
-      title: 'Streaming from Home',
-      subtitle: 'Berhalangan Hadir',
-      avatarBg: 'linear-gradient(135deg, #4d4d4d 0%, #2b2b2b 100%)',
-      avatarInitial: '🏠',
+      title: 'Virtual Premiere',
+      subtitle: 'Streaming from Home',
+      avatarVariant: 'purple',
     },
   ];
 
+  const selectedOption =
+    profileOptions.find(
+      (opt) =>
+        formData.attendance === opt.id &&
+        (opt.id === 'Tidak Hadir' || formData.guestCount === opt.count),
+    ) || profileOptions[0];
+
   return (
-    <section id="rsvp" className="section rsvp" aria-labelledby="rsvp-title">
+    <section
+      ref={sectionRef}
+      id="rsvp"
+      className="section rsvp"
+      aria-labelledby="rsvp-title"
+    >
       <div className="container">
         <motion.div
-          className="rsvp__card netflix-rsvp-card"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="rsvp__container"
+          style={{
+            opacity: rsvpOpacity,
+            y: rsvpY,
+            scale: rsvpScale,
+          }}
         >
           <div className="netflix-section-header">
             <h2 className="rsvp__title" id="rsvp-title">
@@ -160,6 +188,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                   guestName={formData.name}
                   invitationSlug={invitationSlug}
                   attendance={formData.attendance}
+                  avatarVariant={selectedOption.avatarVariant}
                   guestCount={
                     Number.parseInt(String(formData.guestCount || 1), 10) || 1
                   }
@@ -171,7 +200,7 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
               {/* Netflix Profile Avatar Selector */}
               <div className="netflix-profile-picker">
                 <span className="netflix-profile-picker__label">
-                  PILIH PROFIL KEHADIRAN (SELECT PROFILE):
+                  WHO&apos;S WATCHING? (PILIH PROFIL KEHADIRAN):
                 </span>
                 <div className="netflix-profile-picker__grid">
                   {profileOptions.map((opt) => {
@@ -193,13 +222,13 @@ export const RsvpSection: React.FC<RsvpSectionProps> = ({
                           }));
                         }}
                       >
-                        <div
-                          className="netflix-profile-avatar-card__icon"
-                          style={{ background: opt.avatarBg }}
-                        >
-                          <span style={{ fontSize: '1.75rem' }}>
-                            {opt.avatarInitial}
-                          </span>
+                        <div className="netflix-profile-avatar-card__icon-wrapper">
+                          <NetflixAvatar
+                            variant={opt.avatarVariant}
+                            size="lg"
+                            active={isSelected}
+                            alt={opt.title}
+                          />
                           {isSelected && (
                             <span className="netflix-profile-avatar-card__check">
                               ✓

@@ -9,6 +9,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import TimerIcon from '@mui/icons-material/Timer';
 import type React from 'react';
 import { useEffect, useState } from 'react';
+import { NetflixAvatar } from '@/components/atoms/NetflixAvatar';
 
 export interface NetflixNavbarProps {
   guestName?: string;
@@ -62,10 +63,6 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const guestInitial = guestName
-    ? guestName.trim().charAt(0).toUpperCase()
-    : 'U';
 
   return (
     <header
@@ -200,7 +197,11 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             className="netflix-nav__profile"
             title={`Login sebagai: ${guestName || 'Tamu Undangan'}`}
           >
-            <span className="netflix-nav__avatar">{guestInitial}</span>
+            <NetflixAvatar
+              variant="red"
+              size="sm"
+              alt={guestName || 'VIP Guest'}
+            />
             <span className="netflix-nav__username">
               {guestName ? guestName.split(' ')[0] : 'Guest'}
             </span>

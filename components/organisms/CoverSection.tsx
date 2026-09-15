@@ -5,7 +5,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import type React from 'react';
 import { useState } from 'react';
-
+import { NetflixAvatar } from '@/components/atoms/NetflixAvatar';
 import type { WeddingCover } from '@/types/wedding';
 
 export interface CoverSectionProps {
@@ -97,9 +97,10 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
               animationsReady && !isOpen
-                ? 'translateY(0)'
-                : 'translateY(-20px)',
-            transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s',
+                ? 'translate(0, 0)'
+                : 'translate(-25px, -15px)',
+            transition:
+              'opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s',
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -119,8 +120,11 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(20px, 15px)',
+            transition:
+              'opacity 0.8s ease 0.25s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s',
           }}
         >
           <span className="netflix-cover__rank">#1</span>
@@ -133,8 +137,11 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(-30px, 25px)',
+            transition:
+              'opacity 0.8s ease 0.35s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s',
           }}
         >
           {title}
@@ -146,8 +153,11 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(-15px, 15px)',
+            transition:
+              'opacity 0.8s ease 0.45s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.45s',
           }}
         >
           <span className="netflix-cover__year">{year}</span>
@@ -162,8 +172,11 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(25px, 20px)',
+            transition:
+              'opacity 0.8s ease 0.55s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s',
           }}
         >
           {synopsis}
@@ -175,18 +188,16 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(-25px, 25px)',
+            transition:
+              'opacity 0.8s ease 0.65s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.65s',
           }}
         >
           <div className="netflix-cover__profile-card">
             <div className="netflix-cover__avatar-box">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/avatar.webp"
-                alt="Netflix Profile Smiley"
-                className="netflix-cover__avatar-img"
-              />
+              <NetflixAvatar variant="red" size="md" active />
             </div>
             <div className="netflix-cover__profile-text">
               <span className="netflix-cover__guest-badge">
@@ -202,14 +213,17 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
           </div>
         </div>
 
-        {/* Netflix Action Buttons */}
+        {/* Action Buttons: Play (Open) & My List (Calendar) */}
         <div
           className="netflix-cover__actions"
           style={{
             opacity: animationsReady && !isOpen ? 1 : 0,
             transform:
-              animationsReady && !isOpen ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'opacity 0.8s ease 0.9s, transform 0.8s ease 0.9s',
+              animationsReady && !isOpen
+                ? 'translate(0, 0)'
+                : 'translate(25px, 25px)',
+            transition:
+              'opacity 0.8s ease 0.75s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s',
           }}
         >
           <button

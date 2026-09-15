@@ -2,9 +2,9 @@
 
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CountdownUnit } from '@/components/molecules/CountdownUnit';
 import {
   calculateCountdown,
@@ -21,6 +21,39 @@ export interface CountdownSectionProps {
 export const CountdownSection: React.FC<CountdownSectionProps> = ({
   countdown,
 }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
+  const headerOpacity = useTransform(smoothProgress, [0.03, 0.25], [0, 1]);
+  const headerY = useTransform(smoothProgress, [0.03, 0.25], [20, 0]);
+
+  const unit0X = useTransform(smoothProgress, [0.08, 0.45], [-40, 0]);
+  const unit0Opacity = useTransform(smoothProgress, [0.08, 0.45], [0, 1]);
+
+  const unit1X = useTransform(smoothProgress, [0.12, 0.5], [-20, 0]);
+  const unit1Opacity = useTransform(smoothProgress, [0.12, 0.5], [0, 1]);
+
+  const unit2X = useTransform(smoothProgress, [0.12, 0.5], [20, 0]);
+  const unit2Opacity = useTransform(smoothProgress, [0.12, 0.5], [0, 1]);
+
+  const unit3X = useTransform(smoothProgress, [0.08, 0.45], [40, 0]);
+  const unit3Opacity = useTransform(smoothProgress, [0.08, 0.45], [0, 1]);
+
+  const unitMotion = [
+    { x: unit0X, opacity: unit0Opacity },
+    { x: unit1X, opacity: unit1Opacity },
+    { x: unit2X, opacity: unit2Opacity },
+    { x: unit3X, opacity: unit3Opacity },
+  ];
+
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -71,16 +104,17 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
 
   return (
     <section
+      ref={sectionRef}
       id="countdown"
       className="section countdown"
       aria-labelledby="countdown-title"
     >
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            opacity: headerOpacity,
+            y: headerY,
+          }}
         >
           <div className="netflix-section-header">
             <h2 className="countdown__title" id="countdown-title">
@@ -120,36 +154,32 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
           </div>
         </motion.div>
 
-        <motion.div
+        <div
           className="countdown__timer"
           role="timer"
           aria-label="Hitung mundur menuju hari pernikahan"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
-          <CountdownUnit
-            value={timeLeft.days}
-            label="Days"
-            isMounted={isMounted}
-          />
-          <CountdownUnit
-            value={timeLeft.hours}
-            label="Hours"
-            isMounted={isMounted}
-          />
-          <CountdownUnit
-            value={timeLeft.minutes}
-            label="Minutes"
-            isMounted={isMounted}
-          />
-          <CountdownUnit
-            value={timeLeft.seconds}
-            label="Seconds"
-            isMounted={isMounted}
-          />
-        </motion.div>
+          {[
+            { value: timeLeft.days, label: 'Days' },
+            { value: timeLeft.hours, label: 'Hours' },
+            { value: timeLeft.minutes, label: 'Minutes' },
+            { value: timeLeft.seconds, label: 'Seconds' },
+          ].map((unit, index) => (
+            <motion.div
+              key={unit.label}
+              style={{
+                x: unitMotion[index].x,
+                opacity: unitMotion[index].opacity,
+              }}
+            >
+              <CountdownUnit
+                value={unit.value}
+                label={unit.label}
+                isMounted={isMounted}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

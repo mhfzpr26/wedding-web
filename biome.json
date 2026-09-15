@@ -35,6 +35,7 @@
       },
       "correctness": {
         "noUnusedVariables": "warn",
+        "noUnusedImports": "warn",
         "useExhaustiveDependencies": "warn"
       },
       "performance": {
