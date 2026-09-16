@@ -10,15 +10,18 @@ import TimerIcon from '@mui/icons-material/Timer';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { NetflixAvatar } from '@/components/atoms/NetflixAvatar';
+import type { WeddingPrivacyMode } from '@/types/wedding';
 
 export interface NetflixNavbarProps {
   guestName?: string;
   visible: boolean;
+  privacyMode?: WeddingPrivacyMode;
 }
 
 export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
   guestName,
   visible,
+  privacyMode,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('opening');
@@ -29,7 +32,9 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
 
       const sections = [
         'opening',
+        ...(!privacyMode?.noMedia ? ['trailer'] : []),
         'couple',
+        ...(!privacyMode?.noMedia ? ['gallery'] : []),
         'story',
         'countdown',
         'event',
@@ -54,7 +59,7 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [privacyMode?.noMedia]);
 
   const scrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -94,17 +99,19 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
           >
             Home
           </a>
-          <a
-            href="#trailer"
-            onClick={scrollTo('trailer')}
-            className={`netflix-nav__link ${activeSection === 'trailer' ? 'active' : ''}`}
-          >
-            <OndemandVideoIcon
-              sx={{ fontSize: 16 }}
-              className="netflix-nav__link-icon"
-            />
-            Trailer
-          </a>
+          {!privacyMode?.noMedia && (
+            <a
+              href="#trailer"
+              onClick={scrollTo('trailer')}
+              className={`netflix-nav__link ${activeSection === 'trailer' ? 'active' : ''}`}
+            >
+              <OndemandVideoIcon
+                sx={{ fontSize: 16 }}
+                className="netflix-nav__link-icon"
+              />
+              Trailer
+            </a>
+          )}
           <a
             href="#couple"
             onClick={scrollTo('couple')}
@@ -116,13 +123,15 @@ export const NetflixNavbar: React.FC<NetflixNavbarProps> = ({
             />
             Cast
           </a>
-          <a
-            href="#gallery"
-            onClick={scrollTo('gallery')}
-            className={`netflix-nav__link ${activeSection === 'gallery' ? 'active' : ''}`}
-          >
-            Gallery
-          </a>
+          {!privacyMode?.noMedia && (
+            <a
+              href="#gallery"
+              onClick={scrollTo('gallery')}
+              className={`netflix-nav__link ${activeSection === 'gallery' ? 'active' : ''}`}
+            >
+              Gallery
+            </a>
+          )}
           <a
             href="#story"
             onClick={scrollTo('story')}

@@ -17,7 +17,7 @@
     "posterImage": "/images/gallery-1.jpg",
     "statusBadge": "COMING SOON",
     "dateText": "14 November 2026",
-    "title": "Destia & Rakafansa:",
+    "title": "Destia & Rakafansa",
     "subtitle": "Our Forever Chapter",
     "locationText": "Masjid Agung Al-Barkah & Hotel Santika Premiere, Bekasi",
     "quote": "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
@@ -211,5 +211,11 @@
     "title": "Wedding Music",
     "artist": "",
     "autoplay": true
+  },
+  "privacyMode": {
+    "noMedia": false,
+    "groomInitial": "R",
+    "brideInitial": "D",
+    "coupleInitials": "D & R"
   }
 }

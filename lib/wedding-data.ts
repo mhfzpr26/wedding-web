@@ -234,6 +234,12 @@ export const DEFAULT_WEDDING_CONFIG: WeddingConfig = {
     artist: '',
     autoplay: false,
   },
+  privacyMode: {
+    noMedia: false,
+    groomInitial: 'R',
+    brideInitial: 'D',
+    coupleInitials: 'D & R',
+  },
 };
 
 export async function getWeddingConfig(): Promise<WeddingConfig> {
@@ -276,6 +282,10 @@ export async function getWeddingConfig(): Promise<WeddingConfig> {
       },
       closing: { ...DEFAULT_WEDDING_CONFIG.closing, ...(parsed.closing || {}) },
       music: { ...DEFAULT_WEDDING_CONFIG.music, ...(parsed.music || {}) },
+      privacyMode: {
+        ...DEFAULT_WEDDING_CONFIG.privacyMode,
+        ...(parsed.privacyMode || {}),
+      },
       gallery: parsed.gallery || DEFAULT_WEDDING_CONFIG.gallery,
       events: parsed.events || DEFAULT_WEDDING_CONFIG.events,
       loveStory: parsed.loveStory || DEFAULT_WEDDING_CONFIG.loveStory,

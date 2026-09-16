@@ -11,7 +11,8 @@ export interface EventCardProps {
 
 export const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
   const venuePhoto =
-    index === 0 ? '/images/venue-akad.jpg' : '/images/venue-resepsi.jpg';
+    event.venuePhoto ||
+    (index === 0 ? '/images/venue-akad.jpg' : '/images/venue-resepsi.jpg');
 
   return (
     <article className="netflix-episode-row">

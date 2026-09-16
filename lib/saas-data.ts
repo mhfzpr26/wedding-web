@@ -689,6 +689,10 @@ export async function getInvitationConfig(
           ...(parsed.closing || {}),
         },
         music: { ...DEFAULT_WEDDING_CONFIG.music, ...(parsed.music || {}) },
+        privacyMode: {
+          ...DEFAULT_WEDDING_CONFIG.privacyMode,
+          ...(parsed.privacyMode || {}),
+        },
         gallery: parsed.gallery || DEFAULT_WEDDING_CONFIG.gallery,
         events: parsed.events || DEFAULT_WEDDING_CONFIG.events,
         loveStory: parsed.loveStory || DEFAULT_WEDDING_CONFIG.loveStory,

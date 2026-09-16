@@ -91,9 +91,14 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
         isOpen={coverOpened}
         guestName={guestName}
         cover={config?.cover}
+        privacyMode={config?.privacyMode}
       />
 
-      <NetflixNavbar guestName={guestName} visible={coverOpened} />
+      <NetflixNavbar
+        guestName={guestName}
+        visible={coverOpened}
+        privacyMode={config?.privacyMode}
+      />
 
       <FloatingAudio music={config?.music} />
 
@@ -108,11 +113,24 @@ export const InvitationTemplate: React.FC<InvitationTemplateProps> = ({
             maxWidth: '100%',
           }}
         >
-          <OpeningSection opening={config?.opening} />
-          <TrailerSection trailer={config?.trailer} />
-          <CoupleSection couple={config?.couple} />
-          <GallerySection photos={config?.gallery} />
-          <LoveStorySection timeline={config?.loveStory} />
+          <OpeningSection
+            opening={config?.opening}
+            privacyMode={config?.privacyMode}
+          />
+          {!config?.privacyMode?.noMedia && (
+            <TrailerSection trailer={config?.trailer} />
+          )}
+          <CoupleSection
+            couple={config?.couple}
+            privacyMode={config?.privacyMode}
+          />
+          {!config?.privacyMode?.noMedia && (
+            <GallerySection photos={config?.gallery} />
+          )}
+          <LoveStorySection
+            timeline={config?.loveStory}
+            privacyMode={config?.privacyMode}
+          />
           <CountdownSection countdown={config?.countdown} />
           <EventSection events={config?.events} />
           <RsvpSection

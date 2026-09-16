@@ -19,6 +19,7 @@ export interface EventDetailData {
   address: string;
   mapUrl: string;
   calendarUrl: string;
+  venuePhoto?: string;
 }
 
 export interface BankAccountData {

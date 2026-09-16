@@ -6,13 +6,14 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import type React from 'react';
 import { useState } from 'react';
 import { NetflixAvatar } from '@/components/atoms/NetflixAvatar';
-import type { WeddingCover } from '@/types/wedding';
+import type { WeddingCover, WeddingPrivacyMode } from '@/types/wedding';
 
 export interface CoverSectionProps {
   onEnter: () => void;
   isOpen: boolean;
   guestName?: string;
   cover?: WeddingCover;
+  privacyMode?: WeddingPrivacyMode;
 }
 
 export const CoverSection: React.FC<CoverSectionProps> = ({
@@ -20,6 +21,7 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
   isOpen,
   guestName,
   cover,
+  privacyMode,
 }) => {
   const animationsReady = true;
   const [savedToList, setSavedToList] = useState(false);
@@ -79,12 +81,14 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
     >
       {/* Background with cinematic Netflix backdrop and gradient */}
       <div className="netflix-cover__bg" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={bgImage}
-          alt="Cinematic Wedding Background"
-          className="netflix-cover__backdrop-img"
-        />
+        {!privacyMode?.noMedia && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={bgImage}
+            alt="Cinematic Wedding Background"
+            className="netflix-cover__backdrop-img"
+          />
+        )}
         <div className="netflix-cover__vignette" />
         <div className="netflix-cover__glow" />
       </div>

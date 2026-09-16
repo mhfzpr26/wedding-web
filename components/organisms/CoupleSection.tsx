@@ -4,10 +4,11 @@ import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
 import { useRef } from 'react';
 import { CoupleProfileCard } from '@/components/molecules/CoupleProfileCard';
-import type { WeddingCouple } from '@/types/wedding';
+import type { WeddingCouple, WeddingPrivacyMode } from '@/types/wedding';
 
 export interface CoupleSectionProps {
   couple?: WeddingCouple;
+  privacyMode?: WeddingPrivacyMode;
 }
 
 const DEFAULT_BRIDE = {
@@ -38,7 +39,10 @@ const DEFAULT_GROOM = {
   },
 };
 
-export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
+export const CoupleSection: React.FC<CoupleSectionProps> = ({
+  couple,
+  privacyMode,
+}) => {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const { scrollYProgress } = useScroll({
@@ -127,7 +131,12 @@ export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
               width: '100%',
             }}
           >
-            <CoupleProfileCard person={brideData} type="bride" rank={1} />
+            <CoupleProfileCard
+              person={brideData}
+              type="bride"
+              rank={1}
+              privacyMode={privacyMode}
+            />
           </motion.div>
 
           {/* Groom Card (Scrolls in from Right: 100 -> 0) */}
@@ -138,7 +147,12 @@ export const CoupleSection: React.FC<CoupleSectionProps> = ({ couple }) => {
               width: '100%',
             }}
           >
-            <CoupleProfileCard person={groomData} type="groom" rank={2} />
+            <CoupleProfileCard
+              person={groomData}
+              type="groom"
+              rank={2}
+              privacyMode={privacyMode}
+            />
           </motion.div>
         </div>
       </div>

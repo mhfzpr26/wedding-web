@@ -31,6 +31,7 @@ export interface WeddingEventItem {
   address: string;
   mapUrl: string;
   calendarUrl: string;
+  venuePhoto?: string;
 }
 
 export interface WeddingCountdown {
@@ -121,6 +122,13 @@ export interface WeddingMusic {
   autoplay: boolean;
 }
 
+export interface WeddingPrivacyMode {
+  noMedia?: boolean;
+  groomInitial?: string;
+  brideInitial?: string;
+  coupleInitials?: string;
+}
+
 export interface WeddingConfig {
   templateId: string; // 'netflix'
   title: string;
@@ -136,6 +144,7 @@ export interface WeddingConfig {
   gifts: WeddingBankAccount[];
   closing: WeddingClosing;
   music: WeddingMusic;
+  privacyMode?: WeddingPrivacyMode;
 }
 
 export type InvitationStatus = 'draft' | 'published' | 'inactive';

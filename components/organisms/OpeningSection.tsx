@@ -7,13 +7,17 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
 import { useRef } from 'react';
-import type { WeddingOpening } from '@/types/wedding';
+import type { WeddingOpening, WeddingPrivacyMode } from '@/types/wedding';
 
 export interface OpeningSectionProps {
   opening?: WeddingOpening;
+  privacyMode?: WeddingPrivacyMode;
 }
 
-export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
+export const OpeningSection: React.FC<OpeningSectionProps> = ({
+  opening,
+  privacyMode,
+}) => {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const { scrollYProgress } = useScroll({
@@ -103,12 +107,14 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
           scale: bgScale,
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={posterImage}
-          alt="Wedding Poster"
-          className="netflix-hero-poster__img"
-        />
+        {!privacyMode?.noMedia && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={posterImage}
+            alt="Wedding Poster"
+            className="netflix-hero-poster__img"
+          />
+        )}
         <div className="netflix-hero-poster__gradient" />
       </motion.div>
 
@@ -156,31 +162,33 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({ opening }) => {
           </motion.div>
 
           {/* Quick Action Navigation Buttons */}
-          <motion.div
-            className="netflix-hero-poster__actions"
-            style={{
-              y: actionsY,
-              opacity: actionsOpacity,
-            }}
-          >
-            <button
-              type="button"
-              className="netflix-hero-btn netflix-hero-btn--primary"
-              onClick={() => scrollToSection('trailer')}
+          {!privacyMode?.noMedia && (
+            <motion.div
+              className="netflix-hero-poster__actions"
+              style={{
+                y: actionsY,
+                opacity: actionsOpacity,
+              }}
             >
-              <PlayArrowIcon sx={{ fontSize: 24 }} />
-              <span>WATCH TEASER FILM</span>
-            </button>
+              <button
+                type="button"
+                className="netflix-hero-btn netflix-hero-btn--primary"
+                onClick={() => scrollToSection('trailer')}
+              >
+                <PlayArrowIcon sx={{ fontSize: 24 }} />
+                <span>WATCH TEASER FILM</span>
+              </button>
 
-            <button
-              type="button"
-              className="netflix-hero-btn netflix-hero-btn--secondary"
-              onClick={() => scrollToSection('gallery')}
-            >
-              <CollectionsIcon sx={{ fontSize: 22 }} />
-              <span>PHOTO GALLERY</span>
-            </button>
-          </motion.div>
+              <button
+                type="button"
+                className="netflix-hero-btn netflix-hero-btn--secondary"
+                onClick={() => scrollToSection('gallery')}
+              >
+                <CollectionsIcon sx={{ fontSize: 22 }} />
+                <span>PHOTO GALLERY</span>
+              </button>
+            </motion.div>
+          )}
 
           {/* Wedding Quote / Sacred Verse Card */}
           {(quote || quoteSource) && (

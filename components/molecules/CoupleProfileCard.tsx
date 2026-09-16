@@ -1,21 +1,33 @@
 import InstagramIcon from '@mui/icons-material/Instagram';
 import type React from 'react';
-import type { WeddingBrideGroom } from '@/types/wedding';
+import type { WeddingBrideGroom, WeddingPrivacyMode } from '@/types/wedding';
 
 export interface CoupleProfileCardProps {
   person: WeddingBrideGroom;
   type: 'bride' | 'groom';
   rank: number;
+  privacyMode?: WeddingPrivacyMode;
 }
 
 export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
   person,
   type,
   rank,
+  privacyMode,
 }) => {
   const defaultPhoto =
     type === 'bride' ? '/images/destia.jpg' : '/images/rakafansa.jpg';
   const photoSrc = person.photo || defaultPhoto;
+
+  const fallbackInitial = person.name?.trim()
+    ? person.name.trim()[0].toUpperCase()
+    : type === 'bride'
+      ? 'D'
+      : 'R';
+  const initial =
+    (type === 'bride'
+      ? privacyMode?.brideInitial
+      : privacyMode?.groomInitial) || fallbackInitial;
 
   return (
     <article
@@ -26,15 +38,28 @@ export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
         #{rank}
       </div>
 
-      {/* Portrait Photo */}
+      {/* Portrait Photo / Monogram */}
       <div className="netflix-cast-card__photo-wrap">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={photoSrc}
-          alt={person.name}
-          className="netflix-cast-card__photo"
-          loading="lazy"
-        />
+        {privacyMode?.noMedia ? (
+          <div className="netflix-cast-card__monogram">
+            <div className="netflix-cast-card__monogram-badge">
+              <span className="netflix-cast-card__monogram-letter">
+                {initial}
+              </span>
+            </div>
+            <span className="netflix-cast-card__monogram-name">
+              {person.callname || person.name}
+            </span>
+          </div>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={photoSrc}
+            alt={person.name}
+            className="netflix-cast-card__photo"
+            loading="lazy"
+          />
+        )}
         <div className="netflix-cast-card__photo-gradient" />
         <span className="netflix-cast-card__rank-badge">#{rank} IN CAST</span>
       </div>

@@ -3,6 +3,7 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import MovieIcon from '@mui/icons-material/Movie';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -65,8 +66,175 @@ export const MediaEditorTab: React.FC = () => {
       prev ? { ...prev, trailer: { ...prev.trailer, [key]: val } } : null,
     );
 
+  const setPrivacy = (key: string, val: string | boolean) =>
+    setConfig((prev) =>
+      prev
+        ? {
+            ...prev,
+            privacyMode: {
+              ...(prev.privacyMode || {}),
+              [key]: val,
+            },
+          }
+        : null,
+    );
+
+  const groomName = config.couple?.groom?.name || '';
+  const brideName = config.couple?.bride?.name || '';
+  const defaultGroomInitial = groomName.trim()
+    ? groomName.trim()[0].toUpperCase()
+    : 'R';
+  const defaultBrideInitial = brideName.trim()
+    ? brideName.trim()[0].toUpperCase()
+    : 'D';
+  const defaultCoupleInitials = `${defaultBrideInitial} & ${defaultGroomInitial}`;
+
   return (
     <Grid container spacing={3}>
+      {/* Privacy Mode Card (No Media / Syar'i Mode) */}
+      <Grid size={12}>
+        <Card
+          sx={{
+            border: (theme) =>
+              config.privacyMode?.noMedia
+                ? `1px solid ${theme.palette.primary.main}`
+                : '1px solid rgba(255,255,255,0.08)',
+            background: config.privacyMode?.noMedia
+              ? 'linear-gradient(135deg, rgba(229,9,20,0.08) 0%, rgba(20,20,20,0.95) 100%)'
+              : undefined,
+          }}
+        >
+          <CardContent sx={{ p: 3 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <Box
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 2,
+                    bgcolor: config.privacyMode?.noMedia
+                      ? 'rgba(229,9,20,0.2)'
+                      : 'rgba(255,255,255,0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <VisibilityOffIcon
+                    sx={{
+                      fontSize: 20,
+                      color: config.privacyMode?.noMedia
+                        ? 'error.main'
+                        : 'text.secondary',
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                    🛡️ Mode Tanpa Foto & Video (Syar&apos;i / Privacy Mode)
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    Sembunyikan foto & video mempelai, gantikan dengan inisial
+                    monogram teks & grafis Netflix elegan tanpa mengubah tata
+                    letak.
+                  </Typography>
+                </Box>
+              </Box>
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={config.privacyMode?.noMedia ?? false}
+                    onChange={(e) => setPrivacy('noMedia', e.target.checked)}
+                    color="error"
+                  />
+                }
+                label={
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {config.privacyMode?.noMedia
+                      ? 'Aktif (Tanpa Foto/Video)'
+                      : 'Nonaktif (Tampil Foto/Video)'}
+                  </Typography>
+                }
+              />
+            </Box>
+
+            {config.privacyMode?.noMedia && (
+              <Box
+                sx={{
+                  mt: 2,
+                  pt: 2.5,
+                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 600, mb: 1.5, color: 'text.primary' }}
+                >
+                  ✍️ Pengaturan Inisial Teks (Otomatis & Tanpa Perlu Upload File)
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      size="small"
+                      label="Inisial Pengantin Pria"
+                      value={
+                        config.privacyMode?.groomInitial ?? defaultGroomInitial
+                      }
+                      onChange={(e) =>
+                        setPrivacy('groomInitial', e.target.value)
+                      }
+                      fullWidth
+                      helperText={`Default: ${defaultGroomInitial}`}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      size="small"
+                      label="Inisial Pengantin Wanita"
+                      value={
+                        config.privacyMode?.brideInitial ?? defaultBrideInitial
+                      }
+                      onChange={(e) =>
+                        setPrivacy('brideInitial', e.target.value)
+                      }
+                      fullWidth
+                      helperText={`Default: ${defaultBrideInitial}`}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      size="small"
+                      label="Inisial Bersama (Cover / Badge)"
+                      value={
+                        config.privacyMode?.coupleInitials ??
+                        defaultCoupleInitials
+                      }
+                      onChange={(e) =>
+                        setPrivacy('coupleInitials', e.target.value)
+                      }
+                      fullWidth
+                      helperText={`Default: ${defaultCoupleInitials}`}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      </Grid>
       {/* Music Card */}
       <Grid size={{ xs: 12, md: 6 }}>
         <Card sx={{ height: '100%' }}>

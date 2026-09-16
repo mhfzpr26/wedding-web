@@ -4462,6 +4462,122 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
+/* ==========================================================================
+   Monogram / Privacy Mode (No Media) Enhancements
+   ========================================================================== */
+.netflix-cast-card__monogram {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #262626 0%, #121212 100%);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.netflix-cast-card__monogram::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.netflix-cast-card__monogram-badge {
+  position: relative;
+  width: clamp(75px, 14vw, 110px);
+  height: clamp(75px, 14vw, 110px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(229, 9, 20, 0.25) 0%,
+    rgba(20, 20, 20, 0.95) 100%
+  );
+  border: 2px solid rgba(229, 9, 20, 0.6);
+  box-shadow:
+    0 8px 24px rgba(229, 9, 20, 0.25),
+    inset 0 0 16px rgba(229, 9, 20, 0.2);
+  margin-bottom: 0.85rem;
+  transition:
+    transform 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.netflix-cast-card:hover .netflix-cast-card__monogram-badge {
+  transform: scale(1.06);
+  border-color: #e50914;
+}
+
+.netflix-cast-card__monogram-letter {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+  letter-spacing: 1px;
+}
+
+.netflix-cast-card__monogram-name {
+  font-family: var(--font-heading);
+  font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-light-gray);
+  z-index: 2;
+}
+
+.love-story__photo-monogram {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #242424 0%, #111111 100%);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.love-story__photo-monogram::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.love-story__photo-monogram-season {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.love-story__photo-monogram-event {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  color: var(--color-light-gray);
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
 .netflix-timeline__photo-wrap {
   position: relative;
   width: 100%;

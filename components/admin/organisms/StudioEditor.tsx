@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import type React from 'react';
+import { EditorCompletenessBar } from '@/components/admin/molecules/EditorCompletenessBar';
 import { EditorTabNavigation } from '@/components/admin/molecules/EditorTabNavigation';
 import { TenantContextBar } from '@/components/admin/molecules/TenantContextBar';
 import { ClosingEditorTab } from '@/components/admin/organisms/editor/ClosingEditorTab';
@@ -55,8 +56,14 @@ export const StudioEditor: React.FC = () => {
         </Box>
       ) : (
         <>
+          {/* Status Kelengkapan Konten (Completeness Progress & Checklist) */}
+          <EditorCompletenessBar />
+
+          {/* Navigasi 2 Tingkat (4 Kategori Utama + Sub-Bagian) */}
           <EditorTabNavigation />
-          <Box sx={{ p: 3 }}>
+
+          {/* Active Tab Content Panel */}
+          <Box sx={{ p: { xs: 2, md: 3 } }}>
             {editorTab === 'template' && <TemplateSelectorTab />}
             {editorTab === 'couple' && <CoupleEditorTab />}
             {editorTab === 'events' && <EventsEditorTab />}

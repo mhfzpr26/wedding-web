@@ -4,10 +4,11 @@ import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import type React from 'react';
 import { useRef } from 'react';
 import type { StoryTimelineItemData } from '@/types/invitation';
-import type { WeddingTimelineItem } from '@/types/wedding';
+import type { WeddingPrivacyMode, WeddingTimelineItem } from '@/types/wedding';
 
 export interface LoveStorySectionProps {
   timeline?: WeddingTimelineItem[];
+  privacyMode?: WeddingPrivacyMode;
 }
 
 const DEFAULT_TIMELINE: StoryTimelineItemData[] = [
@@ -39,6 +40,7 @@ const TIMELINE_PHOTOS = [
 
 export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   timeline,
+  privacyMode,
 }) => {
   const containerRef = useRef<HTMLElement | null>(null);
 
@@ -236,7 +238,7 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                 scale: photoEntranceScale,
               }}
             >
-              {moments.map((m) => (
+              {moments.map((m, idx) => (
                 <motion.div
                   key={`photo-${m.data.year}`}
                   className="love-story__photo-item"
@@ -245,12 +247,23 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                     y: photoParallaxY,
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={m.photo}
-                    alt={m.data.event}
-                    className="love-story__photo-img"
-                  />
+                  {privacyMode?.noMedia ? (
+                    <div className="love-story__photo-monogram">
+                      <span className="love-story__photo-monogram-season">
+                        {m.data.season || `SEASON ${idx + 1}`}
+                      </span>
+                      <span className="love-story__photo-monogram-event">
+                        {m.data.event}
+                      </span>
+                    </div>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={m.photo}
+                      alt={m.data.event}
+                      className="love-story__photo-img"
+                    />
+                  )}
                   <div className="love-story__photo-badge">
                     EPISODE STILL • {m.data.year}
                   </div>
