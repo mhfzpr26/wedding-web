@@ -41,15 +41,44 @@ export const CoupleProfileCard: React.FC<CoupleProfileCardProps> = ({
       {/* Portrait Photo / Monogram */}
       <div className="netflix-cast-card__photo-wrap">
         {privacyMode?.noMedia ? (
-          <div className="netflix-cast-card__monogram">
-            <div className="netflix-cast-card__monogram-badge">
-              <span className="netflix-cast-card__monogram-letter">
+          <div
+            className={`netflix-cast-card__poster netflix-cast-card__poster--${type}`}
+          >
+            {/* Cinematic Stage Lighting & Backdrop */}
+            <div className="netflix-cast-card__poster-bg" />
+            <div className="netflix-cast-card__poster-spotlight" />
+
+            {/* Micro Stardust Embers */}
+            <div
+              className="netflix-cast-card__poster-embers"
+              aria-hidden="true"
+            >
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--1" />
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--2" />
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--3" />
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--4" />
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--5" />
+              <span className="netflix-cast-card__poster-ember netflix-cast-card__poster-ember--1" />
+            </div>
+
+            {/* Minimalist Cinema Framing */}
+            <div className="netflix-cast-card__poster-frame" />
+
+            {/* Cinematic Movie Title Typography */}
+            <div className="netflix-cast-card__poster-title-wrap">
+              <span
+                className="netflix-cast-card__poster-initial"
+                aria-hidden="true"
+              >
                 {initial}
               </span>
+              <h4 className="netflix-cast-card__poster-title">
+                {person.callname ||
+                  person.name?.trim().split(' ')[0] ||
+                  (type === 'bride' ? 'Destia' : 'Rakafansa')}
+              </h4>
+              <div className="netflix-cast-card__poster-divider" />
             </div>
-            <span className="netflix-cast-card__monogram-name">
-              {person.callname || person.name}
-            </span>
           </div>
         ) : (
           /* eslint-disable-next-line @next/next/no-img-element */

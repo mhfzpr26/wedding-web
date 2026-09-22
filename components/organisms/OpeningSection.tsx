@@ -14,6 +14,31 @@ export interface OpeningSectionProps {
   privacyMode?: WeddingPrivacyMode;
 }
 
+const HERO_EMBER_IDS = [
+  'he-1',
+  'he-2',
+  'he-3',
+  'he-4',
+  'he-5',
+  'he-6',
+  'he-7',
+  'he-8',
+  'he-9',
+  'he-10',
+  'he-11',
+  'he-12',
+  'he-13',
+  'he-14',
+  'he-15',
+  'he-16',
+  'he-17',
+  'he-18',
+  'he-19',
+  'he-20',
+  'he-21',
+  'he-22',
+] as const;
+
 export const OpeningSection: React.FC<OpeningSectionProps> = ({
   opening,
   privacyMode,
@@ -107,7 +132,46 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({
           scale: bgScale,
         }}
       >
-        {!privacyMode?.noMedia && (
+        {privacyMode?.noMedia ? (
+          <div className="netflix-hero-poster__privacy-bg">
+            {/* Dual Hollywood Premiere Searchlights (Menyilang) */}
+            <div className="netflix-hero-poster__searchlight netflix-hero-poster__searchlight--left">
+              <div className="netflix-hero-poster__searchlight-source" />
+              <div className="netflix-hero-poster__searchlight-beam" />
+            </div>
+            <div className="netflix-hero-poster__searchlight netflix-hero-poster__searchlight--right">
+              <div className="netflix-hero-poster__searchlight-source" />
+              <div className="netflix-hero-poster__searchlight-beam" />
+            </div>
+
+            {/* Central Intersection Glow (Where Beams Cross) */}
+            <div className="netflix-hero-poster__spotlight-intersection" />
+
+            {/* Ambient Velvet Aurora & Shadows */}
+            <div className="netflix-hero-poster__aurora-wave netflix-hero-poster__aurora-wave--1" />
+            <div className="netflix-hero-poster__aurora-wave netflix-hero-poster__aurora-wave--2" />
+
+            {/* Glistening Stardust Embers inside Light Beams */}
+            <div className="netflix-hero-poster__embers" aria-hidden="true">
+              {HERO_EMBER_IDS.map((id, i) => (
+                <span
+                  key={id}
+                  className={`netflix-hero-poster__ember netflix-hero-poster__ember--${(i % 15) + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Subtle Lens Flare & Bokeh Field */}
+            <div
+              className="netflix-hero-poster__bokeh-field"
+              aria-hidden="true"
+            >
+              <span className="netflix-hero-poster__bokeh-orb netflix-hero-poster__bokeh-orb--1" />
+              <span className="netflix-hero-poster__bokeh-orb netflix-hero-poster__bokeh-orb--2" />
+              <span className="netflix-hero-poster__bokeh-orb netflix-hero-poster__bokeh-orb--3" />
+            </div>
+          </div>
+        ) : (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={posterImage}
@@ -161,7 +225,7 @@ export const OpeningSection: React.FC<OpeningSectionProps> = ({
             <span>{locationText}</span>
           </motion.div>
 
-          {/* Quick Action Navigation Buttons */}
+          {/* Quick Action Navigation Buttons (Only shown when media exists) */}
           {!privacyMode?.noMedia && (
             <motion.div
               className="netflix-hero-poster__actions"

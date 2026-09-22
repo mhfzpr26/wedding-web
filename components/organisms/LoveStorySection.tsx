@@ -38,6 +38,25 @@ const TIMELINE_PHOTOS = [
   '/images/gallery-2.jpg',
 ];
 
+const toRoman = (num: number): string => {
+  const romanMap: [number, string][] = [
+    [10, 'X'],
+    [9, 'IX'],
+    [5, 'V'],
+    [4, 'IV'],
+    [1, 'I'],
+  ];
+  let res = '';
+  let n = num;
+  for (const [val, roman] of romanMap) {
+    while (n >= val) {
+      res += roman;
+      n -= val;
+    }
+  }
+  return res || 'I';
+};
+
 export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   timeline,
   privacyMode,
@@ -46,112 +65,112 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start end', 'end end'],
+    offset: ['start start', 'end end'],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
+    stiffness: 120,
+    damping: 28,
     restDelta: 0.001,
   });
 
-  // Header Entrance & Scrub: Animates in from previous section, stays locked
+  // Header Entrance & Scrub: Stays locked throughout
   const headerOpacity = useTransform(
     smoothProgress,
-    [0.02, 0.14, 0.92, 1],
-    [0, 1, 1, 0.3],
+    [0, 0.92, 1],
+    [1, 1, 0.3],
   );
-  const headerY = useTransform(smoothProgress, [0.02, 0.14], [25, 0]);
+  const headerY = useTransform(smoothProgress, [0, 1], [0, 0]);
 
-  // Photo Entrance Parallax: Scales and fades in as section enters
+  // Photo Entrance Parallax: Always fully formed when locked
   const photoEntranceOpacity = useTransform(
     smoothProgress,
-    [0.04, 0.16],
     [0, 1],
+    [1, 1],
   );
-  const photoEntranceY = useTransform(smoothProgress, [0.04, 0.16], [25, 0]);
+  const photoEntranceY = useTransform(smoothProgress, [0, 1], [0, 0]);
   const photoEntranceScale = useTransform(
     smoothProgress,
-    [0.04, 0.16],
-    [0.94, 1],
+    [0, 1],
+    [1, 1],
   );
 
   // Dynamic Timeline Growth (0% to 100%)
   const progressHeight = useTransform(
     smoothProgress,
-    [0.12, 0.94],
+    [0.02, 0.98],
     ['0%', '100%'],
   );
 
-  // Moment 1 (2022) Scroll Transforms: Smooth entrance then crossfade
+  // Moment 1 (Season 1): Active immediately upon arrival (0.0 to 0.28), crossfades 0.28 to 0.36
   const m1Opacity = useTransform(
     smoothProgress,
-    [0.05, 0.16, 0.38, 0.44],
-    [0, 1, 1, 0],
+    [0, 0.28, 0.36],
+    [1, 1, 0],
   );
   const m1Y = useTransform(
     smoothProgress,
-    [0.05, 0.16, 0.38, 0.44],
-    [20, 0, 0, -20],
+    [0, 0.28, 0.36],
+    [0, 0, -20],
   );
   const m1Scale = useTransform(
     smoothProgress,
-    [0.05, 0.16, 0.38, 0.44],
-    [0.96, 1, 1, 0.96],
+    [0, 0.28, 0.36],
+    [1, 1, 0.96],
   );
 
-  // Moment 2 (2024) Scroll Transforms
+  // Moment 2 (Season 2): Enters 0.30 to 0.38, stays active 0.38 to 0.62, crossfades 0.62 to 0.70
   const m2Opacity = useTransform(
     smoothProgress,
-    [0.38, 0.44, 0.68, 0.74],
+    [0.30, 0.38, 0.62, 0.70],
     [0, 1, 1, 0],
   );
   const m2Y = useTransform(
     smoothProgress,
-    [0.38, 0.44, 0.68, 0.74],
+    [0.30, 0.38, 0.62, 0.70],
     [20, 0, 0, -20],
   );
   const m2Scale = useTransform(
     smoothProgress,
-    [0.38, 0.44, 0.68, 0.74],
+    [0.30, 0.38, 0.62, 0.70],
     [0.96, 1, 1, 0.96],
   );
 
-  // Moment 3 (2026) Scroll Transforms
+  // Moment 3 (Season 3): Enters 0.64 to 0.72, stays active until the end
   const m3Opacity = useTransform(
     smoothProgress,
-    [0.68, 0.74, 0.96, 1],
-    [0, 1, 1, 1],
+    [0.64, 0.72, 1],
+    [0, 1, 1],
   );
   const m3Y = useTransform(
     smoothProgress,
-    [0.68, 0.74, 0.96, 1],
-    [20, 0, 0, 0],
+    [0.64, 0.72, 1],
+    [20, 0, 0],
   );
   const m3Scale = useTransform(
     smoothProgress,
-    [0.68, 0.74, 0.96, 1],
-    [0.96, 1, 1, 1],
+    [0.64, 0.72, 1],
+    [0.96, 1, 1],
   );
 
-  // Photo Parallax & Crossfades
+  // Photo Parallax & Crossfades (Synchronized with Moments)
   const p1Opacity = useTransform(
     smoothProgress,
-    [0.04, 0.16, 0.38, 0.44],
-    [0, 1, 1, 0],
+    [0, 0.28, 0.36],
+    [1, 1, 0],
   );
   const p2Opacity = useTransform(
     smoothProgress,
-    [0.38, 0.44, 0.68, 0.74],
+    [0.30, 0.38, 0.62, 0.70],
     [0, 1, 1, 0],
   );
   const p3Opacity = useTransform(
     smoothProgress,
-    [0.68, 0.74, 0.96, 1],
-    [0, 1, 1, 1],
+    [0.64, 0.72, 1],
+    [0, 1, 1],
   );
 
-  const photoParallaxY = useTransform(smoothProgress, [0, 1], [-10, 10]);
+  const photoParallaxY = useTransform(smoothProgress, [0, 1], [-8, 8]);
 
   const timelineData =
     timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE;
@@ -248,13 +267,32 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                   }}
                 >
                   {privacyMode?.noMedia ? (
-                    <div className="love-story__photo-monogram">
-                      <span className="love-story__photo-monogram-season">
-                        {m.data.season || `SEASON ${idx + 1}`}
-                      </span>
-                      <span className="love-story__photo-monogram-event">
-                        {m.data.event}
-                      </span>
+                    <div className="love-story__chapter-card">
+                      <div className="love-story__chapter-backdrop" />
+                      <div className="love-story__chapter-watermark" aria-hidden="true">
+                        {m.data.year}
+                      </div>
+                      <div className="love-story__chapter-embers" aria-hidden="true">
+                        <span className="chapter-ember" />
+                        <span className="chapter-ember" />
+                        <span className="chapter-ember" />
+                        <span className="chapter-ember" />
+                        <span className="chapter-ember" />
+                        <span className="chapter-ember" />
+                      </div>
+                      <div className="love-story__chapter-content">
+                        <div className="love-story__chapter-roman-wrap">
+                          <div className="love-story__chapter-ornament-line" />
+                          <span className="love-story__chapter-roman">
+                            {toRoman(idx + 1)}
+                          </span>
+                          <div className="love-story__chapter-ornament-line" />
+                        </div>
+                        <span className="love-story__chapter-kicker">
+                          {m.data.season || `CHAPTER ${idx + 1}`}
+                        </span>
+                        <div className="love-story__chapter-accent-divider" />
+                      </div>
                     </div>
                   ) : (
                     /* eslint-disable-next-line @next/next/no-img-element */
@@ -264,8 +302,19 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                       className="love-story__photo-img"
                     />
                   )}
-                  <div className="love-story__photo-badge">
-                    EPISODE STILL • {m.data.year}
+                  <div
+                    className={`love-story__photo-badge ${
+                      privacyMode?.noMedia ? 'love-story__photo-badge--privacy' : ''
+                    }`}
+                  >
+                    {privacyMode?.noMedia ? (
+                      <>
+                        <span className="love-story__photo-badge-node" />
+                        <span>CHAPTER ARCHIVE • {m.data.year}</span>
+                      </>
+                    ) : (
+                      `EPISODE STILL • ${m.data.year}`
+                    )}
                   </div>
                 </motion.div>
               ))}

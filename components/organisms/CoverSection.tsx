@@ -16,6 +16,27 @@ export interface CoverSectionProps {
   privacyMode?: WeddingPrivacyMode;
 }
 
+const COVER_EMBER_IDS = [
+  'ce-1',
+  'ce-2',
+  'ce-3',
+  'ce-4',
+  'ce-5',
+  'ce-6',
+  'ce-7',
+  'ce-8',
+  'ce-9',
+  'ce-10',
+  'ce-11',
+  'ce-12',
+  'ce-13',
+  'ce-14',
+  'ce-15',
+  'ce-16',
+  'ce-17',
+  'ce-18',
+] as const;
+
 export const CoverSection: React.FC<CoverSectionProps> = ({
   onEnter,
   isOpen,
@@ -75,13 +96,43 @@ export const CoverSection: React.FC<CoverSectionProps> = ({
 
   return (
     <section
-      className="cover netflix-cover"
+      className={`cover netflix-cover ${privacyMode?.noMedia ? 'netflix-cover--privacy' : ''}`}
       aria-label="Cover undangan"
       style={coverStyle}
     >
       {/* Background with cinematic Netflix backdrop and gradient */}
       <div className="netflix-cover__bg" aria-hidden="true">
-        {!privacyMode?.noMedia && (
+        {privacyMode?.noMedia ? (
+          <div className="netflix-cover__privacy-bg">
+            {/* Organic Fluid Aurora & Ambient Light Waves */}
+            <div className="netflix-cover__aurora-wave netflix-cover__aurora-wave--1" />
+            <div className="netflix-cover__aurora-wave netflix-cover__aurora-wave--2" />
+
+            {/* Cinematic Volumetric Projector Spotlight */}
+            <div className="netflix-cover__spotlight" />
+
+            {/* Cinematic Floating Bokeh (Multi-Depth of Field) */}
+            <div className="netflix-cover__bokeh-field" aria-hidden="true">
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--1" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--2" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--3" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--4" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--5" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--6" />
+              <span className="netflix-cover__bokeh-orb netflix-cover__bokeh-orb--7" />
+            </div>
+
+            {/* Rising Cinematic Stardust Embers */}
+            <div className="netflix-cover__embers" aria-hidden="true">
+              {COVER_EMBER_IDS.map((id, i) => (
+                <span
+                  key={id}
+                  className={`netflix-cover__ember netflix-cover__ember--${(i % 15) + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={bgImage}
