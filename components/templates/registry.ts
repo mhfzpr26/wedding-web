@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { WeddingConfig } from '@/types/wedding';
 import { InvitationTemplate } from './InvitationTemplate';
+import { SpotifyTemplate } from './spotify/SpotifyTemplate';
 
 interface TemplateProps {
   config: WeddingConfig;
@@ -27,6 +28,16 @@ const TEMPLATE_REGISTRY: Record<string, TemplateDefinition> = {
       'Gaya antarmuka sinematik terinspirasi platform streaming global dengan video teaser, poster hero, episode list acara, dan end credits roll.',
     component: InvitationTemplate,
     thumbnail: '/images/netflix-cover-bg.jpg',
+    available: true,
+  },
+  spotify: {
+    id: 'spotify',
+    name: 'Spotify Music Experience',
+    badge: 'New • Viral',
+    description:
+      'Gaya antarmuka pemutar musik streaming modern terinspirasi Spotify dengan tracklist rundown acara, interactive synced lyrics love story, profil verified artist, dan sticky now-playing audio player.',
+    component: SpotifyTemplate,
+    thumbnail: '/images/spotify-cover-bg.jpg',
     available: true,
   },
   floral: {

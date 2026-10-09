@@ -1,26 +1,27 @@
 {
   "templateId": "netflix",
-  "title": "Destia & Rakafansa | The Wedding",
-  "seoDescription": "Undangan Pernikahan Destia Dwi Ramadhani & Rakafansa Saputra - 14 November 2026.",
+  "title": "Rakafansa & Destia | The Wedding",
+  "seoDescription": "Undangan Pernikahan Rakafansa Saputra, S.Kom. & Destia Dwi Ramadhani, S.Pd. - 2026-11-14",
   "cover": {
     "seriesBadge": "WEDDING SPECIAL",
     "trendingRank": "in Weddings Today",
-    "title": "DESTIA & RAKAFANSA",
+    "title": "RAKAFANSA & DESTIA",
     "matchPercentage": "99% Match",
     "year": "2026",
     "ratingBadge": "SU / ALL AGES",
     "synopsis": "Dua hati yang dipertemukan oleh takdir, kini siap mengikat janji suci seumur hidup. Sebuah kisah romansa penuh kehangatan, komitmen, dan restu kedua keluarga besar.",
     "bgImage": "/images/netflix-cover-bg.jpg",
-    "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi"
+    "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T080000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Bekasi",
+    "starring": "Rakafansa Saputra, S.Kom. & Destia Dwi Ramadhani, S.Pd."
   },
   "opening": {
-    "posterImage": "/images/gallery-1.jpg",
+    "posterImage": "/images/netflix-cover-bg.jpg",
     "statusBadge": "COMING SOON",
-    "dateText": "14 November 2026",
-    "title": "Destia & Rakafansa",
+    "dateText": "2026-11-14",
+    "title": "Rakafansa & Destia:",
     "subtitle": "Our Forever Chapter",
-    "locationText": "Masjid Agung Al-Barkah & Hotel Santika Premiere, Bekasi",
-    "quote": "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
+    "locationText": "Masjid Agung Al-Barkah & Hotel Santika Premiere",
+    "quote": "QS. Ar-Rum 21",
     "quoteSource": "QS. AR-RUM : 21"
   },
   "trailer": {
@@ -28,16 +29,16 @@
     "title": "OFFICIAL WEDDING TRAILER",
     "subtitle": "Satu-satunya teaser film resmi perjalanan cinta Destia & Rakafansa menuju pelaminan.",
     "videoUrl": "/videos/wedding-teaser.mp4",
-    "posterUrl": "/images/gallery-1.jpg",
+    "posterUrl": "/images/netflix-cover-bg.jpg",
     "duration": "02:30 • 4K UHD",
-    "filmTitle": "Destia & Rakafansa: The Journey"
+    "filmTitle": "Rakafansa & Destia: The Journey"
   },
   "couple": {
     "bride": {
-      "name": "Destia Dwi Ramadhani",
+      "name": "Destia Dwi Ramadhani, S.Pd.",
       "callname": "Destia",
-      "characterRole": "DESTIA as THE BRIDE",
-      "bio": "Pribadi yang hangat, penuh kebaikan, dan tulus. Siap mengarungi samudera kehidupan baru bersama sang pendamping hati.",
+      "characterRole": "Putri kedua dari",
+      "bio": "Pendamping hati.",
       "instagram": "destiadwir",
       "photo": "/images/destia.jpg",
       "parents": {
@@ -46,10 +47,10 @@
       }
     },
     "groom": {
-      "name": "Rakafansa Saputra",
+      "name": "Rakafansa Saputra, S.Kom.",
       "callname": "Rakafansa",
-      "characterRole": "RAKAFANSA as THE GROOM",
-      "bio": "Pria pekerja keras, berprinsip, dan setia. Berkomitmen menjadi nahkoda keluarga yang penuh amanah dan kasih sayang.",
+      "characterRole": "Putra pertama dari",
+      "bio": "Nahkoda keluarga.",
       "instagram": "rakafansa",
       "photo": "/images/rakafansa.jpg",
       "parents": {
@@ -60,93 +61,22 @@
   },
   "gallery": [
     {
-      "id": "p1",
+      "id": "photo-1",
       "src": "/images/gallery-1.jpg",
-      "tag": "Sunset Garden • 35mm",
-      "title": "Golden Hour Promise",
-      "aspect": "landscape",
-      "category": "prewedding"
-    },
-    {
-      "id": "p2",
-      "src": "/images/destia.jpg",
-      "tag": "Bridal Portrait • 85mm f/1.4",
-      "title": "The Radiant Bride: Destia",
-      "aspect": "portrait",
-      "category": "lead"
-    },
-    {
-      "id": "p3",
-      "src": "/images/rakafansa.jpg",
-      "tag": "Groom Portrait • 85mm f/1.4",
-      "title": "The Groom: Rakafansa",
-      "aspect": "portrait",
-      "category": "lead"
-    },
-    {
-      "id": "p4",
-      "src": "/images/gallery-3.jpg",
-      "tag": "Candid Cafe • 50mm f/1.2",
-      "title": "Unfiltered Laughter",
+      "tag": "Photo 1",
+      "title": "Rakafansa & Destia - Moment 1",
       "aspect": "portrait",
       "category": "prewedding"
-    },
-    {
-      "id": "p5",
-      "src": "/images/gallery-2.jpg",
-      "tag": "Grand Ballroom • Studio Light",
-      "title": "Elegance in Black Tie",
-      "aspect": "landscape",
-      "category": "prewedding"
-    },
-    {
-      "id": "p6",
-      "src": "/images/gallery-4.jpg",
-      "tag": "Macro Close-Up • 100mm f/2.8",
-      "title": "The Sacred Vows & Rings",
-      "aspect": "landscape",
-      "category": "prewedding"
-    },
-    {
-      "id": "p7",
-      "src": "/images/gallery-5.jpg",
-      "tag": "Traditional Adat • Royal Navy",
-      "title": "Royal Heritage Songket",
-      "aspect": "portrait",
-      "category": "prewedding"
-    },
-    {
-      "id": "p8",
-      "src": "/images/venue-akad.jpg",
-      "tag": "Masjid Agung Al-Barkah",
-      "title": "Sanctuary of Akad Nikah",
-      "aspect": "landscape",
-      "category": "venue"
-    },
-    {
-      "id": "p9",
-      "src": "/images/venue-resepsi.jpg",
-      "tag": "Hotel Santika Premiere",
-      "title": "Grand Celebration Ballroom",
-      "aspect": "landscape",
-      "category": "venue"
     }
   ],
   "loveStory": [
     {
-      "desc": "Kisah kami bermula dari pertemuan tak terduga yang mengubah segalanya. Suasana yang sederhana tapi penuh makna menjadi awal dari perjalanan panjang kami.\n\nlorem ipsum dolor sit amet consectetur adipiscing elit dolor voluptate veniam distinctio sint maxime et cupiditate qui atque distinctio esse nam aliqua commodo qui vero voluptatum harum non quis id deserunt praesentium veniam veniam et vel atque est qui laboris lorem et quos cupiditate sint et id officia in minim",
+      "id": "story-1",
+      "desc": "Pertemuan tak terduga.",
       "year": "2022",
-      "event": "Pertama Bertemu"
-    },
-    {
-      "desc": "Setelah melewati berbagai dinamika bersama, kami memutuskan untuk menjalin ikatan yang lebih serius. Keputusan ini dilandasi oleh rasa saling percaya, menghargai, dan mencintai.\n\nlorem ipsum dolor sit amet consectetur adipiscing elit dolor voluptate veniam distinctio sint maxime et cupiditate qui atque distinctio esse nam aliqua commodo qui vero voluptatum harum non quis id deserunt praesentium veniam veniam et vel atque est qui laboris lorem et quos cupiditate sint et id officia in minim",
-      "year": "2024",
-      "event": "Mulai Berniat"
-    },
-    {
-      "desc": "Hari ini, kami berdiri di hadapan Tuhan dan orang-orang terkasih untuk mengucapkan janji suci. Sebuah momen yang menandai awal kehidupan baru sebagai suami istri.\n\nlorem ipsum dolor sit amet consectetur adipiscing elit dolor voluptate veniam distinctio sint maxime et cupiditate qui atque distinctio esse nam aliqua commodo qui vero voluptatum harum non quis id deserunt praesentium veniam veniam et vel atque est qui laboris lorem et quos cupiditate sint et id officia in minim",
-      "year": "2026",
-      "event": "Acara Pernikahan"
+      "event": "Awal Pertemuan",
+      "season": "Chapter 1",
+      "duration": "Episode Romance"
     }
   ],
   "countdown": {
@@ -156,53 +86,47 @@
   },
   "events": [
     {
-      "id": "akad",
-      "date": "Sabtu, 14 November 2026",
-      "time": "09:00 - 10:30 WIB",
+      "id": "event-akad",
+      "date": "2026-11-14",
+      "time": "08:00 - 10:00 WIB",
       "type": "AKAD NIKAH",
-      "title": "The Sacred Vow (Akad Nikah)",
+      "title": "AKAD NIKAH",
       "venue": "Masjid Agung Al-Barkah",
-      "mapUrl": "https://maps.google.com/?q=Masjid+Agung+Al-Barkah+Bekasi",
-      "address": "Jl. Veteran No. 46, Marga Jaya, Bekasi Selatan, Kota Bekasi",
-      "duration": "90 Menit",
-      "synopsis": "Ijab kabul sakral pengikatan janji suci di hadapan penghulu, para saksi, dan keluarga terkasih. Diselenggarakan dengan penuh khidmat dan rasa syukur.",
+      "mapUrl": "https://maps.google.com",
+      "address": "Jl. Veteran No. 46, Bekasi",
+      "duration": "Sakral • Janji Suci",
+      "synopsis": "Momen pengucapan ijab kabul sakral penyatuan dua insan dalam ikatan pernikahan.",
       "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Akad+Nikah+Destia+%26+Rakafansa&dates=20261114T020000Z/20261114T040000Z&details=Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Masjid+Agung+Al-Barkah+Bekasi",
       "episodeNumber": 1
     },
     {
-      "id": "resepsi",
-      "date": "Sabtu, 14 November 2026",
-      "time": "12:00 - 15:00 WIB",
+      "id": "event-resepsi",
+      "date": "2026-11-14",
+      "time": "11:00 - 14:00 WIB",
       "type": "RESEPSI PERNIKAHAN",
-      "title": "The Grand Celebration (Resepsi)",
-      "venue": "Grand Ballroom Hotel Santika Mega City",
-      "mapUrl": "https://maps.google.com/?q=Hotel+Santika+Mega+City+Bekasi",
-      "address": "Jl. Jendral Ahmad Yani No. 1, Marga Jaya, Kota Bekasi",
-      "duration": "180 Menit",
-      "synopsis": "Pesta perayaan penuh suka cita dan ramah tamah bersama sanak famili, sahabat, serta handai tolan. Dimeriahkan oleh jamuan prasmanan dan hiburan musik.",
+      "title": "RESEPSI PERNIKAHAN",
+      "venue": "Hotel Santika Premiere",
+      "mapUrl": "https://maps.google.com",
+      "address": "Jl. Ahmad Yani No. 1, Bekasi",
+      "duration": "Selebrasi • Jamuan Kasih",
+      "synopsis": "Pesta perayaan dan ramah tamah bersama sanak saudara serta sahabat tercinta.",
       "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Resepsi+Pernikahan+Destia+%26+Rakafansa&dates=20261114T050000Z/20261114T080000Z&details=Resepsi+Pernikahan+Destia+Dwi+Ramadhani+%26+Rakafansa+Saputra&location=Hotel+Santika+Bekasi",
       "episodeNumber": 2
     }
   ],
   "gifts": [
     {
-      "id": "bca",
+      "id": "gift-1",
       "bank": "BCA",
       "owner": "Destia Dwi Ramadhani",
       "number": "8820491823"
-    },
-    {
-      "id": "mandiri",
-      "bank": "MANDIRI",
-      "owner": "Rakafansa Saputra",
-      "number": "1560018928192"
     }
   ],
   "closing": {
     "badge": "WARM REGARDS • TERIMA KASIH",
     "title": "SEE YOU AT THE PREMIERE",
-    "message": "Merupakan suatu kebahagiaan dan kehormatan yang teramat besar bagi kami atas kehadiran, doa restu, serta kasih sayang yang Anda curahkan.",
-    "names": "DESTIA & RAKAFANSA",
+    "message": "Terima kasih atas doa restunya.",
+    "names": "RAKAFANSA & DESTIA",
     "dateLocation": "14 NOVEMBER 2026 • BEKASI, INDONESIA",
     "copyright": "© 2026 DESTIA & RAKAFANSA WEDDING SPECIAL • A NETFLIX ORIGINAL CELEBRATION • ALL RIGHTS RESERVED"
   },

@@ -17,29 +17,39 @@ interface KpiCardProps {
 
 const colorMap = {
   primary: {
-    bg: 'rgba(99,102,241,0.1)',
-    icon: '#818cf8',
-    border: 'rgba(99,102,241,0.2)',
+    bg: 'rgba(124, 58, 237, 0.12)',
+    icon: '#7c3aed',
+    border: 'rgba(124, 58, 237, 0.22)',
+    cardBg: 'linear-gradient(135deg, rgba(124, 58, 237, 0.04) 0%, #ffffff 100%)',
+    shadow: '0 4px 15px rgba(124, 58, 237, 0.08)',
   },
   success: {
-    bg: 'rgba(16,185,129,0.1)',
-    icon: '#34d399',
-    border: 'rgba(16,185,129,0.2)',
+    bg: 'rgba(5, 150, 105, 0.12)',
+    icon: '#059669',
+    border: 'rgba(5, 150, 105, 0.22)',
+    cardBg: 'linear-gradient(135deg, rgba(5, 150, 105, 0.04) 0%, #ffffff 100%)',
+    shadow: '0 4px 15px rgba(5, 150, 105, 0.08)',
   },
   warning: {
-    bg: 'rgba(245,158,11,0.1)',
-    icon: '#fbbf24',
-    border: 'rgba(245,158,11,0.2)',
+    bg: 'rgba(217, 119, 6, 0.12)',
+    icon: '#d97706',
+    border: 'rgba(217, 119, 6, 0.22)',
+    cardBg: 'linear-gradient(135deg, rgba(217, 119, 6, 0.04) 0%, #ffffff 100%)',
+    shadow: '0 4px 15px rgba(217, 119, 6, 0.08)',
   },
   info: {
-    bg: 'rgba(14,165,233,0.1)',
-    icon: '#38bdf8',
-    border: 'rgba(14,165,233,0.2)',
+    bg: 'rgba(6, 182, 212, 0.12)',
+    icon: '#0891b2',
+    border: 'rgba(6, 182, 212, 0.22)',
+    cardBg: 'linear-gradient(135deg, rgba(6, 182, 212, 0.04) 0%, #ffffff 100%)',
+    shadow: '0 4px 15px rgba(6, 182, 212, 0.08)',
   },
   error: {
-    bg: 'rgba(244,63,94,0.1)',
-    icon: '#fb7185',
-    border: 'rgba(244,63,94,0.2)',
+    bg: 'rgba(225, 29, 72, 0.12)',
+    icon: '#e11d48',
+    border: 'rgba(225, 29, 72, 0.22)',
+    cardBg: 'linear-gradient(135deg, rgba(225, 29, 72, 0.04) 0%, #ffffff 100%)',
+    shadow: '0 4px 15px rgba(225, 29, 72, 0.08)',
   },
 };
 
@@ -58,11 +68,14 @@ export const KpiCard: React.FC<KpiCardProps> = ({
         display: 'flex',
         alignItems: 'center',
         p: 0,
+        background: c.cardBg,
         border: `1px solid ${c.border}`,
-        transition: 'border-color 0.2s, transform 0.15s',
+        boxShadow: c.shadow,
+        transition: 'all 0.2s ease',
         '&:hover': {
           borderColor: c.icon,
-          transform: 'translateY(-1px)',
+          transform: 'translateY(-2px)',
+          boxShadow: `0 8px 20px ${c.border}`,
         },
       }}
     >

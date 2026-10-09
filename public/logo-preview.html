@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Logo Invatera - Color Matched Fill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f8fafc;
+      --card-light: #ffffff;
+      --text-dark: #0f172a;
+      --border-light: #e2e8f0;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+    .header {
+      max-width: 1000px;
+      margin: 0 auto 36px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #0b192c;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: #64748b;
+      font-size: 1rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card-light);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      border: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 30px -10px rgba(124, 58, 237, 0.12);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0b192c;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .logo-container {
+      width: 100%;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafaf9;
+      border-radius: 14px;
+      border: 1px dashed #e2e8f0;
+      margin-bottom: 20px;
+      padding: 20px;
+      position: relative;
+    }
+    .logo-container.dark {
+      background: #090d16;
+      border-color: #1e293b;
+    }
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    .dark-switch-banner {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      background: #0b192c;
+      color: #ffffff;
+      padding: 24px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge">Eksplorasi Vektor Asli (SVG)</div>
+    <h1>Evolusi Logo INVATERA: Warna Fill Senada Garis</h1>
+    <p class="subtitle">Warna isian (fill) dibuat 100% selaras dengan warna garis: ungu elektrik di kiri, bertransisi ke cyan cerah di kanan atas, dan navy di bagian bawah.</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- Card 1: Soft Translucent Glass Fill -->
+    <div class="card">
+      <div class="card-title">
+        <span>💎</span> Opsi 1: Soft Glass Tint (20% Fill)
+      </div>
+      <p class="card-desc">Garis luar tetap tajam dan dominan, bagian dalam diisi warna gradien lembut 20% yang memberi efek kaca modern berkedalaman.</p>
+      
+      <div class="logo-container">
+        <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gradStroke1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed" />
+              <stop offset="60%" stop-color="#3b82f6" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+            <linearGradient id="gradFill1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.18" />
+              <stop offset="60%" stop-color="#3b82f6" stop-opacity="0.18" />
+              <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.22" />
+            </linearGradient>
+          </defs>
+
+          <!-- Envelope Body Base (Navy with subtle soft fill) -->
+          <path d="M 140 85 L 140 135 A 8 8 0 0 1 132 143 L 132 143 A 8 8 0 0 1 124 135 L 124 85 A 8 8 0 0 1 140 85 Z" fill="#0b192c" />
+          <path d="M 140 136 L 255 136 A 12 12 0 0 0 267 124 L 267 90 A 8 8 0 0 0 251 90 L 251 120 L 140 120 Z" fill="#0b192c" />
+
+          <!-- V-Fold and Arrow (Matching Stroke & Fill) -->
+          <g>
+            <!-- Fill Shape for Arrow & Fold -->
+            <path d="M 130 75 Q 130 65 142 65 L 210 65 Q 218 65 224 71 L 248 98 L 248 60 L 235 60 L 256 36 L 277 60 L 264 60 L 264 105 Q 264 112 258 116 L 232 136 Q 225 141 218 136 L 155 83 L 140 83 Q 130 83 130 75 Z" 
+                  fill="url(#gradFill1)" />
+
+            <!-- Stroke Path for Arrow & Fold -->
+            <path d="M 134 76 Q 134 68 144 68 L 205 68 Q 212 68 217 73 L 244 102 L 244 58 L 232 58 L 256 32 L 280 58 L 268 58 L 268 108 Q 268 116 260 121 L 230 142 Q 223 147 215 142 L 150 86" 
+                  fill="none" stroke="url(#gradStroke1)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+            
+            <!-- Lower Arrow Line -->
+            <path d="M 230 115 L 255 135" fill="none" stroke="url(#gradStroke1)" stroke-width="12" stroke-linecap="round" />
+          </g>
+
+          <!-- Text -->
+          <text x="200" y="186" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#0b192c" letter-spacing="2">INVATERA</text>
+          <text x="200" y="206" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#0b192c" letter-spacing="4">DIGITAL INVITATIONS</text>
+        </svg>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-secondary" onclick="alert('Kode SVG siap disalin')">Lihat Vektor</button>
+      </div>
+    </div>
+
+    <!-- Card 2: Medium Luminous Fill -->
+    <div class="card">
+      <div class="card-title">
+        <span>✨</span> Opsi 2: Luminous Match (45% Fill)
+      </div>
+      <p class="card-desc">Tingkat isian lebih tegas (45% opacity). Warna ungu dan cyan tampak jelas di dalam lipatan, menciptakan kontras yang sangat hidup.</p>
+      
+      <div class="logo-container">
+        <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gradStroke2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed" />
+              <stop offset="50%" stop-color="#4f46e5" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+            <linearGradient id="gradFill2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.45" />
+              <stop offset="50%" stop-color="#4f46e5" stop-opacity="0.45" />
+              <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.5" />
+            </linearGradient>
+            <linearGradient id="navyFill2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0b192c" stop-opacity="0.12" />
+              <stop offset="100%" stop-color="#1e293b" stop-opacity="0.16" />
+            </linearGradient>
+          </defs>
+
+          <!-- Envelope Body Base (Navy with subtle soft fill) -->
+          <rect x="135" y="75" width="130" height="60" rx="8" fill="url(#navyFill2)" />
+          <path d="M 140 85 L 140 135 A 8 8 0 0 1 132 143 L 132 143 A 8 8 0 0 1 124 135 L 124 85 A 8 8 0 0 1 140 85 Z" fill="#0b192c" />
+          <path d="M 140 136 L 255 136 A 12 12 0 0 0 267 124 L 267 90 A 8 8 0 0 0 251 90 L 251 120 L 140 120 Z" fill="#0b192c" />
+
+          <!-- V-Fold and Arrow (Matching Stroke & Fill) -->
+          <g>
+            <path d="M 130 75 Q 130 65 142 65 L 210 65 Q 218 65 224 71 L 248 98 L 248 60 L 235 60 L 256 36 L 277 60 L 264 60 L 264 105 Q 264 112 258 116 L 232 136 Q 225 141 218 136 L 155 83 L 140 83 Q 130 83 130 75 Z" 
+                  fill="url(#gradFill2)" />
+
+            <path d="M 134 76 Q 134 68 144 68 L 205 68 Q 212 68 217 73 L 244 102 L 244 58 L 232 58 L 256 32 L 280 58 L 268 58 L 268 108 Q 268 116 260 121 L 230 142 Q 223 147 215 142 L 150 86" 
+                  fill="none" stroke="url(#gradStroke2)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+            
+            <path d="M 230 115 L 255 135" fill="none" stroke="url(#gradStroke2)" stroke-width="12" stroke-linecap="round" />
+          </g>
+
+          <!-- Text -->
+          <text x="200" y="186" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#0b192c" letter-spacing="2">INVATERA</text>
+          <text x="200" y="206" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#0b192c" letter-spacing="4">DIGITAL INVITATIONS</text>
+        </svg>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-secondary" onclick="alert('Kode SVG siap disalin')">Lihat Vektor</button>
+      </div>
+    </div>
+
+    <!-- Card 3: Solid Tech App Icon Fill -->
+    <div class="card">
+      <div class="card-title">
+        <span>🚀</span> Opsi 3: Solid Vibrant (100% Fill)
+      </div>
+      <p class="card-desc">Isian warna penuh solid (100%). Menyerupai gaya app icon modern (seperti Instagram/Stripe), sangat solid dan berwibawa.</p>
+      
+      <div class="logo-container">
+        <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="solidGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed" />
+              <stop offset="50%" stop-color="#4f46e5" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+          </defs>
+
+          <!-- Envelope Body Base (Navy solid) -->
+          <rect x="135" y="80" width="130" height="55" rx="6" fill="#0b192c" opacity="0.1" />
+          <path d="M 140 85 L 140 135 A 8 8 0 0 1 132 143 L 132 143 A 8 8 0 0 1 124 135 L 124 85 A 8 8 0 0 1 140 85 Z" fill="#0b192c" />
+          <path d="M 140 136 L 255 136 A 12 12 0 0 0 267 124 L 267 90 A 8 8 0 0 0 251 90 L 251 120 L 140 120 Z" fill="#0b192c" />
+
+          <!-- V-Fold and Arrow (Full Solid Fill with White Glow Outline) -->
+          <g>
+            <path d="M 130 75 Q 130 65 142 65 L 210 65 Q 218 65 224 71 L 248 98 L 248 60 L 235 60 L 256 36 L 277 60 L 264 60 L 264 105 Q 264 112 258 116 L 232 136 Q 225 141 218 136 L 155 83 L 140 83 Q 130 83 130 75 Z" 
+                  fill="url(#solidGrad3)" />
+
+            <path d="M 134 76 Q 134 68 144 68 L 205 68 Q 212 68 217 73 L 244 102 L 244 58 L 232 58 L 256 32 L 280 58 L 268 58 L 268 108 Q 268 116 260 121 L 230 142 Q 223 147 215 142 L 150 86" 
+                  fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" />
+          </g>
+
+          <!-- Text -->
+          <text x="200" y="186" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#0b192c" letter-spacing="2">INVATERA</text>
+          <text x="200" y="206" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#0b192c" letter-spacing="4">DIGITAL INVITATIONS</text>
+        </svg>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-secondary" onclick="alert('Kode SVG siap disalin')">Lihat Vektor</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Dark Mode Preview Section -->
+  <div class="dark-switch-banner">
+    <div>
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 4px;">🌙 Ingin Melihat Tampilan di Dark Mode (Latar Gelap)?</h3>
+      <p style="font-size: 0.85rem; color: #94a3b8;">Logo dengan isian gradien ini menyala sangat indah di latar belakang website mode malam.</p>
+    </div>
+    <button class="btn btn-primary" style="flex: 0 0 auto; padding: 12px 24px;" onclick="toggleDarkContainers()">Toggle Dark Mode</button>
+  </div>
+
+  <script>
+    let isDark = false;
+    function toggleDarkContainers() {
+      isDark = !isDark;
+      const containers = document.querySelectorAll('.logo-container');
+      containers.forEach(c => {
+        if (isDark) {
+          c.classList.add('dark');
+        } else {
+          c.classList.remove('dark');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

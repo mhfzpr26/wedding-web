@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { AVAILABLE_TEMPLATES } from '@/components/templates/registry';
+import type {
+  OnboardingFormData,
+  OnboardingResponseData,
+} from '@/types/onboarding';
 import type { RsvpPayload, RsvpRecord } from '@/types/rsvp';
 import type {
   ClientRecord,
@@ -985,4 +989,352 @@ export async function getSaasStats(): Promise<SaasStats> {
       totalRsvps,
     };
   }
+}
+
+// -------------------------------------------------------------
+// CLIENT ONBOARDING HELPERS
+// -------------------------------------------------------------
+export function configToOnboardingForm(
+  config: WeddingConfig,
+): OnboardingFormData {
+  const events = config.events || [];
+  const akad =
+    events.find((e) => e.type?.toUpperCase().includes('AKAD')) || events[0];
+  const resepsi =
+    events.find((e) => e.type?.toUpperCase().includes('RESEPSI')) ||
+    events[1] ||
+    events[0];
+  const others = events.filter((e) => e !== akad && e !== resepsi);
+
+  return {
+    couple: {
+      groom: {
+        fullName: config.couple?.groom?.name || '',
+        callName: config.couple?.groom?.callname || '',
+        fatherName: config.couple?.groom?.parents?.father || '',
+        motherName: config.couple?.groom?.parents?.mother || '',
+        childOrder: config.couple?.groom?.characterRole || 'Putra pertama dari',
+        instagram: config.couple?.groom?.instagram || '',
+        photo: config.couple?.groom?.photo || '',
+        bio: config.couple?.groom?.bio || '',
+      },
+      bride: {
+        fullName: config.couple?.bride?.name || '',
+        callName: config.couple?.bride?.callname || '',
+        fatherName: config.couple?.bride?.parents?.father || '',
+        motherName: config.couple?.bride?.parents?.mother || '',
+        childOrder: config.couple?.bride?.characterRole || 'Putri kedua dari',
+        instagram: config.couple?.bride?.instagram || '',
+        photo: config.couple?.bride?.photo || '',
+        bio: config.couple?.bride?.bio || '',
+      },
+      coverPhoto: config.cover?.bgImage || '',
+    },
+    events: {
+      akad: {
+        date: akad?.date || '',
+        startTime: akad?.time?.split('-')[0]?.trim() || '08:00',
+        endTime: akad?.time?.split('-')[1]?.trim() || '10:00 WIB',
+        venueName: akad?.venue || '',
+        address: akad?.address || '',
+        mapUrl: akad?.mapUrl || '',
+      },
+      resepsi: {
+        date: resepsi?.date || '',
+        startTime: resepsi?.time?.split('-')[0]?.trim() || '11:00',
+        endTime: resepsi?.time?.split('-')[1]?.trim() || '14:00 WIB',
+        venueName: resepsi?.venue || '',
+        address: resepsi?.address || '',
+        mapUrl: resepsi?.mapUrl || '',
+      },
+      additionalEvents: others.map((e) => ({
+        id: e.id,
+        title: e.title || e.type,
+        date: e.date,
+        time: e.time,
+        venueName: e.venue,
+        address: e.address,
+        mapUrl: e.mapUrl,
+      })),
+    },
+    story: {
+      stories: (config.loveStory || []).map((s, idx) => ({
+        id: s.id || `story-${s.year}-${idx}`,
+        year: s.year,
+        title: s.event,
+        desc: s.desc,
+      })),
+      galleryPhotos: (config.gallery || []).map((g) => g.src),
+      videoUrl: config.trailer?.videoUrl || '',
+    },
+    gift: {
+      bankAccounts: (config.gifts || []).map((g) => ({
+        id: g.id,
+        bank: g.bank,
+        number: g.number,
+        owner: g.owner,
+      })),
+      musicTitle: config.music?.title || '',
+      audioUrl: config.music?.audioUrl || '',
+    },
+    closing: {
+      quote: config.opening?.quote || '',
+      quoteSource: config.opening?.quoteSource || 'QS. AR-RUM : 21',
+      closingMessage: config.closing?.message || '',
+    },
+  };
+}
+
+export function onboardingFormToConfig(
+  existing: WeddingConfig,
+  form: OnboardingFormData,
+): WeddingConfig {
+  const groomCall = form.couple.groom.callName.trim() || 'Groom';
+  const brideCall = form.couple.bride.callName.trim() || 'Bride';
+  const groomFull = form.couple.groom.fullName.trim() || groomCall;
+  const brideFull = form.couple.bride.fullName.trim() || brideCall;
+  const coupleTitle = `${groomCall} & ${brideCall}`;
+  const coupleFullTitle = `${groomFull} & ${brideFull}`;
+
+  const akadTime =
+    `${form.events.akad.startTime} - ${form.events.akad.endTime}`.trim();
+  const resepsiTime =
+    `${form.events.resepsi.startTime} - ${form.events.resepsi.endTime}`.trim();
+
+  const primaryDate =
+    form.events.akad.date ||
+    form.events.resepsi.date ||
+    existing.countdown.targetDate.split('T')[0];
+
+  const updatedEvents = [
+    {
+      id: 'event-akad',
+      type: 'AKAD NIKAH',
+      episodeNumber: 1,
+      title: 'AKAD NIKAH',
+      duration: 'Sakral • Janji Suci',
+      synopsis:
+        'Momen pengucapan ijab kabul sakral penyatuan dua insan dalam ikatan pernikahan.',
+      date: form.events.akad.date || primaryDate,
+      time: akadTime || '08:00 - 10:00 WIB',
+      venue: form.events.akad.venueName,
+      address: form.events.akad.address,
+      mapUrl: form.events.akad.mapUrl,
+      calendarUrl: existing.events?.[0]?.calendarUrl || '',
+      venuePhoto: existing.events?.[0]?.venuePhoto,
+    },
+    {
+      id: 'event-resepsi',
+      type: 'RESEPSI PERNIKAHAN',
+      episodeNumber: 2,
+      title: 'RESEPSI PERNIKAHAN',
+      duration: 'Selebrasi • Jamuan Kasih',
+      synopsis:
+        'Pesta perayaan dan ramah tamah bersama sanak saudara serta sahabat tercinta.',
+      date: form.events.resepsi.date || primaryDate,
+      time: resepsiTime || '11:00 - 14:00 WIB',
+      venue: form.events.resepsi.venueName,
+      address: form.events.resepsi.address,
+      mapUrl: form.events.resepsi.mapUrl,
+      calendarUrl: existing.events?.[1]?.calendarUrl || '',
+      venuePhoto: existing.events?.[1]?.venuePhoto,
+    },
+    ...(form.events.additionalEvents || []).map((e, idx) => ({
+      id: e.id || `event-extra-${idx}`,
+      type: e.title.toUpperCase(),
+      episodeNumber: 3 + idx,
+      title: e.title,
+      duration: 'Rangkaian Spesial',
+      synopsis: 'Rangkaian acara pendukung pernikahan.',
+      date: e.date || primaryDate,
+      time: e.time,
+      venue: e.venueName,
+      address: e.address,
+      mapUrl: e.mapUrl,
+      calendarUrl: '',
+    })),
+  ];
+
+  const updatedGallery = form.story.galleryPhotos.map((src, idx) => ({
+    id: `photo-${idx + 1}`,
+    src,
+    title: `${coupleTitle} - Moment ${idx + 1}`,
+    category: (idx % 2 === 0 ? 'prewedding' : 'lead') as
+      | 'prewedding'
+      | 'lead'
+      | 'venue',
+    tag: `Photo ${idx + 1}`,
+    aspect: (idx % 3 === 0
+      ? 'portrait'
+      : idx % 3 === 1
+        ? 'landscape'
+        : 'square') as 'portrait' | 'landscape' | 'square',
+  }));
+
+  const updatedStories = form.story.stories.map((s, idx) => ({
+    id: `story-${idx + 1}`,
+    year: s.year,
+    event: s.title,
+    desc: s.desc,
+    season: `Chapter ${idx + 1}`,
+    duration: 'Episode Romance',
+  }));
+
+  const updatedGifts = form.gift.bankAccounts.map((b, idx) => ({
+    id: b.id || `gift-${idx + 1}`,
+    bank: b.bank,
+    number: b.number,
+    owner: b.owner,
+  }));
+
+  return {
+    ...existing,
+    title: `${coupleTitle} | The Wedding`,
+    seoDescription: `Undangan Pernikahan ${coupleFullTitle} - ${primaryDate}`,
+    cover: {
+      ...existing.cover,
+      title: coupleTitle.toUpperCase(),
+      starring: coupleFullTitle,
+      bgImage: form.couple.coverPhoto || existing.cover.bgImage,
+      year: primaryDate ? primaryDate.split('-')[0] : existing.cover.year,
+    },
+    opening: {
+      ...existing.opening,
+      title: `${coupleTitle}:`,
+      dateText: primaryDate,
+      locationText:
+        `${form.events.akad.venueName || ''} & ${form.events.resepsi.venueName || ''}`.replace(
+          /^ & | & $/g,
+          '',
+        ),
+      quote: form.closing.quote || existing.opening.quote,
+      quoteSource: form.closing.quoteSource || existing.opening.quoteSource,
+      posterImage: form.couple.coverPhoto || existing.opening.posterImage,
+    },
+    couple: {
+      groom: {
+        ...existing.couple.groom,
+        name: groomFull,
+        callname: groomCall,
+        characterRole:
+          form.couple.groom.childOrder || existing.couple.groom.characterRole,
+        bio: form.couple.groom.bio || existing.couple.groom.bio,
+        instagram: form.couple.groom.instagram,
+        photo: form.couple.groom.photo || existing.couple.groom.photo,
+        parents: {
+          father: form.couple.groom.fatherName,
+          mother: form.couple.groom.motherName,
+        },
+      },
+      bride: {
+        ...existing.couple.bride,
+        name: brideFull,
+        callname: brideCall,
+        characterRole:
+          form.couple.bride.childOrder || existing.couple.bride.characterRole,
+        bio: form.couple.bride.bio || existing.couple.bride.bio,
+        instagram: form.couple.bride.instagram,
+        photo: form.couple.bride.photo || existing.couple.bride.photo,
+        parents: {
+          father: form.couple.bride.fatherName,
+          mother: form.couple.bride.motherName,
+        },
+      },
+    },
+    events: updatedEvents,
+    countdown: {
+      ...existing.countdown,
+      targetDate: primaryDate
+        ? `${primaryDate}T09:00:00+07:00`
+        : existing.countdown.targetDate,
+    },
+    gallery: updatedGallery.length > 0 ? updatedGallery : existing.gallery,
+    loveStory: updatedStories.length > 0 ? updatedStories : existing.loveStory,
+    gifts: updatedGifts.length > 0 ? updatedGifts : existing.gifts,
+    closing: {
+      ...existing.closing,
+      names: coupleTitle.toUpperCase(),
+      message: form.closing.closingMessage || existing.closing.message,
+    },
+    music: {
+      ...existing.music,
+      title: form.gift.musicTitle || existing.music.title,
+      audioUrl: form.gift.audioUrl || existing.music.audioUrl,
+    },
+    trailer: {
+      ...existing.trailer,
+      filmTitle: `${coupleTitle}: The Journey`,
+      videoUrl: form.story.videoUrl || existing.trailer.videoUrl,
+      posterUrl: form.couple.coverPhoto || existing.trailer.posterUrl,
+    },
+  };
+}
+
+export async function getInvitationForOnboarding(
+  token: string,
+): Promise<OnboardingResponseData | null> {
+  const inv =
+    (await getInvitationById(token)) || (await getInvitationBySlug(token));
+  if (!inv) return null;
+
+  const config = await getInvitationConfig(inv.id);
+  const formData = configToOnboardingForm(config);
+  const [rsvps, wishes] = await Promise.all([
+    getTenantRsvps(inv.id),
+    getTenantWishes(inv.id),
+  ]);
+
+  return {
+    invitation: {
+      id: inv.id,
+      title: inv.title,
+      slug: inv.slug,
+      status: inv.status,
+      eventDate: inv.eventDate,
+      templateId: inv.templateId,
+    },
+    client: inv.client || null,
+    formData,
+    rsvps,
+    wishes,
+  };
+}
+
+export async function saveOnboardingSubmission(
+  token: string,
+  formData: OnboardingFormData,
+  isFinalSubmit = false,
+): Promise<{
+  success: boolean;
+  message: string;
+  invitation: InvitationRecord;
+}> {
+  const inv =
+    (await getInvitationById(token)) || (await getInvitationBySlug(token));
+  if (!inv) throw new Error('Undangan tidak ditemukan');
+
+  const currentConfig = await getInvitationConfig(inv.id);
+  const updatedConfig = onboardingFormToConfig(currentConfig, formData);
+
+  await saveInvitationConfig(inv.id, updatedConfig);
+
+  const primaryDate = formData.events.akad.date || formData.events.resepsi.date;
+  const updatePayload: Partial<InvitationRecord> = {};
+  if (primaryDate && primaryDate !== inv.eventDate) {
+    updatePayload.eventDate = primaryDate;
+  }
+
+  let updatedInv = inv;
+  if (Object.keys(updatePayload).length > 0) {
+    const res = await updateInvitation(inv.id, updatePayload);
+    if (res) updatedInv = res;
+  }
+
+  return {
+    success: true,
+    message: isFinalSubmit
+      ? 'Formulir data pernikahan berhasil dikirimkan ke tim desainer!'
+      : 'Draf data berhasil disimpan!',
+    invitation: updatedInv,
+  };
 }

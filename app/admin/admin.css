@@ -1,62 +1,63 @@
 /* ==========================================================================
-   WEDFLOW MULTI-TENANT SAAS ADMIN DASHBOARD
-   Solid, High-Contrast Modern Dark Theme (No Glassmorphism, No Blurs)
+   INVATERA MULTI-TENANT SAAS ADMIN DASHBOARD
+   Electric Violet & Cyber Cyan High-Tech Signature Theme
    ========================================================================== */
 
 :root {
-  /* Solid Opaque Backgrounds (Zero Transparency / Zero Blurs) */
-  --admin-bg: #0b0f19;
-  --admin-surface: #111827;
-  --admin-surface-card: #1f2937;
-  --admin-surface-card-hover: #283548;
-  --admin-surface-subtle: #161f30;
+  /* Soft Slate Cloud Backgrounds (#F8FAFC + Crisp White Cards) */
+  --admin-bg: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-surface-card: #ffffff;
+  --admin-surface-card-hover: #f8fafc;
+  --admin-surface-subtle: #f1f5f9;
 
-  /* Crisp Solid Borders & Dividers */
-  --admin-border: #374151;
-  --admin-border-subtle: #1f2937;
-  --admin-border-focus: #6366f1;
-  --admin-border-hover: #4b5563;
+  /* Crisp Subtle Borders & Dividers */
+  --admin-border: #e2e8f0;
+  --admin-border-subtle: #f1f5f9;
+  --admin-border-focus: #7c3aed;
+  --admin-border-hover: #cbd5e1;
 
-  /* Typography Colors */
-  --admin-text-primary: #f9fafb;
-  --admin-text-secondary: #9ca3af;
-  --admin-text-muted: #6b7280;
+  /* High-Contrast Typography Colors */
+  --admin-text-primary: #0f172a;
+  --admin-text-secondary: #64748b;
+  --admin-text-muted: #94a3b8;
 
-  /* Solid Primary Brand (Indigo 600) */
-  --admin-primary: #4f46e5;
-  --admin-primary-hover: #4338ca;
-  --admin-primary-dark: #3730a3;
-  --admin-primary-light: #818cf8;
-  --admin-primary-bg: #1e1b4b;
-  --admin-primary-border: #4338ca;
+  /* Solid Primary Brand (Invatera Electric Violet) */
+  --admin-primary: #7c3aed;
+  --admin-primary-hover: #6d28d9;
+  --admin-primary-dark: #5b21b6;
+  --admin-primary-light: #8b5cf6;
+  --admin-primary-bg: rgba(124, 58, 237, 0.08);
+  --admin-primary-border: #7c3aed;
+  --admin-gradient-brand: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
 
   /* Backward Compatibility Alias */
-  --admin-red: #4f46e5;
-  --admin-red-hover: #4338ca;
-  --admin-red-dark: #3730a3;
+  --admin-red: #7c3aed;
+  --admin-red-hover: #6d28d9;
+  --admin-red-dark: #5b21b6;
 
   /* Solid Semantic State Colors */
-  --admin-green: #10b981;
-  --admin-green-bg: #064e3b;
-  --admin-green-border: #059669;
-  --admin-amber: #f59e0b;
-  --admin-amber-bg: #451a03;
-  --admin-amber-border: #d97706;
-  --admin-cyan: #0ea5e9;
-  --admin-cyan-bg: #082f49;
-  --admin-cyan-border: #0284c7;
-  --admin-rose: #f43f5e;
-  --admin-rose-bg: #4c0519;
-  --admin-rose-border: #e11d48;
+  --admin-green: #059669;
+  --admin-green-bg: #ecfdf5;
+  --admin-green-border: #10b981;
+  --admin-amber: #d97706;
+  --admin-amber-bg: #fffbeb;
+  --admin-amber-border: #f59e0b;
+  --admin-cyan: #06b6d4;
+  --admin-cyan-bg: rgba(6, 182, 212, 0.08);
+  --admin-cyan-border: #0891b2;
+  --admin-rose: #e11d48;
+  --admin-rose-bg: #fff1f2;
+  --admin-rose-border: #f43f5e;
 
-  /* Crisp Geometry & Sharp Borders */
+  /* Crisp Geometry & Soft Elevation Shadows */
   --admin-radius-sm: 6px;
   --admin-radius-md: 8px;
   --admin-radius-lg: 10px;
   --admin-radius-xl: 12px;
-  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --admin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --admin-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --admin-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --admin-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
   --admin-font: var(
     --font-sans,
     -apple-system,
@@ -105,7 +106,7 @@
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.5px;
-  color: #ffffff;
+  color: var(--admin-text-primary);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -157,7 +158,7 @@
 }
 
 .admin-primary-nav__item:hover {
-  color: #ffffff;
+  color: var(--admin-text-primary);
   background-color: var(--admin-surface-card);
 }
 
@@ -216,19 +217,19 @@
 .admin-btn--secondary:hover:not(:disabled) {
   background-color: var(--admin-surface-card-hover);
   border-color: var(--admin-border-hover);
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-btn--outline {
   background-color: transparent;
-  color: #e5e7eb;
+  color: var(--admin-text-primary);
   border-color: var(--admin-border);
 }
 
 .admin-btn--outline:hover:not(:disabled) {
   background-color: var(--admin-surface-card);
   border-color: var(--admin-border-hover);
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-btn--success {
@@ -315,7 +316,7 @@
 .admin-kpi-card__value {
   font-size: 2.1rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--admin-text-primary);
   line-height: 1;
 }
 
@@ -369,7 +370,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-card__desc {
@@ -461,7 +462,7 @@
 /* Status Select Dropdown */
 .admin-status-select {
   background-color: var(--admin-surface);
-  color: #ffffff;
+  color: var(--admin-text-primary);
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-sm);
   padding: 0.35rem 0.65rem;
@@ -527,7 +528,7 @@
 }
 
 .admin-nav__item:hover {
-  color: #ffffff;
+  color: var(--admin-text-primary);
   background-color: var(--admin-surface-card);
 }
 
@@ -561,7 +562,7 @@
   font-size: 1.15rem;
   font-weight: 800;
   margin: 0;
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-editor-bar__controls {
@@ -597,7 +598,7 @@
   background-color: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-sm);
-  color: #ffffff;
+  color: var(--admin-text-primary);
   font-family: inherit;
   font-size: 0.9rem;
   padding: 0.65rem 0.85rem;
@@ -700,7 +701,7 @@
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-modal__body {
@@ -750,7 +751,7 @@
   height: 180px;
   position: relative;
   overflow: hidden;
-  background-color: #000000;
+  background-color: var(--admin-surface-subtle);
 }
 
 .admin-template-card__thumb {
@@ -784,7 +785,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 0.4rem;
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .admin-template-card__desc {
@@ -802,7 +803,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--admin-bg);
-  color: #ffffff;
+  color: var(--admin-text-primary);
   text-align: center;
 }
 

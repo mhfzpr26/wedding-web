@@ -1,13 +1,20 @@
 'use client';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SaveIcon from '@mui/icons-material/Save';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
@@ -16,6 +23,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import type React from 'react';
+import { useState } from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 import type { InvitationStatus } from '@/types/wedding';
 
@@ -49,6 +57,35 @@ export const TenantContextBar: React.FC = () => {
     (i) => i.id === selectedInvitationId,
   );
   const statusInfo = editorStatus ? statusConfig[editorStatus] : null;
+
+  const [formMenuAnchor, setFormMenuAnchor] = useState<null | HTMLElement>(
+    null,
+  );
+
+  const getPortalUrl = () => {
+    const slug = editorSlug || currentInvitation?.slug || '';
+    return `${window.location.origin}/portal/${slug}`;
+  };
+
+  const handleCopyPortalLink = () => {
+    navigator.clipboard.writeText(getPortalUrl());
+    showToast('success', 'Link portal klien berhasil disalin!');
+    setFormMenuAnchor(null);
+  };
+
+  const handleSendViaWhatsApp = () => {
+    const phone =
+      currentInvitation?.client?.phone?.replace(/[^0-9]/g, '') || '';
+    const waPhone = phone.startsWith('0') ? `62${phone.slice(1)}` : phone;
+    const clientName = currentInvitation?.client?.name || 'Kak';
+    const link = getPortalUrl();
+    const msg = `Halo ${clientName}, berikut tautan portal pernikahan Anda untuk melengkapi data, menyebarkan undangan ke tamu via WhatsApp, dan memantau kehadiran:\n\n${link}\n\nTerima kasih! 🙏`;
+    window.open(
+      `https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`,
+      '_blank',
+    );
+    setFormMenuAnchor(null);
+  };
 
   const handleUpdateStatus = async (newStatus: InvitationStatus) => {
     if (!selectedInvitationId) return;
@@ -142,7 +179,7 @@ export const TenantContextBar: React.FC = () => {
         justifyContent: 'space-between',
         gap: 1.5,
         flexWrap: 'wrap',
-        bgcolor: '#0d1220',
+        bgcolor: 'background.paper',
       }}
     >
       {/* Left: Back + Title */}
@@ -161,7 +198,7 @@ export const TenantContextBar: React.FC = () => {
             onClick={() => setPrimaryTab('dashboard')}
             sx={{
               color: 'text.secondary',
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: 'action.hover',
               borderRadius: 1.5,
             }}
           >
@@ -286,6 +323,79 @@ export const TenantContextBar: React.FC = () => {
         <Box
           sx={{ display: 'flex', gap: 1, width: { xs: '100%', sm: 'auto' } }}
         >
+          {/* Form Klien Button & Menu */}
+          {currentInvitation && (
+            <>
+              <Tooltip title="Bagikan portal mandiri pengantin ke klien (isi data, sebar WA, rekap tamu)">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="warning"
+                  startIcon={<AssignmentIcon />}
+                  onClick={(e) => setFormMenuAnchor(e.currentTarget)}
+                  sx={{ flex: { xs: 1, sm: 'initial' }, borderRadius: 1.5 }}
+                >
+                  Portal Klien
+                </Button>
+              </Tooltip>
+              <Menu
+                anchorEl={formMenuAnchor}
+                open={Boolean(formMenuAnchor)}
+                onClose={() => setFormMenuAnchor(null)}
+                slotProps={{
+                  paper: {
+                    sx: {
+                      bgcolor: 'background.paper',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      boxShadow: '0 10px 15px -3px rgba(15,23,42,0.08)',
+                      minWidth: 220,
+                    },
+                  },
+                }}
+              >
+                <MenuItem onClick={handleCopyPortalLink}>
+                  <ListItemIcon>
+                    <ContentCopyIcon
+                      fontSize="small"
+                      sx={{ color: 'primary.main' }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Salin Link Portal"
+                    secondary="Untuk dikirim ke pengantin"
+                  />
+                </MenuItem>
+                <MenuItem onClick={handleSendViaWhatsApp}>
+                  <ListItemIcon>
+                    <WhatsAppIcon fontSize="small" sx={{ color: '#25d366' }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Kirim Portal via WhatsApp"
+                    secondary="Template pesan otomatis"
+                  />
+                </MenuItem>
+                <MenuItem
+                  component={Link}
+                  href={`/portal/${editorSlug || currentInvitation.slug}`}
+                  target="_blank"
+                  onClick={() => setFormMenuAnchor(null)}
+                >
+                  <ListItemIcon>
+                    <OpenInNewIcon
+                      fontSize="small"
+                      sx={{ color: 'text.secondary' }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Buka Portal Pengantin"
+                    secondary="Tampilan layar pengantin"
+                  />
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+
           {/* Preview Live */}
           {currentInvitation && (
             <Tooltip
@@ -315,7 +425,13 @@ export const TenantContextBar: React.FC = () => {
             sx={{
               flex: { xs: 1, sm: 'initial' },
               borderRadius: 1.5,
-              fontWeight: 600,
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)',
+              boxShadow: '0 3px 12px rgba(124, 58, 237, 0.25)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #6d28d9 0%, #0891b2 100%)',
+                boxShadow: '0 4px 16px rgba(124, 58, 237, 0.35)',
+              },
             }}
           >
             {saving ? 'Menyimpan…' : 'Simpan'}

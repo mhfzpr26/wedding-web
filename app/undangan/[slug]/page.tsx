@@ -211,6 +211,12 @@ export default async function UndanganPage({
     incrementInvitationViews(invitation.id).catch(() => {});
   }
 
+  const templateOverride =
+    typeof query?.template === 'string' ? query.template : undefined;
+  const activeConfig = templateOverride
+    ? { ...config, templateId: templateOverride }
+    : config;
+
   return (
     <>
       {/* Draft Mode Notification Banner */}
@@ -260,7 +266,7 @@ export default async function UndanganPage({
       )}
 
       <TemplateRouter
-        config={config}
+        config={activeConfig}
         guestName={guestName}
         invitationSlug={invitation.slug}
       />

@@ -79,6 +79,20 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
       sx={{
         top: 0,
         zIndex: (theme) => theme.zIndex.appBar,
+        background: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '2.5px',
+          background:
+            'linear-gradient(90deg, #7c3aed 0%, #06b6d4 35%, #f43f5e 70%, #f59e0b 100%)',
+          zIndex: 1,
+        },
       }}
     >
       <Toolbar
@@ -121,11 +135,11 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
               width: 30,
               height: 30,
               borderRadius: 1.5,
-              bgcolor: 'rgba(99,102,241,0.15)',
+              bgcolor: 'rgba(124,58,237,0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'primary.light',
+              color: 'primary.main',
               flexShrink: 0,
             }}
           >
@@ -164,11 +178,11 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({
               label={`${stats.totalClients} Client`}
               size="small"
               sx={{
-                bgcolor: 'rgba(99,102,241,0.12)',
-                color: 'primary.light',
+                bgcolor: 'rgba(124,58,237,0.08)',
+                color: 'primary.main',
                 fontWeight: 700,
                 fontSize: '0.72rem',
-                border: '1px solid rgba(99,102,241,0.25)',
+                border: '1px solid rgba(124,58,237,0.2)',
               }}
             />
             <Chip

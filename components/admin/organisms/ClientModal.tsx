@@ -115,15 +115,6 @@ export const ClientModal: React.FC = () => {
       onClose={() => setShowClientModal(false)}
       maxWidth="sm"
       fullWidth
-      slotProps={{
-        paper: {
-          sx: {
-            bgcolor: '#111827 !important',
-            backgroundImage: 'none !important',
-            border: '1px solid #1f2937',
-          },
-        },
-      }}
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -132,16 +123,16 @@ export const ClientModal: React.FC = () => {
               width: 36,
               height: 36,
               borderRadius: 2,
-              bgcolor: 'rgba(99,102,241,0.12)',
+              bgcolor: 'rgba(124,58,237,0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
             {isEdit ? (
-              <PersonIcon sx={{ color: 'primary.light', fontSize: 20 }} />
+              <PersonIcon sx={{ color: 'primary.main', fontSize: 20 }} />
             ) : (
-              <PersonAddIcon sx={{ color: 'primary.light', fontSize: 20 }} />
+              <PersonAddIcon sx={{ color: 'primary.main', fontSize: 20 }} />
             )}
           </Box>
           {isEdit ? 'Edit Data Client' : 'Daftarkan Client Baru'}

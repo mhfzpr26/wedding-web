@@ -48,9 +48,15 @@ export default async function HomePage({ searchParams }: PageProps) {
         ? params.u
         : '') || '';
 
+  const templateOverride =
+    typeof params?.template === 'string' ? params.template : undefined;
+  const activeConfig = templateOverride
+    ? { ...config, templateId: templateOverride }
+    : config;
+
   return (
     <TemplateRouter
-      config={config}
+      config={activeConfig}
       guestName={guestName}
       invitationSlug="destia-rakafansa"
     />

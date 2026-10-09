@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import type React from 'react';
 import './styles/global.css';
 import './styles/invitation.css';
+import './styles/spotify.css';
 
 export const metadata: Metadata = {
   title: 'Destia & Rakafansa | The Wedding',

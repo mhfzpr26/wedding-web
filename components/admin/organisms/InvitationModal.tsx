@@ -114,15 +114,6 @@ export const InvitationModal: React.FC = () => {
       onClose={() => setShowCreateInvModal(false)}
       maxWidth="sm"
       fullWidth
-      slotProps={{
-        paper: {
-          sx: {
-            bgcolor: '#111827 !important',
-            backgroundImage: 'none !important',
-            border: '1px solid #1f2937',
-          },
-        },
-      }}
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -131,13 +122,13 @@ export const InvitationModal: React.FC = () => {
               width: 36,
               height: 36,
               borderRadius: 2,
-              bgcolor: 'rgba(99,102,241,0.12)',
+              bgcolor: 'rgba(124,58,237,0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <CardGiftcardIcon sx={{ color: 'primary.light', fontSize: 20 }} />
+            <CardGiftcardIcon sx={{ color: 'primary.main', fontSize: 20 }} />
           </Box>
           Buat Undangan Baru
         </Box>

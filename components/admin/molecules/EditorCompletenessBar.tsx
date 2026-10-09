@@ -31,6 +31,32 @@ export interface CompletenessItem {
   isComplete: boolean;
 }
 
+export const CATEGORY_COLORS: Record<
+  string,
+  { bg: string; color: string; border: string }
+> = {
+  appearance: {
+    bg: 'rgba(124, 58, 237, 0.08)',
+    color: '#7c3aed',
+    border: 'rgba(124, 58, 237, 0.22)',
+  },
+  schedule: {
+    bg: 'rgba(244, 63, 94, 0.08)',
+    color: '#f43f5e',
+    border: 'rgba(244, 63, 94, 0.22)',
+  },
+  media: {
+    bg: 'rgba(245, 158, 11, 0.08)',
+    color: '#d97706',
+    border: 'rgba(245, 158, 11, 0.22)',
+  },
+  interaction: {
+    bg: 'rgba(6, 182, 212, 0.08)',
+    color: '#0891b2',
+    border: 'rgba(6, 182, 212, 0.22)',
+  },
+};
+
 export function computeCompletenessItems(
   config: WeddingConfig | null,
 ): CompletenessItem[] {
@@ -217,7 +243,7 @@ export const EditorCompletenessBar: React.FC = () => {
         sx={{
           borderBottom: '1px solid',
           borderColor: 'divider',
-          bgcolor: 'rgba(255,255,255,0.015)',
+          bgcolor: 'background.paper',
           px: { xs: 2, md: 3 },
           py: 1.5,
         }}
@@ -250,14 +276,14 @@ export const EditorCompletenessBar: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 bgcolor: isAllComplete
-                  ? 'rgba(46,125,50,0.15)'
+                  ? 'rgba(16,185,129,0.15)'
                   : isGoodProgress
-                    ? 'rgba(99,102,241,0.15)'
+                    ? 'rgba(124,58,237,0.15)'
                     : 'rgba(237,108,2,0.15)',
                 color: isAllComplete
                   ? 'success.main'
                   : isGoodProgress
-                    ? 'primary.main'
+                    ? '#06b6d4'
                     : 'warning.main',
               }}
             >
@@ -311,7 +337,15 @@ export const EditorCompletenessBar: React.FC = () => {
                 sx={{
                   height: 6,
                   borderRadius: 3,
-                  bgcolor: 'rgba(255,255,255,0.08)',
+                  bgcolor: '#e2e8f0',
+                  '& .MuiLinearProgress-bar': {
+                    borderRadius: 3,
+                    background: isAllComplete
+                      ? undefined
+                      : isGoodProgress
+                        ? 'linear-gradient(90deg, #7c3aed 0%, #06b6d4 100%)'
+                        : undefined,
+                  },
                 }}
               />
             </Box>
@@ -448,7 +482,13 @@ export const EditorCompletenessBar: React.FC = () => {
                           sx={{
                             fontSize: '0.65rem',
                             height: 20,
-                            bgcolor: 'rgba(255,255,255,0.06)',
+                            fontWeight: 700,
+                            bgcolor:
+                              CATEGORY_COLORS[item.category]?.bg ?? '#f1f5f9',
+                            color:
+                              CATEGORY_COLORS[item.category]?.color ??
+                              'text.secondary',
+                            border: `1px solid ${CATEGORY_COLORS[item.category]?.border ?? '#e2e8f0'}`,
                           }}
                         />
                         <Typography
@@ -515,7 +555,7 @@ export const EditorCompletenessBar: React.FC = () => {
                     sx={{
                       p: 1.25,
                       borderRadius: 1.5,
-                      bgcolor: 'rgba(255,255,255,0.02)',
+                      bgcolor: '#f8fafc',
                       border: '1px solid',
                       borderColor: 'divider',
                       display: 'flex',

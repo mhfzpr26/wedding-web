@@ -3,9 +3,9 @@ import { AdminClientWrapper } from '@/components/admin/templates/AdminClientWrap
 import './admin.css';
 
 export const metadata: Metadata = {
-  title: 'WEDFLOW — SaaS Command Center',
+  title: 'INVATERA — SaaS Studio & Command Center',
   description:
-    'Central multi-tenant admin panel untuk mengelola seluruh client, undangan, template, dan konten SaaS Wedding.',
+    'Central multi-tenant admin panel untuk mengelola seluruh client, undangan, template, dan konten SaaS Invatera Digital Invitations.',
 };
 
 export default function AdminPage() {

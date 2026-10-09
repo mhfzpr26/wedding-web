@@ -1,59 +1,60 @@
 import { createTheme } from '@mui/material/styles';
 
 /**
- * WEDFLOW Admin MUI Dark Theme
- * Solid, high-contrast, opaque — no glassmorphism
+ * INVATERA Admin MUI Soft Slate Cloud Theme (Light Mode)
+ * Stripe & Linear Light aesthetic: Calm #F8FAFC canvas with crisp white cards
+ * Electric Violet & Cyber Cyan high-tech brand signature
  */
-const wedflowAdminTheme = createTheme({
+const invateraAdminTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: '#6366f1',
-      light: '#818cf8',
-      dark: '#4338ca',
+      main: '#7c3aed',
+      light: '#8b5cf6',
+      dark: '#6d28d9',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#10b981',
-      light: '#34d399',
-      dark: '#059669',
+      main: '#06b6d4',
+      light: '#38bdf8',
+      dark: '#0891b2',
       contrastText: '#ffffff',
     },
     error: {
-      main: '#f43f5e',
-      light: '#fb7185',
-      dark: '#e11d48',
+      main: '#e11d48',
+      light: '#f43f5e',
+      dark: '#be123c',
     },
     warning: {
-      main: '#f59e0b',
-      light: '#fbbf24',
-      dark: '#d97706',
+      main: '#d97706',
+      light: '#f59e0b',
+      dark: '#b45309',
     },
     success: {
-      main: '#10b981',
-      light: '#34d399',
-      dark: '#059669',
+      main: '#059669',
+      light: '#10b981',
+      dark: '#047857',
     },
     info: {
-      main: '#0ea5e9',
+      main: '#06b6d4',
       light: '#38bdf8',
-      dark: '#0284c7',
+      dark: '#0891b2',
     },
     background: {
-      default: '#0b0f19',
-      paper: '#111827',
+      default: '#f8fafc',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#f9fafb',
-      secondary: '#9ca3af',
-      disabled: '#4b5563',
+      primary: '#0f172a',
+      secondary: '#64748b',
+      disabled: '#94a3b8',
     },
-    divider: '#1f2937',
+    divider: '#e2e8f0',
     action: {
-      hover: 'rgba(99, 102, 241, 0.08)',
-      selected: 'rgba(99, 102, 241, 0.16)',
-      disabled: '#374151',
-      disabledBackground: '#1f2937',
+      hover: 'rgba(124, 58, 237, 0.05)',
+      selected: 'rgba(124, 58, 237, 0.10)',
+      disabled: '#cbd5e1',
+      disabledBackground: '#f1f5f9',
     },
   },
 
@@ -63,17 +64,17 @@ const wedflowAdminTheme = createTheme({
 
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    h1: { fontWeight: 800 },
-    h2: { fontWeight: 700 },
-    h3: { fontWeight: 700 },
-    h4: { fontWeight: 600 },
-    h5: { fontWeight: 600 },
-    h6: { fontWeight: 600 },
-    subtitle1: { fontWeight: 500 },
+    h1: { fontWeight: 800, color: '#0f172a' },
+    h2: { fontWeight: 700, color: '#0f172a' },
+    h3: { fontWeight: 700, color: '#0f172a' },
+    h4: { fontWeight: 600, color: '#0f172a' },
+    h5: { fontWeight: 600, color: '#0f172a' },
+    h6: { fontWeight: 600, color: '#0f172a' },
+    subtitle1: { fontWeight: 500, color: '#334155' },
     subtitle2: { fontWeight: 600, fontSize: '0.8rem', letterSpacing: '0.05em' },
-    body1: { fontSize: '0.9375rem' },
-    body2: { fontSize: '0.875rem' },
-    caption: { color: '#9ca3af' },
+    body1: { fontSize: '0.9375rem', color: '#0f172a' },
+    body2: { fontSize: '0.875rem', color: '#475569' },
+    caption: { color: '#64748b' },
     button: {
       textTransform: 'none',
       fontWeight: 600,
@@ -84,19 +85,21 @@ const wedflowAdminTheme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          scrollbarColor: '#374151 #111827',
+          backgroundColor: '#f8fafc',
+          color: '#0f172a',
+          scrollbarColor: '#cbd5e1 #f8fafc',
           '&::-webkit-scrollbar': {
             width: 6,
             height: 6,
           },
           '&::-webkit-scrollbar-track': {
-            background: '#111827',
+            background: '#f8fafc',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: '#374151',
+            background: '#cbd5e1',
             borderRadius: 3,
             '&:hover': {
-              background: '#4b5563',
+              background: '#94a3b8',
             },
           },
         },
@@ -107,8 +110,9 @@ const wedflowAdminTheme = createTheme({
       defaultProps: { elevation: 0 },
       styleOverrides: {
         root: {
-          backgroundColor: '#111827',
-          borderBottom: '1px solid #1f2937',
+          backgroundColor: '#ffffff',
+          color: '#0f172a',
+          borderBottom: '1px solid #e2e8f0',
           backgroundImage: 'none',
         },
       },
@@ -117,8 +121,9 @@ const wedflowAdminTheme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#0d1220',
-          borderRight: '1px solid #1f2937',
+          backgroundColor: '#ffffff',
+          color: '#0f172a',
+          borderRight: '1px solid #e2e8f0',
           backgroundImage: 'none',
         },
       },
@@ -128,9 +133,10 @@ const wedflowAdminTheme = createTheme({
       defaultProps: { elevation: 0 },
       styleOverrides: {
         root: {
-          backgroundColor: '#111827',
-          border: '1px solid #1f2937',
+          backgroundColor: '#ffffff',
+          border: '1px solid #e2e8f0',
           backgroundImage: 'none',
+          boxShadow: '0 1px 3px rgba(15, 23, 42, 0.05)',
         },
       },
     },
@@ -140,7 +146,8 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          backgroundColor: '#111827',
+          backgroundColor: '#ffffff',
+          color: '#0f172a',
         },
       },
     },
@@ -156,14 +163,14 @@ const wedflowAdminTheme = createTheme({
         },
         contained: {
           '&:hover': {
-            backgroundColor: '#4f46e5',
+            backgroundColor: '#6d28d9',
           },
         },
         outlined: {
-          borderColor: '#374151',
+          borderColor: '#cbd5e1',
           '&:hover': {
-            borderColor: '#6366f1',
-            backgroundColor: 'rgba(99, 102, 241, 0.08)',
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124, 58, 237, 0.05)',
           },
         },
       },
@@ -173,8 +180,10 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 7,
+          color: '#64748b',
           '&:hover': {
-            backgroundColor: 'rgba(99, 102, 241, 0.08)',
+            backgroundColor: 'rgba(124, 58, 237, 0.06)',
+            color: '#7c3aed',
           },
         },
       },
@@ -185,26 +194,26 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            backgroundColor: '#0b0f19',
+            backgroundColor: '#ffffff',
             '& fieldset': {
-              borderColor: '#374151',
+              borderColor: '#cbd5e1',
             },
             '&:hover fieldset': {
-              borderColor: '#4b5563',
+              borderColor: '#94a3b8',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#6366f1',
+              borderColor: '#7c3aed',
               borderWidth: '1.5px',
             },
           },
           '& .MuiInputLabel-root': {
-            color: '#6b7280',
+            color: '#64748b',
             '&.Mui-focused': {
-              color: '#6366f1',
+              color: '#7c3aed',
             },
           },
           '& .MuiInputBase-input': {
-            color: '#f9fafb',
+            color: '#0f172a',
           },
         },
       },
@@ -213,15 +222,16 @@ const wedflowAdminTheme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#0b0f19',
+          backgroundColor: '#ffffff',
+          color: '#0f172a',
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#374151',
+            borderColor: '#cbd5e1',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#4b5563',
+            borderColor: '#94a3b8',
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#6366f1',
+            borderColor: '#7c3aed',
           },
         },
       },
@@ -231,13 +241,14 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           fontSize: '0.875rem',
+          color: '#0f172a',
           '&:hover': {
-            backgroundColor: 'rgba(99, 102, 241, 0.08)',
+            backgroundColor: 'rgba(124, 58, 237, 0.05)',
           },
           '&.Mui-selected': {
-            backgroundColor: 'rgba(99, 102, 241, 0.16)',
+            backgroundColor: 'rgba(124, 58, 237, 0.10)',
             '&:hover': {
-              backgroundColor: 'rgba(99, 102, 241, 0.24)',
+              backgroundColor: 'rgba(124, 58, 237, 0.15)',
             },
           },
         },
@@ -247,13 +258,14 @@ const wedflowAdminTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#111827 !important',
-          border: '1px solid #1f2937',
+          backgroundColor: '#ffffff !important',
+          border: '1px solid #e2e8f0',
           backgroundImage: 'none !important',
           borderRadius: 10,
+          boxShadow: '0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05) !important',
         },
         backdrop: {
-          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          backgroundColor: 'rgba(15, 23, 42, 0.45)',
         },
       },
     },
@@ -264,7 +276,8 @@ const wedflowAdminTheme = createTheme({
           padding: '20px 24px 12px',
           fontSize: '1.0625rem',
           fontWeight: 700,
-          borderBottom: '1px solid #1f2937',
+          color: '#0f172a',
+          borderBottom: '1px solid #e2e8f0',
         },
       },
     },
@@ -281,7 +294,7 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           padding: '12px 24px 20px',
-          borderTop: '1px solid #1f2937',
+          borderTop: '1px solid #e2e8f0',
           gap: 8,
         },
       },
@@ -291,13 +304,13 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiTableCell-head': {
-            backgroundColor: '#0d1220',
-            color: '#9ca3af',
+            backgroundColor: '#f1f5f9',
+            color: '#475569',
             fontSize: '0.75rem',
             fontWeight: 700,
             letterSpacing: '0.06em',
             textTransform: 'uppercase',
-            borderBottom: '1px solid #1f2937',
+            borderBottom: '1px solid #e2e8f0',
           },
         },
       },
@@ -308,11 +321,11 @@ const wedflowAdminTheme = createTheme({
         root: {
           '& .MuiTableRow-root': {
             '&:hover': {
-              backgroundColor: 'rgba(255,255,255,0.02)',
+              backgroundColor: '#f8fafc',
             },
             '& .MuiTableCell-body': {
-              borderBottom: '1px solid #1a2035',
-              color: '#f9fafb',
+              borderBottom: '1px solid #f1f5f9',
+              color: '#0f172a',
               fontSize: '0.875rem',
             },
           },
@@ -338,19 +351,19 @@ const wedflowAdminTheme = createTheme({
           marginBottom: 2,
           padding: '8px 12px',
           '&:hover': {
-            backgroundColor: 'rgba(99, 102, 241, 0.08)',
+            backgroundColor: 'rgba(124, 58, 237, 0.05)',
           },
           '&.Mui-selected': {
-            backgroundColor: 'rgba(99, 102, 241, 0.16)',
+            backgroundColor: 'rgba(124, 58, 237, 0.10)',
             '& .MuiListItemText-primary': {
-              color: '#818cf8',
+              color: '#7c3aed',
               fontWeight: 700,
             },
             '& .MuiListItemIcon-root': {
-              color: '#6366f1',
+              color: '#7c3aed',
             },
             '&:hover': {
-              backgroundColor: 'rgba(99, 102, 241, 0.22)',
+              backgroundColor: 'rgba(124, 58, 237, 0.15)',
             },
           },
         },
@@ -361,7 +374,7 @@ const wedflowAdminTheme = createTheme({
       styleOverrides: {
         root: {
           minWidth: 36,
-          color: '#6b7280',
+          color: '#64748b',
         },
       },
     },
@@ -371,7 +384,7 @@ const wedflowAdminTheme = createTheme({
         primary: {
           fontSize: '0.875rem',
           fontWeight: 500,
-          color: '#d1d5db',
+          color: '#334155',
         },
       },
     },
@@ -379,11 +392,11 @@ const wedflowAdminTheme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
-          borderBottom: '1px solid #1f2937',
+          borderBottom: '1px solid #e2e8f0',
         },
         indicator: {
-          backgroundColor: '#6366f1',
-          height: 2,
+          backgroundColor: '#7c3aed',
+          height: 2.5,
         },
       },
     },
@@ -394,14 +407,14 @@ const wedflowAdminTheme = createTheme({
           textTransform: 'none',
           fontWeight: 600,
           fontSize: '0.8125rem',
-          color: '#6b7280',
+          color: '#64748b',
           minHeight: 44,
           padding: '8px 16px',
           '&.Mui-selected': {
-            color: '#818cf8',
+            color: '#7c3aed',
           },
           '&:hover': {
-            color: '#d1d5db',
+            color: '#0f172a',
           },
         },
       },
@@ -411,8 +424,8 @@ const wedflowAdminTheme = createTheme({
       defaultProps: { elevation: 0, disableGutters: true },
       styleOverrides: {
         root: {
-          backgroundColor: '#1a2035',
-          border: '1px solid #1f2937',
+          backgroundColor: '#ffffff',
+          border: '1px solid #e2e8f0',
           borderRadius: '8px !important',
           marginBottom: 8,
           '&:before': { display: 'none' },
@@ -426,7 +439,7 @@ const wedflowAdminTheme = createTheme({
           padding: '0 16px',
           minHeight: 48,
           '& .MuiAccordionSummary-expandIconWrapper': {
-            color: '#6b7280',
+            color: '#64748b',
           },
         },
       },
@@ -435,7 +448,7 @@ const wedflowAdminTheme = createTheme({
     MuiDivider: {
       styleOverrides: {
         root: {
-          borderColor: '#1f2937',
+          borderColor: '#e2e8f0',
         },
       },
     },
@@ -443,14 +456,14 @@ const wedflowAdminTheme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: '#1f2937',
-          color: '#f9fafb',
+          backgroundColor: '#0f172a',
+          color: '#f8fafc',
           fontSize: '0.75rem',
-          border: '1px solid #374151',
+          border: '1px solid #334155',
           borderRadius: 6,
         },
         arrow: {
-          color: '#1f2937',
+          color: '#0f172a',
         },
       },
     },
@@ -458,7 +471,7 @@ const wedflowAdminTheme = createTheme({
     MuiLinearProgress: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1f2937',
+          backgroundColor: '#e2e8f0',
           borderRadius: 4,
           height: 6,
         },
@@ -471,11 +484,12 @@ const wedflowAdminTheme = createTheme({
     MuiSkeleton: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1a2035',
+          backgroundColor: '#f1f5f9',
         },
       },
     },
   },
 });
 
-export default wedflowAdminTheme;
+export default invateraAdminTheme;
+export { invateraAdminTheme as wedflowAdminTheme };

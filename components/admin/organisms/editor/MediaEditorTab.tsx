@@ -98,9 +98,9 @@ export const MediaEditorTab: React.FC = () => {
             border: (theme) =>
               config.privacyMode?.noMedia
                 ? `1px solid ${theme.palette.primary.main}`
-                : '1px solid rgba(255,255,255,0.08)',
+                : '1px solid #e2e8f0',
             background: config.privacyMode?.noMedia
-              ? 'linear-gradient(135deg, rgba(229,9,20,0.08) 0%, rgba(20,20,20,0.95) 100%)'
+              ? 'linear-gradient(135deg, rgba(124,58,237,0.05) 0%, #ffffff 100%)'
               : undefined,
           }}
         >
@@ -122,8 +122,8 @@ export const MediaEditorTab: React.FC = () => {
                     height: 36,
                     borderRadius: 2,
                     bgcolor: config.privacyMode?.noMedia
-                      ? 'rgba(229,9,20,0.2)'
-                      : 'rgba(255,255,255,0.08)',
+                      ? 'rgba(124,58,237,0.12)'
+                      : '#f1f5f9',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -176,7 +176,8 @@ export const MediaEditorTab: React.FC = () => {
                 sx={{
                   mt: 2,
                   pt: 2.5,
-                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '1px solid',
+                  borderColor: 'divider',
                 }}
               >
                 <Typography

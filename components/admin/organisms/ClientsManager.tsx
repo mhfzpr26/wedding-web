@@ -2,6 +2,7 @@
 
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EmailIcon from '@mui/icons-material/Email';
@@ -89,6 +90,20 @@ export const ClientsManager: React.FC = () => {
     setShowCreateInvModal(true);
   };
 
+  const handleSendFormWhatsApp = (client: ClientWithInvs) => {
+    const inv = client.invitations?.[0];
+    if (!inv) return;
+    const cleanPhone = client.phone.replace(/[^0-9]/g, '');
+    const waPhone = cleanPhone.startsWith('0')
+      ? `62${cleanPhone.slice(1)}`
+      : cleanPhone;
+    const portalUrl = `${window.location.origin}/portal/${inv.slug}`;
+    const text = encodeURIComponent(
+      `Halo Kak ${client.name}, berikut tautan portal pernikahan Anda untuk melengkapi data, menyebarkan undangan ke tamu via WhatsApp, dan memantau kehadiran:\n\n${portalUrl}\n\nTerima kasih! 🙏`,
+    );
+    window.open(`https://wa.me/${waPhone}?text=${text}`, '_blank');
+  };
+
   const initials = (name: string) =>
     name
       .split(' ')
@@ -141,7 +156,16 @@ export const ClientsManager: React.FC = () => {
               size="small"
               startIcon={<AddIcon />}
               onClick={handleOpenAdd}
-              sx={{ whiteSpace: 'nowrap' }}
+              sx={{
+                whiteSpace: 'nowrap',
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)',
+                boxShadow: '0 3px 12px rgba(124, 58, 237, 0.25)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #6d28d9 0%, #0891b2 100%)',
+                  boxShadow: '0 4px 16px rgba(124, 58, 237, 0.35)',
+                },
+              }}
             >
               Tambah Client
             </Button>
@@ -304,7 +328,7 @@ export const ClientsManager: React.FC = () => {
                         label={client.package || 'Standard'}
                         size="small"
                         sx={{
-                          bgcolor: 'rgba(255,255,255,0.06)',
+                          bgcolor: '#f1f5f9',
                           color: 'text.secondary',
                           fontWeight: 600,
                           fontSize: '0.72rem',
@@ -350,6 +374,24 @@ export const ClientsManager: React.FC = () => {
                             Undangan
                           </Button>
                         </Tooltip>
+                        {client.invitations &&
+                          client.invitations.length > 0 && (
+                            <Tooltip title="Kirim link form pernikahan via WhatsApp">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleSendFormWhatsApp(client)}
+                                sx={{
+                                  color: 'warning.light',
+                                  bgcolor: 'rgba(245,158,11,0.08)',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(245,158,11,0.18)',
+                                  },
+                                }}
+                              >
+                                <AssignmentIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                         <Tooltip title="Edit data client">
                           <IconButton
                             size="small"

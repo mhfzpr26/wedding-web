@@ -64,19 +64,19 @@ export const TemplatesCatalog: React.FC = () => {
                     height={160}
                     image={tmpl.thumbnail}
                     alt={tmpl.name}
-                    sx={{ objectFit: 'cover', bgcolor: '#0d1220' }}
+                    sx={{ objectFit: 'cover', bgcolor: '#f1f5f9' }}
                   />
                   <Box sx={{ position: 'absolute', top: 10, left: 10 }}>
                     <Chip
                       label={tmpl.badge}
                       size="small"
                       sx={{
-                        bgcolor: 'rgba(0,0,0,0.75)',
-                        color: 'primary.light',
+                        bgcolor: 'rgba(15,23,42,0.85)',
+                        color: '#ffffff',
                         fontWeight: 700,
                         fontSize: '0.68rem',
                         backdropFilter: 'none',
-                        border: '1px solid rgba(99,102,241,0.4)',
+                        border: '1px solid rgba(124,58,237,0.4)',
                       }}
                     />
                   </Box>

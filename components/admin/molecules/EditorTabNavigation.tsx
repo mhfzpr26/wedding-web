@@ -39,6 +39,10 @@ interface MainCategoryConfig {
   label: string;
   shortLabel: string;
   icon: React.ReactNode;
+  themeColor: string;
+  themeBg: string;
+  themeGradient: string;
+  themeShadow: string;
   subTabs: SubTabConfig[];
 }
 
@@ -48,6 +52,10 @@ const CATEGORIES_CONFIG: MainCategoryConfig[] = [
     label: '1. Tampilan & Pembuka',
     shortLabel: 'Tampilan',
     icon: <PaletteIcon fontSize="small" />,
+    themeColor: '#7c3aed',
+    themeBg: 'rgba(124, 58, 237, 0.08)',
+    themeGradient: 'linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)',
+    themeShadow: '0 4px 14px rgba(124, 58, 237, 0.3)',
     subTabs: [
       {
         id: 'template',
@@ -68,6 +76,10 @@ const CATEGORIES_CONFIG: MainCategoryConfig[] = [
     label: '2. Mempelai & Acara',
     shortLabel: 'Mempelai & Acara',
     icon: <PeopleIcon fontSize="small" />,
+    themeColor: '#f43f5e',
+    themeBg: 'rgba(244, 63, 94, 0.08)',
+    themeGradient: 'linear-gradient(135deg, #f43f5e 0%, #fb7185 100%)',
+    themeShadow: '0 4px 14px rgba(244, 63, 94, 0.3)',
     subTabs: [
       {
         id: 'couple',
@@ -100,6 +112,10 @@ const CATEGORIES_CONFIG: MainCategoryConfig[] = [
     label: '3. Media & Dokumentasi',
     shortLabel: 'Media',
     icon: <TheatersRoundedIcon fontSize="small" />,
+    themeColor: '#d97706',
+    themeBg: 'rgba(245, 158, 11, 0.08)',
+    themeGradient: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)',
+    themeShadow: '0 4px 14px rgba(217, 119, 6, 0.3)',
     subTabs: [
       {
         id: 'gallery',
@@ -120,6 +136,10 @@ const CATEGORIES_CONFIG: MainCategoryConfig[] = [
     label: '4. Interaksi & Tamu',
     shortLabel: 'Interaksi',
     icon: <VolunteerActivismRoundedIcon fontSize="small" />,
+    themeColor: '#0891b2',
+    themeBg: 'rgba(6, 182, 212, 0.08)',
+    themeGradient: 'linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)',
+    themeShadow: '0 4px 14px rgba(8, 145, 178, 0.3)',
     subTabs: [
       {
         id: 'gifts',
@@ -183,7 +203,7 @@ export const EditorTabNavigation: React.FC = () => {
         borderColor: 'divider',
       }}
     >
-      {/* TIER 1: 4 Kategori Utama Berdesain Rapi */}
+      {/* TIER 1: 4 Kategori Utama Berdesain Rapi & Color-Coded */}
       <Box
         sx={{
           display: 'grid',
@@ -218,15 +238,14 @@ export const EditorTabNavigation: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 cursor: 'pointer',
-                bgcolor: isActive ? 'rgba(99,102,241,0.08)' : 'transparent',
-                borderBottom: isActive ? '3px solid' : '3px solid transparent',
-                borderColor: isActive ? 'primary.main' : 'transparent',
+                bgcolor: isActive ? cat.themeBg : 'transparent',
+                borderBottom: isActive ? `3px solid ${cat.themeColor}` : '3px solid transparent',
                 borderRadius: 0,
                 transition: 'all 0.2s ease',
                 '&:hover': {
                   bgcolor: isActive
-                    ? 'rgba(99,102,241,0.1)'
-                    : 'rgba(255,255,255,0.03)',
+                    ? cat.themeBg
+                    : 'rgba(15, 23, 42, 0.03)',
                 },
               }}
             >
@@ -240,16 +259,17 @@ export const EditorTabNavigation: React.FC = () => {
               >
                 <Box
                   sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 1.5,
+                    width: 34,
+                    height: 34,
+                    borderRadius: 1.75,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    bgcolor: isActive
-                      ? 'primary.main'
-                      : 'rgba(255,255,255,0.05)',
-                    color: isActive ? '#fff' : 'text.secondary',
+                    background: isActive
+                      ? cat.themeGradient
+                      : cat.themeBg,
+                    color: isActive ? '#fff' : cat.themeColor,
+                    boxShadow: isActive ? cat.themeShadow : 'none',
                     flexShrink: 0,
                     transition: 'all 0.2s ease',
                   }}
@@ -261,9 +281,9 @@ export const EditorTabNavigation: React.FC = () => {
                     variant="subtitle2"
                     noWrap
                     sx={{
-                      fontWeight: isActive ? 700 : 600,
+                      fontWeight: isActive ? 800 : 600,
                       fontSize: { xs: '0.8rem', md: '0.85rem' },
-                      color: isActive ? 'text.primary' : 'text.secondary',
+                      color: isActive ? cat.themeColor : 'text.primary',
                     }}
                   >
                     {cat.label}
@@ -273,7 +293,7 @@ export const EditorTabNavigation: React.FC = () => {
                     noWrap
                     sx={{
                       fontSize: '0.68rem',
-                      color: 'text.disabled',
+                      color: 'text.secondary',
                       display: { xs: 'none', lg: 'block' },
                     }}
                   >
@@ -335,10 +355,12 @@ export const EditorTabNavigation: React.FC = () => {
           alignItems: 'center',
           gap: 1,
           overflowX: 'auto',
-          bgcolor: 'rgba(255,255,255,0.01)',
+          bgcolor: '#f8fafc',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
           '&::-webkit-scrollbar': { height: 4 },
           '&::-webkit-scrollbar-thumb': {
-            bgcolor: 'rgba(255,255,255,0.1)',
+            bgcolor: '#cbd5e1',
             borderRadius: 2,
           },
         }}
@@ -350,7 +372,7 @@ export const EditorTabNavigation: React.FC = () => {
             textTransform: 'uppercase',
             letterSpacing: '0.07em',
             fontSize: '0.68rem',
-            color: 'text.disabled',
+            color: activeCategoryConfig.themeColor,
             whiteSpace: 'nowrap',
             mr: 0.5,
             display: { xs: 'none', sm: 'block' },
@@ -370,28 +392,31 @@ export const EditorTabNavigation: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 0.75,
-                px: 1.5,
-                py: 0.75,
+                px: 1.6,
+                py: 0.8,
                 borderRadius: 2,
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'all 0.15s ease',
-                bgcolor: isSubActive
-                  ? 'primary.main'
-                  : 'rgba(255,255,255,0.04)',
+                background: isSubActive
+                  ? activeCategoryConfig.themeGradient
+                  : '#ffffff',
                 color: isSubActive ? '#fff' : 'text.secondary',
                 border: '1px solid',
                 borderColor: isSubActive
-                  ? 'primary.main'
-                  : 'rgba(255,255,255,0.08)',
+                  ? activeCategoryConfig.themeColor
+                  : '#e2e8f0',
                 boxShadow: isSubActive
-                  ? '0 2px 8px rgba(99,102,241,0.35)'
-                  : 'none',
+                  ? activeCategoryConfig.themeShadow
+                  : '0 1px 2px rgba(15, 23, 42, 0.04)',
                 '&:hover': {
                   bgcolor: isSubActive
-                    ? 'primary.main'
-                    : 'rgba(255,255,255,0.08)',
-                  color: isSubActive ? '#fff' : 'text.primary',
+                    ? undefined
+                    : activeCategoryConfig.themeBg,
+                  borderColor: isSubActive
+                    ? activeCategoryConfig.themeColor
+                    : activeCategoryConfig.themeColor,
+                  color: isSubActive ? '#fff' : activeCategoryConfig.themeColor,
                 },
               }}
             >
@@ -401,7 +426,7 @@ export const EditorTabNavigation: React.FC = () => {
               <Typography
                 variant="caption"
                 sx={{
-                  fontWeight: isSubActive ? 700 : 500,
+                  fontWeight: isSubActive ? 800 : 600,
                   fontSize: '0.78rem',
                   lineHeight: 1.2,
                 }}

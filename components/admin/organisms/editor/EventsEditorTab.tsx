@@ -184,7 +184,7 @@ export const EventsEditorTab: React.FC = () => {
                   sx={{
                     px: { xs: 2, md: 3 },
                     py: 1.75,
-                    bgcolor: 'rgba(255,255,255,0.02)',
+                    bgcolor: '#f8fafc',
                     borderBottom: '1px solid',
                     borderColor: 'divider',
                     display: 'flex',
@@ -392,7 +392,7 @@ export const EventsEditorTab: React.FC = () => {
                               borderRadius: 2,
                               border: '1px solid',
                               borderColor: 'divider',
-                              bgcolor: 'rgba(255,255,255,0.015)',
+                              bgcolor: '#f8fafc',
                             }}
                           >
                             <Typography

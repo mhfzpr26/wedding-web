@@ -2,7 +2,6 @@
 
 import AddIcon from '@mui/icons-material/Add';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import LayersIcon from '@mui/icons-material/Layers';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PaletteIcon from '@mui/icons-material/Palette';
 import PeopleIcon from '@mui/icons-material/People';
@@ -104,46 +103,47 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           borderColor: 'divider',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
           <Box
+            component="img"
+            src="/invatera-icon-nobg.png"
+            alt="Invatera"
             sx={{
-              width: 32,
-              height: 32,
-              borderRadius: 1.5,
-              bgcolor: 'primary.main',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 34,
+              height: 34,
+              objectFit: 'contain',
               flexShrink: 0,
             }}
-          >
-            <LayersIcon sx={{ fontSize: 18, color: '#fff' }} />
+          />
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 900,
+                color: 'text.primary',
+                letterSpacing: '-0.3px',
+                lineHeight: 1,
+                fontSize: '1.15rem',
+              }}
+            >
+              INVA<span style={{ color: '#06b6d4' }}>TERA</span>
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#818cf8',
+                fontSize: '0.64rem',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                display: 'block',
+                mt: 0.2,
+              }}
+            >
+              Digital Invitations
+            </Typography>
           </Box>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 800,
-              color: 'text.primary',
-              letterSpacing: '-0.3px',
-              lineHeight: 1,
-            }}
-          >
-            WED<span style={{ color: '#818cf8' }}>FLOW</span>
-          </Typography>
         </Box>
-        <Typography
-          variant="caption"
-          sx={{
-            color: 'text.disabled',
-            fontSize: '0.68rem',
-            fontWeight: 600,
-            letterSpacing: '0.07em',
-            textTransform: 'uppercase',
-            pl: 0.5,
-          }}
-        >
-          Multi-Tenant SaaS
-        </Typography>
       </Box>
 
       {/* Quick Actions */}
@@ -163,7 +163,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           startIcon={<PersonAddIcon fontSize="small" />}
           onClick={handleAddClient}
           fullWidth
-          sx={{ justifyContent: 'flex-start', py: 0.9 }}
+          sx={{
+            justifyContent: 'flex-start',
+            py: 0.9,
+            background: 'linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)',
+            boxShadow: '0 3px 12px rgba(124, 58, 237, 0.25)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #6d28d9 0%, #0891b2 100%)',
+              boxShadow: '0 4px 16px rgba(124, 58, 237, 0.35)',
+            },
+          }}
         >
           Tambah Client
         </Button>
@@ -173,7 +182,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           startIcon={<AddIcon fontSize="small" />}
           onClick={handleCreateInv}
           fullWidth
-          sx={{ justifyContent: 'flex-start', py: 0.9 }}
+          sx={{
+            justifyContent: 'flex-start',
+            py: 0.9,
+            borderColor: 'rgba(124, 58, 237, 0.3)',
+            color: 'primary.main',
+            '&:hover': {
+              borderColor: 'primary.main',
+              bgcolor: 'rgba(124, 58, 237, 0.05)',
+            },
+          }}
         >
           Buat Undangan
         </Button>
@@ -212,6 +230,22 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   setPrimaryTab(item.id);
                   if (onClose) onClose();
                 }}
+                sx={{
+                  borderRadius: 1.5,
+                  mb: 0.5,
+                  transition: 'all 0.15s ease',
+                  '&.Mui-selected': {
+                    bgcolor: 'rgba(124, 58, 237, 0.08)',
+                    borderLeft: '3px solid #7c3aed',
+                    '& .MuiListItemIcon-root': {
+                      color: '#7c3aed',
+                    },
+                    '& .MuiListItemText-primary': {
+                      fontWeight: 700,
+                      color: '#7c3aed',
+                    },
+                  },
+                }}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
@@ -219,8 +253,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   <Typography
                     variant="caption"
                     sx={{
-                      bgcolor: 'rgba(99,102,241,0.15)',
-                      color: 'primary.light',
+                      bgcolor: 'rgba(124,58,237,0.1)',
+                      color: 'primary.main',
                       fontWeight: 700,
                       fontSize: '0.68rem',
                       px: 0.8,
@@ -271,7 +305,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             pl: 0.5,
           }}
         >
-          WEDFLOW v2.0 — © 2026
+          INVATERA v2.0 — © 2026
         </Typography>
       </Box>
     </Box>
@@ -290,7 +324,9 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           '& .MuiDrawer-paper': {
             width,
             boxSizing: 'border-box',
-            backgroundColor: '#0d1220',
+            backgroundColor: 'background.paper',
+            borderRight: '1px solid',
+            borderColor: 'divider',
           },
         }}
       >
@@ -307,7 +343,9 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           '& .MuiDrawer-paper': {
             width,
             boxSizing: 'border-box',
-            backgroundColor: '#0d1220',
+            backgroundColor: 'background.paper',
+            borderRight: '1px solid',
+            borderColor: 'divider',
           },
         }}
       >

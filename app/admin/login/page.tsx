@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#0b0f19',
+        backgroundColor: '#f8fafc',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -54,12 +54,12 @@ export default function AdminLoginPage() {
         style={{
           width: '100%',
           maxWidth: '400px',
-          backgroundColor: '#111827',
+          backgroundColor: '#ffffff',
           padding: '40px',
           borderRadius: '12px',
           boxShadow:
-            '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
-          border: '1px solid #1f2937',
+            '0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04)',
+          border: '1px solid #e2e8f0',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -71,27 +71,48 @@ export default function AdminLoginPage() {
               width: '48px',
               height: '48px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(99, 102, 241, 0.1)',
-              color: '#818cf8',
+              backgroundColor: 'rgba(124, 58, 237, 0.1)',
+              color: '#7c3aed',
               marginBottom: '16px',
             }}
           >
             <LockOutlinedIcon />
           </div>
-          <h1
+          <div
             style={{
-              color: '#ffffff',
-              fontSize: '24px',
-              fontWeight: 600,
-              margin: 0,
-              marginBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              marginBottom: '6px',
             }}
           >
-            Admin Access
-          </h1>
-          <div style={{ color: '#6366f1', fontSize: '20px', fontWeight: 800 }}>
-            WED<span style={{ color: '#818cf8' }}>FLOW</span>
+            <img
+              src="/invatera-icon-nobg.png"
+              alt="Invatera"
+              style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+            />
+            <div
+              style={{
+                color: '#0f172a',
+                fontSize: '22px',
+                fontWeight: 900,
+                letterSpacing: '-0.3px',
+              }}
+            >
+              INVA<span style={{ color: '#06b6d4' }}>TERA</span>
+            </div>
           </div>
+          <h1
+            style={{
+              color: '#475569',
+              fontSize: '15px',
+              fontWeight: 500,
+              margin: 0,
+            }}
+          >
+            SaaS Studio & Command Center
+          </h1>
         </div>
 
         <form
@@ -103,8 +124,9 @@ export default function AdminLoginPage() {
               htmlFor="email"
               style={{
                 display: 'block',
-                color: '#9ca3af',
+                color: '#475569',
                 fontSize: '14px',
+                fontWeight: 600,
                 marginBottom: '8px',
               }}
             >
@@ -115,20 +137,21 @@ export default function AdminLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@wedflow.com"
+              placeholder="admin@invatera.com"
               style={{
                 width: '100%',
                 padding: '12px 16px',
-                backgroundColor: '#1f2937',
-                border: '1px solid #374151',
+                backgroundColor: '#ffffff',
+                border: '1px solid #cbd5e1',
                 borderRadius: '8px',
-                color: '#ffffff',
-                fontSize: '16px',
+                color: '#0f172a',
+                fontSize: '15px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
+                boxSizing: 'border-box',
               }}
-              onFocus={(e) => (e.target.style.borderColor = '#6366f1')}
-              onBlur={(e) => (e.target.style.borderColor = '#374151')}
+              onFocus={(e) => (e.target.style.borderColor = '#7c3aed')}
+              onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
               required
             />
           </div>
@@ -138,8 +161,9 @@ export default function AdminLoginPage() {
               htmlFor="password"
               style={{
                 display: 'block',
-                color: '#9ca3af',
+                color: '#475569',
                 fontSize: '14px',
+                fontWeight: 600,
                 marginBottom: '8px',
               }}
             >
@@ -154,16 +178,17 @@ export default function AdminLoginPage() {
               style={{
                 width: '100%',
                 padding: '12px 16px',
-                backgroundColor: '#1f2937',
-                border: '1px solid #374151',
+                backgroundColor: '#ffffff',
+                border: '1px solid #cbd5e1',
                 borderRadius: '8px',
-                color: '#ffffff',
-                fontSize: '16px',
+                color: '#0f172a',
+                fontSize: '15px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
+                boxSizing: 'border-box',
               }}
-              onFocus={(e) => (e.target.style.borderColor = '#6366f1')}
-              onBlur={(e) => (e.target.style.borderColor = '#374151')}
+              onFocus={(e) => (e.target.style.borderColor = '#7c3aed')}
+              onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
               required
             />
           </div>
@@ -171,7 +196,11 @@ export default function AdminLoginPage() {
           {error && (
             <div
               style={{
-                color: '#ef4444',
+                color: '#e11d48',
+                backgroundColor: '#fff1f2',
+                border: '1px solid #fecdd3',
+                padding: '10px',
+                borderRadius: '6px',
                 fontSize: '14px',
                 textAlign: 'center',
               }}
@@ -186,31 +215,31 @@ export default function AdminLoginPage() {
             style={{
               width: '100%',
               padding: '12px',
-              backgroundColor: '#6366f1',
+              backgroundColor: '#7c3aed',
               color: '#ffffff',
               border: 'none',
               borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 600,
+              fontSize: '15px',
+              fontWeight: 700,
               cursor: isLoading ? 'not-allowed' : 'pointer',
               opacity: isLoading ? 0.7 : 1,
               transition: 'background-color 0.2s',
               marginTop: '8px',
             }}
             onMouseOver={(e) => {
-              if (!isLoading) e.currentTarget.style.backgroundColor = '#4f46e5';
+              if (!isLoading) e.currentTarget.style.backgroundColor = '#6d28d9';
             }}
             onFocus={(e) => {
-              if (!isLoading) e.currentTarget.style.backgroundColor = '#4f46e5';
+              if (!isLoading) e.currentTarget.style.backgroundColor = '#6d28d9';
             }}
             onMouseOut={(e) => {
-              if (!isLoading) e.currentTarget.style.backgroundColor = '#6366f1';
+              if (!isLoading) e.currentTarget.style.backgroundColor = '#7c3aed';
             }}
             onBlur={(e) => {
-              if (!isLoading) e.currentTarget.style.backgroundColor = '#6366f1';
+              if (!isLoading) e.currentTarget.style.backgroundColor = '#7c3aed';
             }}
           >
-            {isLoading ? 'Authenticating...' : 'Sign In'}
+            {isLoading ? 'Memverifikasi…' : 'Sign In'}
           </button>
         </form>
       </div>

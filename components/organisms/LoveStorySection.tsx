@@ -75,25 +75,13 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   });
 
   // Header Entrance & Scrub: Stays locked throughout
-  const headerOpacity = useTransform(
-    smoothProgress,
-    [0, 0.92, 1],
-    [1, 1, 0.3],
-  );
+  const headerOpacity = useTransform(smoothProgress, [0, 0.92, 1], [1, 1, 0.3]);
   const headerY = useTransform(smoothProgress, [0, 1], [0, 0]);
 
   // Photo Entrance Parallax: Always fully formed when locked
-  const photoEntranceOpacity = useTransform(
-    smoothProgress,
-    [0, 1],
-    [1, 1],
-  );
+  const photoEntranceOpacity = useTransform(smoothProgress, [0, 1], [1, 1]);
   const photoEntranceY = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const photoEntranceScale = useTransform(
-    smoothProgress,
-    [0, 1],
-    [1, 1],
-  );
+  const photoEntranceScale = useTransform(smoothProgress, [0, 1], [1, 1]);
 
   // Dynamic Timeline Growth (0% to 100%)
   const progressHeight = useTransform(
@@ -103,72 +91,40 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
   );
 
   // Moment 1 (Season 1): Active immediately upon arrival (0.0 to 0.28), crossfades 0.28 to 0.36
-  const m1Opacity = useTransform(
-    smoothProgress,
-    [0, 0.28, 0.36],
-    [1, 1, 0],
-  );
-  const m1Y = useTransform(
-    smoothProgress,
-    [0, 0.28, 0.36],
-    [0, 0, -20],
-  );
-  const m1Scale = useTransform(
-    smoothProgress,
-    [0, 0.28, 0.36],
-    [1, 1, 0.96],
-  );
+  const m1Opacity = useTransform(smoothProgress, [0, 0.28, 0.36], [1, 1, 0]);
+  const m1Y = useTransform(smoothProgress, [0, 0.28, 0.36], [0, 0, -20]);
+  const m1Scale = useTransform(smoothProgress, [0, 0.28, 0.36], [1, 1, 0.96]);
 
   // Moment 2 (Season 2): Enters 0.30 to 0.38, stays active 0.38 to 0.62, crossfades 0.62 to 0.70
   const m2Opacity = useTransform(
     smoothProgress,
-    [0.30, 0.38, 0.62, 0.70],
+    [0.3, 0.38, 0.62, 0.7],
     [0, 1, 1, 0],
   );
   const m2Y = useTransform(
     smoothProgress,
-    [0.30, 0.38, 0.62, 0.70],
+    [0.3, 0.38, 0.62, 0.7],
     [20, 0, 0, -20],
   );
   const m2Scale = useTransform(
     smoothProgress,
-    [0.30, 0.38, 0.62, 0.70],
+    [0.3, 0.38, 0.62, 0.7],
     [0.96, 1, 1, 0.96],
   );
 
   // Moment 3 (Season 3): Enters 0.64 to 0.72, stays active until the end
-  const m3Opacity = useTransform(
-    smoothProgress,
-    [0.64, 0.72, 1],
-    [0, 1, 1],
-  );
-  const m3Y = useTransform(
-    smoothProgress,
-    [0.64, 0.72, 1],
-    [20, 0, 0],
-  );
-  const m3Scale = useTransform(
-    smoothProgress,
-    [0.64, 0.72, 1],
-    [0.96, 1, 1],
-  );
+  const m3Opacity = useTransform(smoothProgress, [0.64, 0.72, 1], [0, 1, 1]);
+  const m3Y = useTransform(smoothProgress, [0.64, 0.72, 1], [20, 0, 0]);
+  const m3Scale = useTransform(smoothProgress, [0.64, 0.72, 1], [0.96, 1, 1]);
 
   // Photo Parallax & Crossfades (Synchronized with Moments)
-  const p1Opacity = useTransform(
-    smoothProgress,
-    [0, 0.28, 0.36],
-    [1, 1, 0],
-  );
+  const p1Opacity = useTransform(smoothProgress, [0, 0.28, 0.36], [1, 1, 0]);
   const p2Opacity = useTransform(
     smoothProgress,
-    [0.30, 0.38, 0.62, 0.70],
+    [0.3, 0.38, 0.62, 0.7],
     [0, 1, 1, 0],
   );
-  const p3Opacity = useTransform(
-    smoothProgress,
-    [0.64, 0.72, 1],
-    [0, 1, 1],
-  );
+  const p3Opacity = useTransform(smoothProgress, [0.64, 0.72, 1], [0, 1, 1]);
 
   const photoParallaxY = useTransform(smoothProgress, [0, 1], [-8, 8]);
 
@@ -269,10 +225,16 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                   {privacyMode?.noMedia ? (
                     <div className="love-story__chapter-card">
                       <div className="love-story__chapter-backdrop" />
-                      <div className="love-story__chapter-watermark" aria-hidden="true">
+                      <div
+                        className="love-story__chapter-watermark"
+                        aria-hidden="true"
+                      >
                         {m.data.year}
                       </div>
-                      <div className="love-story__chapter-embers" aria-hidden="true">
+                      <div
+                        className="love-story__chapter-embers"
+                        aria-hidden="true"
+                      >
                         <span className="chapter-ember" />
                         <span className="chapter-ember" />
                         <span className="chapter-ember" />
@@ -304,7 +266,9 @@ export const LoveStorySection: React.FC<LoveStorySectionProps> = ({
                   )}
                   <div
                     className={`love-story__photo-badge ${
-                      privacyMode?.noMedia ? 'love-story__photo-badge--privacy' : ''
+                      privacyMode?.noMedia
+                        ? 'love-story__photo-badge--privacy'
+                        : ''
                     }`}
                   >
                     {privacyMode?.noMedia ? (

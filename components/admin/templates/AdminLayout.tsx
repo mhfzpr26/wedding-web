@@ -57,13 +57,22 @@ export const AdminLayout: React.FC = () => {
           thickness={3}
           sx={{ color: 'primary.main' }}
         />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-          <LayersIcon sx={{ color: 'primary.main', fontSize: 26 }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mt: 1 }}>
+          <Box
+            component="img"
+            src="/invatera-icon-nobg.png"
+            alt="Invatera"
+            sx={{ width: 28, height: 28, objectFit: 'contain' }}
+          />
           <Typography
             variant="h6"
-            sx={{ fontWeight: 800, color: 'text.primary' }}
+            sx={{
+              fontWeight: 900,
+              color: 'text.primary',
+              letterSpacing: '-0.3px',
+            }}
           >
-            WED<span style={{ color: '#818cf8' }}>FLOW</span>
+            INVA<span style={{ color: '#06b6d4' }}>TERA</span>
           </Typography>
         </Box>
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>

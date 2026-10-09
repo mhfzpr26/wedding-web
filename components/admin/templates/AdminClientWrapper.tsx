@@ -16,7 +16,7 @@ export function AdminClientWrapper() {
       <div
         style={{
           minHeight: '100vh',
-          backgroundColor: '#0b0f19',
+          backgroundColor: '#f8fafc',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -25,10 +25,24 @@ export function AdminClientWrapper() {
           fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ color: '#6366f1', fontSize: '24px', fontWeight: 800 }}>
-          WED<span style={{ color: '#818cf8' }}>FLOW</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img
+            src="/invatera-icon-nobg.png"
+            alt="Invatera"
+            style={{ width: '36px', height: '36px', objectFit: 'contain' }}
+          />
+          <div
+            style={{
+              color: '#0f172a',
+              fontSize: '24px',
+              fontWeight: 900,
+              letterSpacing: '-0.3px',
+            }}
+          >
+            INVA<span style={{ color: '#06b6d4' }}>TERA</span>
+          </div>
         </div>
-        <div style={{ color: '#9ca3af', fontSize: '13px' }}>
+        <div style={{ color: '#64748b', fontSize: '13px', fontWeight: 500 }}>
           Memuat SaaS platform…
         </div>
       </div>

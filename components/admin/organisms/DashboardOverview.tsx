@@ -1,6 +1,7 @@
 'use client';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -11,6 +12,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import PeopleIcon from '@mui/icons-material/People';
 import TuneIcon from '@mui/icons-material/Tune';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -51,6 +53,28 @@ export const DashboardOverview: React.FC = () => {
     const fullUrl = `${window.location.origin}/undangan/${slug}`;
     navigator.clipboard.writeText(fullUrl);
     showToast('success', `Tautan disalin: ${fullUrl}`);
+  };
+
+  const handleCopyFormLink = (slug: string) => {
+    const fullUrl = `${window.location.origin}/portal/${slug}`;
+    navigator.clipboard.writeText(fullUrl);
+    showToast('success', `Tautan portal pengantin disalin: ${fullUrl}`);
+  };
+
+  const handleSendFormWhatsApp = (
+    clientName: string,
+    phone: string | undefined,
+    slug: string,
+  ) => {
+    const cleanPhone = phone?.replace(/[^0-9]/g, '') || '';
+    const waPhone = cleanPhone.startsWith('0')
+      ? `62${cleanPhone.slice(1)}`
+      : cleanPhone;
+    const formUrl = `${window.location.origin}/portal/${slug}`;
+    const text = encodeURIComponent(
+      `Halo Kak ${clientName || ''}, berikut tautan portal pernikahan Anda untuk melengkapi data, menyebarkan undangan ke tamu via WhatsApp, dan memantau kehadiran:\n\n${formUrl}\n\nTerima kasih! 🙏`,
+    );
+    window.open(`https://wa.me/${waPhone}?text=${text}`, '_blank');
   };
 
   const handleUpdateStatus = async (
@@ -145,7 +169,17 @@ export const DashboardOverview: React.FC = () => {
               size="small"
               startIcon={<AddCircleIcon />}
               onClick={() => setShowCreateInvModal(true)}
-              sx={{ width: { xs: '100%', sm: 'auto' }, whiteSpace: 'nowrap' }}
+              sx={{
+                width: { xs: '100%', sm: 'auto' },
+                whiteSpace: 'nowrap',
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)',
+                boxShadow: '0 3px 12px rgba(124, 58, 237, 0.25)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #6d28d9 0%, #0891b2 100%)',
+                  boxShadow: '0 4px 16px rgba(124, 58, 237, 0.35)',
+                },
+              }}
             >
               Buat Undangan
             </Button>
@@ -262,7 +296,7 @@ export const DashboardOverview: React.FC = () => {
                           <Box
                             component="code"
                             sx={{
-                              bgcolor: 'rgba(255,255,255,0.05)',
+                              bgcolor: '#f1f5f9',
                               px: 0.8,
                               py: 0.2,
                               borderRadius: 1,
@@ -350,6 +384,44 @@ export const DashboardOverview: React.FC = () => {
                               Edit
                             </Button>
                           </Tooltip>
+                          <Tooltip title="Salin tautan formulir klien">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleCopyFormLink(inv.slug)}
+                              sx={{
+                                color: 'warning.light',
+                                bgcolor: 'rgba(245,158,11,0.08)',
+                                '&:hover': { bgcolor: 'rgba(245,158,11,0.18)' },
+                              }}
+                            >
+                              <AssignmentIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                          {inv.client?.phone && (
+                            <Tooltip
+                              title={`Kirim form via WA ke ${inv.client.name}`}
+                            >
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  handleSendFormWhatsApp(
+                                    inv.client?.name || '',
+                                    inv.client?.phone,
+                                    inv.slug,
+                                  )
+                                }
+                                sx={{
+                                  color: '#25d366',
+                                  bgcolor: 'rgba(37,211,102,0.08)',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(37,211,102,0.18)',
+                                  },
+                                }}
+                              >
+                                <WhatsAppIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                           <Tooltip title="Preview live">
                             <IconButton
                               component={Link}
